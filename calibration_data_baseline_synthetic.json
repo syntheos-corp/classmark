@@ -1,0 +1,290 @@
+[
+  {
+    "file_path": "documents/test_data/GENERATION_REPORT.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": false,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/test_data/c_00_confidential_cable.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": true
+  },
+  {
+    "file_path": "documents/test_data/c_01_confidential_cable.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": true
+  },
+  {
+    "file_path": "documents/test_data/c_02_confidential_cable.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": true
+  },
+  {
+    "file_path": "documents/test_data/c_03_confidential_cable.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": true
+  },
+  {
+    "file_path": "documents/test_data/c_04_confidential_cable.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": true
+  },
+  {
+    "file_path": "documents/test_data/cui_00_cui_document.txt",
+    "predicted_confidence": 0.425,
+    "actual_has_classification": true,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/test_data/cui_01_cui_document.txt",
+    "predicted_confidence": 0.425,
+    "actual_has_classification": true,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/test_data/cui_02_cui_document.txt",
+    "predicted_confidence": 0.425,
+    "actual_has_classification": true,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/test_data/cui_03_cui_document.txt",
+    "predicted_confidence": 0.425,
+    "actual_has_classification": true,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/test_data/cui_04_cui_document.txt",
+    "predicted_confidence": 0.425,
+    "actual_has_classification": true,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/test_data/declassified_00_historical_memo.txt",
+    "predicted_confidence": 0.7,
+    "actual_has_classification": true,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/test_data/declassified_01_foia_release.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/test_data/declassified_02_ocr_artifacts.txt",
+    "predicted_confidence": 0.7,
+    "actual_has_classification": true,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/test_data/declassified_03_historical_format.txt",
+    "predicted_confidence": 0.7,
+    "actual_has_classification": true,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/test_data/declassified_04_hybrid_markings.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/test_data/declassified_05_multiple_agencies.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/test_data/declassified_06_page_headers.txt",
+    "predicted_confidence": 0.7,
+    "actual_has_classification": true,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/test_data/errors_00_document_with_errors.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/test_data/errors_01_document_with_errors.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/test_data/errors_02_document_with_errors.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/test_data/errors_03_document_with_errors.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/test_data/errors_04_document_with_errors.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/test_data/fp_00_recipe.txt",
+    "predicted_confidence": 0.0,
+    "actual_has_classification": false,
+    "is_correct": true
+  },
+  {
+    "file_path": "documents/test_data/fp_01_data_classification.txt",
+    "predicted_confidence": 0.0,
+    "actual_has_classification": false,
+    "is_correct": true
+  },
+  {
+    "file_path": "documents/test_data/fp_02_recipe.txt",
+    "predicted_confidence": 0.0,
+    "actual_has_classification": false,
+    "is_correct": true
+  },
+  {
+    "file_path": "documents/test_data/fp_03_data_classification.txt",
+    "predicted_confidence": 0.0,
+    "actual_has_classification": false,
+    "is_correct": true
+  },
+  {
+    "file_path": "documents/test_data/fp_04_newspaper_article.txt",
+    "predicted_confidence": 0.0,
+    "actual_has_classification": false,
+    "is_correct": true
+  },
+  {
+    "file_path": "documents/test_data/legacy_00_legacy_fouo.txt",
+    "predicted_confidence": 0.45,
+    "actual_has_classification": true,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/test_data/legacy_01_legacy_sensitive_but_unclassified.txt",
+    "predicted_confidence": 0.45,
+    "actual_has_classification": false,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/test_data/legacy_02_legacy_fouo.txt",
+    "predicted_confidence": 0.45,
+    "actual_has_classification": true,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/test_data/legacy_03_legacy_sensitive_but_unclassified.txt",
+    "predicted_confidence": 0.45,
+    "actual_has_classification": false,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/test_data/legacy_04_legacy_les.txt",
+    "predicted_confidence": 0.45,
+    "actual_has_classification": true,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/test_data/mixed_00_mixed_classification_report.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": true
+  },
+  {
+    "file_path": "documents/test_data/mixed_01_mixed_classification_report.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": true
+  },
+  {
+    "file_path": "documents/test_data/mixed_02_mixed_classification_report.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": true
+  },
+  {
+    "file_path": "documents/test_data/mixed_03_mixed_classification_report.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": true
+  },
+  {
+    "file_path": "documents/test_data/mixed_04_mixed_classification_report.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": true
+  },
+  {
+    "file_path": "documents/test_data/s_00_secret_assessment.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/test_data/s_01_secret_assessment.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": true
+  },
+  {
+    "file_path": "documents/test_data/s_02_secret_assessment.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/test_data/s_03_secret_assessment.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": true
+  },
+  {
+    "file_path": "documents/test_data/s_04_secret_assessment.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/test_data/ts_00_top_secret_memo.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": true
+  },
+  {
+    "file_path": "documents/test_data/ts_01_top_secret_memo.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": true
+  },
+  {
+    "file_path": "documents/test_data/ts_02_top_secret_memo.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": true
+  },
+  {
+    "file_path": "documents/test_data/ts_03_top_secret_memo.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": true
+  },
+  {
+    "file_path": "documents/test_data/ts_04_top_secret_memo.txt",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": true
+  }
+]

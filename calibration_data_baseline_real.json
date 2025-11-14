@@ -1,0 +1,80 @@
+[
+  {
+    "file_path": "documents/1971 BureBehav&StratComp.pdf",
+    "predicted_confidence": 0.95,
+    "actual_has_classification": false,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/1975-12-06 From A. W. Marshall re Key Military Balances .pdf",
+    "predicted_confidence": 0.95,
+    "actual_has_classification": true,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/1976 Team B Report.pdf",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/19760323 from AWM re McClellan Letter on Recent Trends in the Military Balance Between U.S. and Soviet Union.pdf",
+    "predicted_confidence": 0.95,
+    "actual_has_classification": true,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/1979 FRUS NA Ground Forces Assessment.pdf",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": true,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/19940502-AWM-RMA-Update.pdf",
+    "predicted_confidence": 0.95,
+    "actual_has_classification": false,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/2000 AWM ThoughtsFutureNAs.pdf",
+    "predicted_confidence": 0.95,
+    "actual_has_classification": false,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/B01_F01_01_A Neo-Leitesian, Psycho-Cultural Analysis of Chinese Movies.pdf",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": false,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/B01_F02_01_The Truth About Islam.pdf",
+    "predicted_confidence": 0.95,
+    "actual_has_classification": false,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/B01_F02_04_Non-Western Threats and the Social Sciences.pdf",
+    "predicted_confidence": 0.95,
+    "actual_has_classification": false,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/R862.pdf",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": false,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/RM2301.pdf",
+    "predicted_confidence": 1.0,
+    "actual_has_classification": false,
+    "is_correct": false
+  },
+  {
+    "file_path": "documents/yx275qm3713.pdf",
+    "predicted_confidence": 0.95,
+    "actual_has_classification": false,
+    "is_correct": false
+  }
+]

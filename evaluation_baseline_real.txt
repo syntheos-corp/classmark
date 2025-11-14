@@ -1,0 +1,60 @@
+================================================================================
+CLASSIFICATION MARKING DETECTION - EVALUATION REPORT
+================================================================================
+
+Total Documents Evaluated: 13
+
+================================================================================
+DETECTION METRICS
+================================================================================
+Precision:  0.3077  (30.77%)
+Recall:     1.0000  (100.00%)
+F1 Score:   0.4706  (47.06%)
+Accuracy:   0.3077  (30.77%)
+
+Confusion Matrix:
+  True Positives:  4
+  False Positives: 9
+  True Negatives:  0
+  False Negatives: 0
+
+================================================================================
+PER-LEVEL ACCURACY
+================================================================================
+SECRET              : 0.0000  (0.00%)
+(None/Unknown)      : 0.0000  (0.00%)
+
+================================================================================
+PERFORMANCE METRICS
+================================================================================
+Average Processing Time:  106989.60 ms
+Median Processing Time:   45177.02 ms
+95th Percentile Time:     452604.31 ms
+99th Percentile Time:     452604.31 ms
+
+================================================================================
+ERROR ANALYSIS
+================================================================================
+
+False Positives (flagged but should not be):
+  - documents/1971 BureBehav&StratComp.pdf
+  - documents/19940502-AWM-RMA-Update.pdf
+  - documents/2000 AWM ThoughtsFutureNAs.pdf
+  - documents/B01_F01_01_A Neo-Leitesian, Psycho-Cultural Analysis of Chinese Movies.pdf
+  - documents/B01_F02_01_The Truth About Islam.pdf
+  - documents/B01_F02_04_Non-Western Threats and the Social Sciences.pdf
+  - documents/R862.pdf
+  - documents/RM2301.pdf
+  - documents/yx275qm3713.pdf
+
+Wrong Classification Level:
+  - documents/1975-12-06 From A. W. Marshall re Key Military Balances .pdf
+    Expected: None, Predicted: UNKNOWN
+  - documents/1976 Team B Report.pdf
+    Expected: SECRET, Predicted: TOP SECRET
+  - documents/19760323 from AWM re McClellan Letter on Recent Trends in the Military Balance Between U.S. and Soviet Union.pdf
+    Expected: None, Predicted: UNKNOWN
+  - documents/1979 FRUS NA Ground Forces Assessment.pdf
+    Expected: SECRET, Predicted: TOP SECRET
+
+================================================================================

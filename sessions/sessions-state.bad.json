@@ -1,0 +1,50 @@
+{
+  "version": "unknown",
+  "current_task": {
+    "name": null,
+    "file": null,
+    "branch": null,
+    "status": null,
+    "created": null,
+    "started": null,
+    "updated": null,
+    "dependencies": null,
+    "submodules": null
+  },
+  "active_protocol": null,
+  "api": {
+    "startup_load": false,
+    "completion": false,
+    "todos_clear": false
+  },
+  "mode": "implementation",
+  "todos": {
+    "active": [
+      {
+        "content": "Clean previous build artifacts",
+        "status": "completed",
+        "activeForm": "Cleaning previous build artifacts"
+      },
+      {
+        "content": "Rebuild Windows executable with qwen2.5:14b configuration",
+        "status": "completed",
+        "activeForm": "Rebuilding Windows executable"
+      },
+      {
+        "content": "Verify executable builds successfully",
+        "status": "completed",
+        "activeForm": "Verifying executable build"
+      }
+    ],
+    "stashed": []
+  },
+  "model": "sonnet",
+  "flags": {
+    "context_85": false,
+    "context_90": false,
+    "subagent": false,
+    "noob": true,
+    "bypass_mode": false
+  },
+  "metadata": {}
+}
