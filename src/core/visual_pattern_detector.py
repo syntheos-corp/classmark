@@ -21,10 +21,12 @@ Version: 1.0 SOTA Edition
 import os
 import sys
 import time
+import re
 from typing import List, Dict, Tuple, Optional, Set
 from dataclasses import dataclass
 from pathlib import Path
 from enum import Enum
+from rapidfuzz import fuzz
 
 # Import offline configuration
 try:
@@ -106,7 +108,9 @@ class VisualPatternDetector:
         use_gpu: bool = True,
         dpi: int = 200,  # Lower DPI for faster processing
         max_pages: Optional[int] = None,
-        cache_dir: Optional[str] = None
+        cache_dir: Optional[str] = None,
+        fuzzy_matching: bool = True,
+        fuzzy_threshold: int = 85
     ):
         """
         Initialize visual pattern detector
@@ -117,12 +121,16 @@ class VisualPatternDetector:
             dpi: DPI for PDF conversion (200 is sufficient for layout)
             max_pages: Maximum pages to process (None = all pages)
             cache_dir: Directory for model cache
+            fuzzy_matching: Enable fuzzy matching for OCR errors
+            fuzzy_threshold: Fuzzy match threshold (0-100, default 85)
         """
         self.model_name = model_name
         self.use_gpu = use_gpu
         self.dpi = dpi
         self.max_pages = max_pages
         self.cache_dir = cache_dir or os.path.expanduser('~/.cache/huggingface')
+        self.fuzzy_matching = fuzzy_matching
+        self.fuzzy_threshold = fuzzy_threshold
 
         self.model = None
         self.processor = None
@@ -540,6 +548,49 @@ class VisualPatternDetector:
             'height': float(y2 - y1)
         }
 
+    def _is_valid_classification_text(self, text: str) -> bool:
+        """
+        Validate that text is suitable for classification marking detection.
+
+        Filters out:
+        - Tokenizer artifacts (Ġ, Ċ, etc. from LayoutLMv3 BPE tokenization)
+        - Numeric-heavy text (page numbers, dates, etc.)
+        - Purely symbolic text (punctuation, dots, etc.)
+
+        Args:
+            text: Text to validate
+
+        Returns:
+            True if text is valid for classification detection
+        """
+        if not text:
+            return False
+
+        # Remove whitespace for analysis
+        text_clean = text.strip()
+
+        # Filter tokenizer artifacts (BPE tokens: Ġ=space prefix, Ċ=newline, etc.)
+        # These should never appear in real document text
+        tokenizer_artifacts = ['Ġ', 'Ċ', 'ĉ', 'ġ']
+        if any(artifact in text for artifact in tokenizer_artifacts):
+            return False
+
+        # Count alphanumeric vs non-alphanumeric characters
+        alpha_count = sum(1 for c in text_clean if c.isalpha())
+        digit_count = sum(1 for c in text_clean if c.isdigit())
+        total_chars = len(text_clean)
+
+        # Reject if mostly numeric (>60% digits) - likely page numbers, dates, etc.
+        if total_chars > 0 and digit_count / total_chars > 0.6:
+            return False
+
+        # Reject if too few letters (<30% alpha) - likely not real words
+        # Classification terms are all alphabetic: "SECRET", "NOFORN", etc.
+        if total_chars > 0 and alpha_count / total_chars < 0.3:
+            return False
+
+        return True
+
     def _is_classification_region(self, region: VisualRegion) -> bool:
         """
         Check if region likely contains classification markings
@@ -558,7 +609,31 @@ class VisualPatternDetector:
             'DERIVED FROM', 'DECLASSIFY ON', 'CLASSIFIED BY'
         ]
 
-        has_keyword = any(kw in text_upper for kw in classification_keywords)
+        # SECURITY FIX: Use word boundaries to avoid matching partial words
+        # "ATIONAL" (from "NATIONAL") should NOT match "SECRET"
+        # Only match complete words like "SECRET", "CONFIDENTIAL", etc.
+        # ALSO: Support fuzzy matching to catch OCR errors like ":LASSIFiED" (from "CLASSIFIED")
+        def has_keyword_match(text: str, keyword: str) -> bool:
+            """Check if keyword appears as complete word in text (exact or fuzzy)"""
+            # First try exact word boundary match (fast path)
+            pattern = r'\b' + re.escape(keyword) + r'\b'
+            if re.search(pattern, text) is not None:
+                return True
+
+            # If fuzzy matching enabled, try fuzzy match on individual words
+            if self.fuzzy_matching:
+                # Split text into words and check each word
+                words = re.findall(r'\b\w+\b', text)
+                for word in words:
+                    # Skip short words (< 5 chars) to avoid false positives
+                    if len(word) >= 5:
+                        score = fuzz.ratio(word.upper(), keyword.upper())
+                        if score >= self.fuzzy_threshold:
+                            return True
+
+            return False
+
+        has_keyword = any(has_keyword_match(text_upper, kw) for kw in classification_keywords)
 
         # Check visual features
         features = region.visual_features
@@ -566,10 +641,22 @@ class VisualPatternDetector:
         is_mostly_caps = features.get('capitalization_ratio', 0) >= self.VISUAL_THRESHOLDS['capitalization_ratio']
         is_top_or_bottom = region.is_header or region.is_footer
 
+        # VALIDATION: Reject short fragments like "ICE" (from "OFFICE")
+        # Real classification markings are at least 6 characters:
+        # "SECRET", "NOFORN", "ORCON", "CUI//", etc.
+        MIN_MEANINGFUL_LENGTH = 6
+        is_long_enough = len(region.text.strip()) >= MIN_MEANINGFUL_LENGTH
+
+        # VALIDATION: Check text quality (filter artifacts, page numbers, etc.)
+        is_valid_text = self._is_valid_classification_text(region.text)
+
         # Classify as classification region if:
-        # 1. Has classification keywords, OR
-        # 2. Is banner-like (top/bottom, large, caps)
-        return has_keyword or (is_top_or_bottom and is_large_font and is_mostly_caps)
+        # 1. Has classification keywords AND sufficient length AND valid text
+        # 2. OPTIONAL: Visual features boost confidence but ALWAYS require keyword match
+        #    to prevent false positives like "ATIONAL" (from "INTERNATIONAL")
+        #
+        # SECURITY: Always require has_keyword to prevent visual-only false positives
+        return has_keyword and is_long_enough and is_valid_text
 
     def _calculate_visual_confidence(self, region: VisualRegion) -> float:
         """

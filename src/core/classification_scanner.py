@@ -338,8 +338,8 @@ class ContextAnalyzer:
         r'portion\s+mark',
         r'overall\s+classification',
         r'security\s+classification\s+guide',
-        r'scg',  # Security Classification Guide
-        r'oci',  # Original Classification Authority
+        r'\bscg\b',  # Security Classification Guide - word boundaries prevent matching partial words
+        r'\boci\b',  # Original Classification Authority - word boundaries prevent matching partial words like "societies"
     ]
 
     # Indicators of FALSE POSITIVES (casual usage)
@@ -353,6 +353,8 @@ class ContextAnalyzer:
         r'secret\s+service',
         r'secret\s+agent',
         r'secret\s+ingredient',
+        r'secret\s+(?:society|societies)',
+        r'secret\s+(?:revolutionary|revolution)',
         r'trade\s+secret',
         r'classified\s+as\s+(?:a|an)',
         r'classified\s+into',
@@ -364,6 +366,30 @@ class ContextAnalyzer:
         r'derived\s+from\s+(?:the|a|an|soviet|russian|chinese)',  # Casual "derived from" usage
         r'secret\s+(?:report|document|paper|study)',  # Reference to secret docs, not markings
         r'confidential\s+(?:report|document|paper|study|source)',
+        # Library stamps and ownership markings (NOT classification markings)
+        r'pentagon\s+library',
+        r'library\s+(?:stamp|ownership|copy)',
+        r'washington,?\s*d\.?c\.?',
+        r'property\s+of\s+(?:the\s+)?(?:u\.?s\.?|united\s+states)',
+        # Editorial notations in historical documents (NOT classification markings)
+        r'not\s+declassified',
+        r'lines?\s+not\s+declassified',
+        r'paragraphs?\s+not\s+declassified',
+        r'words?\s+not\s+declassified',
+        r'\[.*?declassified.*?\]',  # Brackets indicate editorial notation
+        r'less\s+than.*?declassified',  # Editorial: "less than 1 line not declassified"
+        # Job titles containing "secret" (NOT classification levels)
+        r'secretary',
+        r'secretariat',
+        r'under\s+secretary',
+        r'assistant\s+secretary',
+        r'deputy\s+secretary',
+        # Casual academic/analytical usage of "derived from" (NOT classification authority)
+        r'derived\s+from\s+(?:the|a|an)\s+(?:theoretical|conceptual|analytical|theoretical|empirical|data|analysis|study|research|work|framework|model|approach|perspective|findings|results|evidence)',
+        r'(?:are|is|was|were|be|been|being)\s+derived\s+from',  # Passive voice = casual usage
+        r'(?:predictions|conclusions|results|findings|data|insights|themes|patterns)\s+(?:are|is|was|were)\s+derived',
+        # Common English words that fuzzy match to classification terms
+        r'\b(?:less|lens|lets|lies|secrets?|secretly|confident|confidence)\b',  # Will be filtered in fuzzy matching
     ]
 
     def __init__(self):
@@ -393,12 +419,39 @@ class ContextAnalyzer:
         # Check if surrounded by slashes (e.g., //SECRET//)
         has_slashes = bool(re.search(r'\/\/.*\/\/', context))
 
+        # Check if embedded in prose (surrounded by lowercase text)
+        # Official classification markings are typically standalone, not embedded in sentences
+        match_in_context = match_pos - start
+        before_text = context[max(0, match_in_context - 30):match_in_context]
+        after_text = context[match_in_context:min(len(context), match_in_context + 30)]
+
+        # Count lowercase letters in surrounding text
+        lowercase_before = sum(1 for c in before_text if c.islower())
+        lowercase_after = sum(1 for c in after_text if c.islower())
+
+        # Check if followed immediately by a lowercase word (indicates compound noun like "Classified ads" or "secret societies")
+        # Extract the matched word from context to find its end position
+        # Find the end of the word at match position (scan forward until non-letter)
+        match_end_pos = match_in_context
+        while match_end_pos < len(context) and context[match_end_pos].isalpha():
+            match_end_pos += 1
+
+        # Now look at what comes after the matched word
+        text_after_match = context[match_end_pos:min(len(context), match_end_pos + 20)].strip()
+        followed_by_lowercase_word = bool(text_after_match) and text_after_match[0].islower()
+
+        # If surrounded by significant lowercase text, it's likely embedded in prose
+        # Threshold: >5 lowercase chars before AND after indicates prose
+        # OR: immediately followed by lowercase word indicates compound noun (e.g., "Classified ads")
+        embedded_in_prose = (lowercase_before > 5 and lowercase_after > 5) or followed_by_lowercase_word
+
         return {
             'context': context,
             'has_official': has_official,
             'has_false_positive': has_false_positive,
             'at_line_start': at_line_start,
             'has_slashes': has_slashes,
+            'embedded_in_prose': embedded_in_prose,
         }
 
 
@@ -1204,9 +1257,12 @@ class ClassificationScanner:
 
         # Initialize fast pattern matcher (Aho-Corasick + Regex hybrid)
         if HAS_FAST_MATCHER:
-            self.fast_matcher = FastPatternMatcher()
+            self.fast_matcher = FastPatternMatcher(
+                fuzzy_matching=config.get('fuzzy_matching', True),
+                fuzzy_threshold=config.get('fuzzy_threshold', 85)
+            )
             self.fast_matcher.initialize()
-            print(f"✓ Fast pattern matcher initialized (Aho-Corasick: {HAS_AHOCORASICK})", file=sys.stderr)
+            print(f"✓ Fast pattern matcher initialized (Aho-Corasick: {HAS_AHOCORASICK}, Fuzzy: {config.get('fuzzy_matching', True)})", file=sys.stderr)
         else:
             self.fast_matcher = None
             # Fallback to traditional regex patterns
@@ -1218,7 +1274,9 @@ class ClassificationScanner:
             self.visual_detector = VisualPatternDetector(
                 use_gpu=config.get('use_gpu', True),
                 dpi=200,  # Lower DPI for faster processing
-                max_pages=config.get('max_pages_visual', None)
+                max_pages=config.get('max_pages_visual', None),
+                fuzzy_matching=config.get('fuzzy_matching', True),
+                fuzzy_threshold=config.get('fuzzy_threshold', 85)
             )
             # Don't initialize yet - only initialize when processing PDFs
             print(f"✓ Visual pattern detector available (LayoutLMv3: {HAS_LAYOUTLM})", file=sys.stderr)
@@ -1256,6 +1314,37 @@ class ClassificationScanner:
         """Get line number for a position in text"""
         return text[:position].count('\n') + 1
 
+    def is_in_json_metadata(self, text: str, position: int, window: int = 200) -> bool:
+        """Detect if a match is inside JSON metadata/coordinate data
+
+        This should ONLY match actual JSON structure from .json files (e.g., Azure OCR output),
+        NOT regular document text in PDFs or other formats.
+        """
+        start = max(0, position - window)
+        end = min(len(text), position + window)
+        context = text[start:end]
+
+        # Check for JSON field names that are VERY specific to OCR API output
+        # These will NOT appear in regular document text
+        json_fields = ['pageNumber', 'polygon', 'boundingBox', '"confidence":', '"spans"',
+                      '"content":', '"words":', '"lines":', '"paragraphs":', 'apiVersion',
+                      '"kind":', '"unit":', '"pageCount":']
+        has_json_fields = any(field in context for field in json_fields)
+
+        # Must have BOTH specific JSON fields AND substantial JSON structure
+        if has_json_fields:
+            # Count JSON structural elements
+            brackets = context.count('[') + context.count(']') + context.count('{') + context.count('}')
+            # Count coordinate arrays (lots of decimal numbers)
+            decimals = len(re.findall(r'\d+\.\d+', context))
+
+            # Require substantial JSON structure to avoid false positives on PDFs
+            # Real JSON coordinate data will have >6 brackets and >8 decimal coordinates
+            if brackets > 6 and decimals > 8:
+                return True
+
+        return False
+
     def determine_location(self, text: str, position: int, extracted_data: Dict) -> str:
         """Determine if match is in header, footer, body, or metadata"""
         # Check metadata
@@ -1291,6 +1380,51 @@ class ClassificationScanner:
                 position = pm.start
                 category = pm.category
 
+                # SKIP: Filter out matches in JSON metadata/coordinate data
+                if self.is_in_json_metadata(text, position):
+                    continue
+
+                # SKIP: Check if classification level is part of a job title (e.g., "Secret" in "Secretary")
+                if category == 'level':
+                    # SKIP: Portion mark abbreviations must be uppercase (e.g., (S), (TS), (C))
+                    # Lowercase versions like (s) are NOT classification markings
+                    if match_text.startswith('(') and match_text.endswith(')'):
+                        # Extract the content between parentheses
+                        inner = match_text[1:-1].split('//')[0].strip()
+                        # Check if it's a single/double letter abbreviation (TS, S, C, U)
+                        if len(inner) <= 2 and inner.isalpha():
+                            # Must be uppercase to be a valid portion mark
+                            if not inner.isupper():
+                                continue  # Skip lowercase portion marks
+
+                    end_position = pm.end
+                    # Check if immediately followed by "ary" or "ariat" (Secretary/Secretariat)
+                    if end_position + 3 <= len(text):
+                        following_text = text[end_position:end_position+5].lower()
+                        if following_text.startswith('ary') or following_text.startswith('ariat'):
+                            continue  # Skip this match - it's part of a job title
+
+                # SKIP: Validate "authority" patterns to ensure they're actual classification authority blocks
+                if category == 'authority':
+                    # Authority patterns like "DERIVED FROM" should be followed by colon or at line start
+                    match_upper = match_text.upper()
+                    if 'DERIVED FROM' in match_upper or 'CLASSIFIED BY' in match_upper or 'DECLASSIFY ON' in match_upper:
+                        # Check if followed by colon (official authority block format)
+                        end_position = pm.end
+                        has_colon_nearby = False
+                        if end_position + 5 <= len(text):
+                            following_text = text[end_position:end_position+5]
+                            has_colon_nearby = ':' in following_text
+
+                        # Check if at line start (official format)
+                        line_start = text.rfind('\n', 0, position)
+                        chars_from_line_start = position - line_start - 1
+                        at_line_start = chars_from_line_start < 5
+
+                        # Skip if neither at line start nor followed by colon
+                        if not has_colon_nearby and not at_line_start:
+                            continue  # Skip this match - not an official authority block
+
                 # Context analysis
                 context_info = self.context_analyzer.analyze(text, position)
 
@@ -1302,8 +1436,13 @@ class ClassificationScanner:
                     confidence += 0.3
 
                 # Penalty for false positive indicators
+                # BUT: Reduce penalty for high-confidence fuzzy matches (OCR-garbled text won't have perfect context)
                 if context_info['has_false_positive']:
-                    confidence -= 0.4
+                    # High-confidence matches (>0.9) are likely valid despite context anomalies
+                    if pm.confidence > 0.9:
+                        confidence -= 0.2  # Reduced penalty for fuzzy matches
+                    else:
+                        confidence -= 0.4
 
                 # Boost for structural indicators
                 if context_info['at_line_start']:
@@ -1311,10 +1450,33 @@ class ClassificationScanner:
                 if context_info['has_slashes']:
                     confidence += 0.15
 
+                # CRITICAL: Reject matches embedded in prose (not official classification markings)
+                # Official markings are standalone, not surrounded by lowercase prose text
+                if context_info.get('embedded_in_prose', False):
+                    # If embedded in prose AND no official context → likely casual usage, not a marking
+                    if not context_info['has_official']:
+                        # Skip this match entirely - it's clearly not an official classification marking
+                        continue
+                    else:
+                        # Even with official context, embedded prose reduces confidence
+                        confidence -= 0.3
+
                 # Boost for specific categories
                 if category == 'level':
                     # Classification level patterns (TOP SECRET, SECRET, CONFIDENTIAL, CUI)
-                    confidence += 0.3
+                    # BUT: Only boost if this doesn't look like casual usage
+                    # Allow boost if:
+                    # 1. Not a false positive, OR
+                    # 2. Has official context, OR
+                    # 3. Has slashes (control markings), OR
+                    # 4. Fuzzy match (pm.confidence < 1.0) at line start (likely OCR error)
+                    is_fuzzy_match = pm.confidence < 1.0
+                    can_boost = (not context_info['has_false_positive'] or
+                                context_info['has_official'] or
+                                context_info['has_slashes'] or
+                                (is_fuzzy_match and context_info['at_line_start']))
+                    if can_boost:
+                        confidence += 0.3
                     # Extra boost if it includes control markings (e.g., SECRET//NOFORN)
                     if '//' in match_text:
                         confidence += 0.2
@@ -1324,7 +1486,9 @@ class ClassificationScanner:
                     confidence += 0.25
                 if category == 'declassification':
                     # Declassification indicators are explicit evidence document was classified
-                    confidence += 0.25
+                    # But NOT if context indicates false positive (editorial notations)
+                    if not context_info['has_false_positive']:
+                        confidence += 0.25
                 if category == 'authority':
                     # Authority blocks are strong indicators
                     confidence += 0.25
@@ -1387,6 +1551,17 @@ class ClassificationScanner:
                     if context_info['has_slashes']:
                         confidence += 0.15
 
+                    # CRITICAL: Reject matches embedded in prose (not official classification markings)
+                    # Official markings are standalone, not surrounded by lowercase prose text
+                    if context_info.get('embedded_in_prose', False):
+                        # If embedded in prose AND no official context → likely casual usage, not a marking
+                        if not context_info['has_official']:
+                            # Skip this match entirely - it's clearly not an official classification marking
+                            continue
+                        else:
+                            # Even with official context, embedded prose reduces confidence
+                            confidence -= 0.3
+
                     # Boost for specific categories
                     if category == 'structural':
                         confidence += 0.2
@@ -1428,7 +1603,24 @@ class ClassificationScanner:
         if self.fuzzy_matcher and self.fuzzy_matcher.enabled:
             fuzzy_matches = self.fuzzy_matcher.find_fuzzy_matches(text)
 
+            # Common English words that should NOT be matched (even with fuzzy matching)
+            EXCLUDED_WORDS = {'less', 'lens', 'lets', 'lies', 'secret', 'secrets', 'secretly',
+                            'confident', 'confidence', 'confidential', 'les', 'secretary'}
+
             for word_phrase, term, score, position in fuzzy_matches:
+                # SKIP: Filter out matches in JSON metadata/coordinate data
+                if self.is_in_json_metadata(text, position):
+                    continue
+
+                # SKIP: Exclude common English words that fuzzy match to classification terms
+                word_lower = word_phrase.lower().strip()
+                if word_lower in EXCLUDED_WORDS:
+                    continue
+
+                # SKIP: Minimum word length for fuzzy matches (avoid single chars or very short matches)
+                if len(word_phrase.strip()) < 3:
+                    continue
+
                 # Avoid duplicates from pattern matching
                 if any(abs(m.position - position) < 10 for m in matches):
                     continue
@@ -1534,6 +1726,47 @@ class ClassificationScanner:
 
                             # Add visual-only matches
                             if not is_covered:
+                                # VALIDATION: Reject garbage/false positive visual matches
+                                visual_text = visual_match.text.strip()
+
+                                # Reject very short matches (likely OCR artifacts)
+                                if len(visual_text) < 3:
+                                    continue
+
+                                # Reject matches that start or end with non-ASCII characters (OCR garbage)
+                                if len(visual_text) > 0 and (ord(visual_text[0]) > 127 or ord(visual_text[-1]) > 127):
+                                    continue
+
+                                # Reject matches with too many non-ASCII characters (OCR garbage)
+                                non_ascii_ratio = sum(1 for c in visual_text if ord(c) > 127) / max(len(visual_text), 1)
+                                if non_ascii_ratio > 0.3:  # >30% non-ASCII = garbage
+                                    continue
+
+                                # Check for false positive indicators (library stamps, etc.)
+                                visual_text_upper = visual_text.upper()
+                                false_positive_keywords = [
+                                    'LIBRARY', 'WASHINGTON', 'PROPERTY OF', 'COPY',
+                                    'SECRETARY', 'SECRETARIAT',  # Job titles, not classification levels
+                                    'PENTAGON LIBRARY',  # Specific library stamp
+                                    'OFFICE',  # Common in headers (e.g., "OFFICE OF...")
+                                    'DEFENSE',  # Department headers
+                                ]
+                                # Check both directions:
+                                # 1. Keyword in visual text (e.g., "WASHINGTON" in "WASHINGTON DC")
+                                # 2. Visual text in keyword (e.g., "ASHINGTON" in "WASHINGTON")
+                                has_false_positive = any(
+                                    keyword in visual_text_upper or visual_text_upper in keyword
+                                    for keyword in false_positive_keywords
+                                )
+
+                                # Reject if clear false positive indicator
+                                if has_false_positive:
+                                    continue
+
+                                # Trust the visual detector's pattern classification
+                                # The visual detector is trained to identify classification patterns visually,
+                                # even when OCR text extraction is poor or incomplete
+
                                 # Calculate confidence for visual-only match
                                 confidence = visual_match.visual_confidence * 0.8  # Base confidence from visual
 

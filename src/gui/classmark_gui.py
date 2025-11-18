@@ -32,6 +32,7 @@ from typing import List, Dict, Optional
 import queue
 from concurrent.futures import ProcessPoolExecutor, as_completed
 import multiprocessing
+import time
 
 # Add src to path for imports
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
@@ -179,6 +180,11 @@ class ClassmarkGUI:
         self.scanner = None
         self.processing = False
         self.results_queue = queue.Queue()
+
+        # Progress tracking for throttling
+        self.last_progress_update = 0
+        self.last_progress_value = 0
+        self.processing_start_time = None
 
         # Settings (loaded from config file)
         self.settings = {
@@ -349,6 +355,11 @@ class ClassmarkGUI:
         self.status_var.set("Processing...")
         self.progress_var.set(0)
 
+        # Reset progress tracking
+        self.last_progress_update = 0
+        self.last_progress_value = 0
+        self.processing_start_time = time.time()
+
         # Start processing in separate thread
         thread = threading.Thread(target=self.process_documents, daemon=True)
         thread.start()
@@ -440,8 +451,37 @@ class ClassmarkGUI:
                     file_path = future_to_file[future]
                     filename = os.path.basename(file_path)
 
-                    # Update progress
-                    self.results_queue.put(('progress', (progress, f"Processing {completed_count}/{len(files)}: {filename}")))
+                    # Throttled progress updates - only update if:
+                    # 1. Progress changed by >= 1% OR
+                    # 2. More than 0.5 seconds passed OR
+                    # 3. This is the last file (100% complete)
+                    current_time = time.time()
+                    time_since_last_update = current_time - self.last_progress_update
+                    progress_delta = abs(progress - self.last_progress_value)
+
+                    should_update = (
+                        progress_delta >= 1.0 or  # Progress changed by 1%+
+                        time_since_last_update >= 0.5 or  # 500ms elapsed
+                        completed_count == len(files)  # Last file
+                    )
+
+                    if should_update:
+                        # Calculate processing statistics
+                        elapsed_time = current_time - self.processing_start_time
+                        files_per_sec = completed_count / elapsed_time if elapsed_time > 0 else 0
+                        remaining_files = len(files) - completed_count
+                        eta_seconds = remaining_files / files_per_sec if files_per_sec > 0 else 0
+
+                        # Format progress label with statistics
+                        if completed_count == len(files):
+                            progress_label = f"Complete: {completed_count}/{len(files)} files"
+                        else:
+                            progress_label = f"{completed_count}/{len(files)} files ({files_per_sec:.1f} files/sec, ETA: {eta_seconds:.0f}s)"
+
+                        # Send throttled update
+                        self.results_queue.put(('progress', (progress, progress_label)))
+                        self.last_progress_update = current_time
+                        self.last_progress_value = progress
 
                     try:
                         # Get result from worker process
@@ -518,23 +558,62 @@ class ClassmarkGUI:
         self.root.after(100, self.process_results)
 
     def save_log(self, results: List[Dict]):
-        """Save processing log to file"""
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        """Save processing log to file
 
-        if self.settings['log_format'] == 'csv':
-            log_path = os.path.join(self.output_folder, f"classmark_log_{timestamp}.csv")
+        Handles heterogeneous result dictionaries where different results may have
+        different fields (e.g., some with 'output_path', some without).
+        """
+        try:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-            with open(log_path, 'w', newline='', encoding='utf-8') as f:
-                if results:
-                    writer = csv.DictWriter(f, fieldnames=results[0].keys())
-                    writer.writeheader()
-                    writer.writerows(results)
+            if self.settings['log_format'] == 'csv':
+                log_path = os.path.join(self.output_folder, f"classmark_log_{timestamp}.csv")
 
-        else:  # json
-            log_path = os.path.join(self.output_folder, f"classmark_log_{timestamp}.json")
+                with open(log_path, 'w', newline='', encoding='utf-8') as f:
+                    if results:
+                        # Define preferred field order for professional CSV output
+                        preferred_order = [
+                            'file_path', 'filename', 'status',
+                            'has_classification', 'classification_level', 'confidence',
+                            'num_matches', 'moved', 'output_path', 'move_error',
+                            'processing_time', 'error'
+                        ]
 
-            with open(log_path, 'w', encoding='utf-8') as f:
-                json.dump(results, f, indent=2)
+                        # Collect all actual fields present in results
+                        actual_fields = set()
+                        for result in results:
+                            actual_fields.update(result.keys())
+
+                        # Use preferred order for known fields, append any extras
+                        fieldnames = [f for f in preferred_order if f in actual_fields]
+                        extra_fields = sorted(actual_fields - set(preferred_order))
+                        fieldnames.extend(extra_fields)
+
+                        writer = csv.DictWriter(f, fieldnames=fieldnames)
+                        writer.writeheader()
+                        writer.writerows(results)
+                    else:
+                        # Write empty CSV with standard headers
+                        fieldnames = ['file_path', 'filename', 'status']
+                        writer = csv.DictWriter(f, fieldnames=fieldnames)
+                        writer.writeheader()
+
+                self.log_message(f"Saved CSV log to {log_path}", 'info')
+
+            else:  # json
+                log_path = os.path.join(self.output_folder, f"classmark_log_{timestamp}.json")
+
+                with open(log_path, 'w', encoding='utf-8') as f:
+                    json.dump(results, f, indent=2)
+
+                self.log_message(f"Saved JSON log to {log_path}", 'info')
+
+            return log_path
+
+        except Exception as e:
+            error_msg = f"Failed to save log: {str(e)}"
+            self.log_message(error_msg, 'error')
+            return None
 
     def get_sensitivity_value(self) -> float:
         """Convert sensitivity setting to threshold value"""
@@ -556,107 +635,86 @@ class ClassmarkGUI:
         self.log_text.config(state='disabled')
 
     def open_settings(self):
-        """Open settings dialog"""
+        """Open settings dialog - Performance Optimizations Only"""
         settings_window = tk.Toplevel(self.root)
-        settings_window.title("Settings")
-        settings_window.geometry("400x400")
+        settings_window.title("Performance Settings")
+        settings_window.geometry("500x300")
         settings_window.transient(self.root)
         settings_window.grab_set()
 
         # Settings frame
-        frame = ttk.Frame(settings_window, padding="10")
+        frame = ttk.Frame(settings_window, padding="20")
         frame.pack(fill=tk.BOTH, expand=True)
 
-        # Sensitivity
-        ttk.Label(frame, text="Sensitivity:").grid(row=0, column=0, sticky=tk.W, pady=5)
-        sensitivity_var = tk.StringVar(value=self.settings['sensitivity'])
-        sensitivity_combo = ttk.Combobox(frame, textvariable=sensitivity_var,
-                                        values=['low', 'medium', 'high'], state='readonly')
-        sensitivity_combo.grid(row=0, column=1, sticky=(tk.W, tk.E), pady=5)
-
-        # Confidence threshold
-        ttk.Label(frame, text="Confidence Threshold:").grid(row=1, column=0, sticky=tk.W, pady=5)
-        confidence_var = tk.DoubleVar(value=self.settings['confidence_threshold'])
-        confidence_spin = ttk.Spinbox(frame, from_=0.0, to=1.0, increment=0.05,
-                                     textvariable=confidence_var, width=10)
-        confidence_spin.grid(row=1, column=1, sticky=tk.W, pady=5)
-
-        # Checkboxes
-        gpu_var = tk.BooleanVar(value=self.settings['use_gpu'])
-        ttk.Checkbutton(frame, text="Use GPU (if available)", variable=gpu_var).grid(row=2, column=0, columnspan=2, sticky=tk.W, pady=5)
-
-        visual_var = tk.BooleanVar(value=self.settings['use_visual_detection'])
-        ttk.Checkbutton(frame, text="Use Visual Detection (LayoutLMv3)", variable=visual_var).grid(row=3, column=0, columnspan=2, sticky=tk.W, pady=5)
-
-        fuzzy_var = tk.BooleanVar(value=self.settings['use_fuzzy_matching'])
-        ttk.Checkbutton(frame, text="Use Fuzzy Matching", variable=fuzzy_var).grid(row=4, column=0, columnspan=2, sticky=tk.W, pady=5)
-
-        move_var = tk.BooleanVar(value=self.settings['move_hits'])
-        ttk.Checkbutton(frame, text="Move classification hits to output folder", variable=move_var).grid(row=5, column=0, columnspan=2, sticky=tk.W, pady=5)
-
-        log_var = tk.BooleanVar(value=self.settings['create_log'])
-        ttk.Checkbutton(frame, text="Create processing log", variable=log_var).grid(row=6, column=0, columnspan=2, sticky=tk.W, pady=5)
-
-        # Log format
-        ttk.Label(frame, text="Log Format:").grid(row=7, column=0, sticky=tk.W, pady=5)
-        log_format_var = tk.StringVar(value=self.settings['log_format'])
-        log_format_combo = ttk.Combobox(frame, textvariable=log_format_var,
-                                       values=['csv', 'json'], state='readonly')
-        log_format_combo.grid(row=7, column=1, sticky=(tk.W, tk.E), pady=5)
-
-        # Performance optimization settings separator
-        ttk.Separator(frame, orient='horizontal').grid(row=8, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=10)
-        ttk.Label(frame, text="Performance Optimizations", font=('Helvetica', 10, 'bold')).grid(row=9, column=0, columnspan=2, sticky=tk.W, pady=5)
+        # Title
+        ttk.Label(frame, text="Performance Optimizations", font=('Helvetica', 12, 'bold')).grid(row=0, column=0, columnspan=2, sticky=tk.W, pady=(0, 15))
 
         # Early exit optimization
         early_exit_var = tk.BooleanVar(value=self.settings['enable_early_exit'])
         ttk.Checkbutton(frame, text="Enable Early Exit (stop after finding classification)",
-                       variable=early_exit_var).grid(row=10, column=0, columnspan=2, sticky=tk.W, pady=5)
+                       variable=early_exit_var).grid(row=1, column=0, columnspan=2, sticky=tk.W, pady=5)
 
         # Early exit threshold
-        ttk.Label(frame, text="Early Exit Confidence Threshold:").grid(row=11, column=0, sticky=tk.W, pady=5)
+        ttk.Label(frame, text="Early Exit Confidence Threshold:").grid(row=2, column=0, sticky=tk.W, pady=5, padx=(20, 0))
         early_exit_threshold_var = tk.DoubleVar(value=self.settings['early_exit_threshold'])
-        early_exit_threshold_spin = ttk.Spinbox(frame, from_=0.5, to=1.0, increment=0.05,
+        early_exit_threshold_spin = ttk.Spinbox(frame, from_=0.7, to=1.0, increment=0.05,
                                                textvariable=early_exit_threshold_var, width=10)
-        early_exit_threshold_spin.grid(row=11, column=1, sticky=tk.W, pady=5)
+        early_exit_threshold_spin.grid(row=2, column=1, sticky=tk.W, pady=5)
 
         # Quick scan pages
-        ttk.Label(frame, text="Quick Scan Pages (for early exit):").grid(row=12, column=0, sticky=tk.W, pady=5)
+        ttk.Label(frame, text="Quick Scan Pages (for early exit):").grid(row=3, column=0, sticky=tk.W, pady=5, padx=(20, 0))
         quick_scan_pages_var = tk.IntVar(value=self.settings['quick_scan_pages'])
         quick_scan_pages_spin = ttk.Spinbox(frame, from_=1, to=10, increment=1,
                                            textvariable=quick_scan_pages_var, width=10)
-        quick_scan_pages_spin.grid(row=12, column=1, sticky=tk.W, pady=5)
+        quick_scan_pages_spin.grid(row=3, column=1, sticky=tk.W, pady=5)
+
+        # Separator
+        ttk.Separator(frame, orient='horizontal').grid(row=4, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=15)
 
         # Parallel workers
         max_cpu = multiprocessing.cpu_count()
-        ttk.Label(frame, text=f"Parallel Workers (of {max_cpu} cores):").grid(row=13, column=0, sticky=tk.W, pady=5)
+        ttk.Label(frame, text=f"Parallel Workers (of {max_cpu} CPU cores):").grid(row=5, column=0, sticky=tk.W, pady=5)
         parallel_workers_var = tk.IntVar(value=self.settings['parallel_workers'])
         parallel_workers_spin = ttk.Spinbox(frame, from_=1, to=max_cpu, increment=1,
                                            textvariable=parallel_workers_var, width=10)
-        parallel_workers_spin.grid(row=13, column=1, sticky=tk.W, pady=5)
+        parallel_workers_spin.grid(row=5, column=1, sticky=tk.W, pady=5)
+
+        # Help text
+        help_text = ttk.Label(frame, text="Note: Higher values improve speed but use more CPU/memory.",
+                             foreground='gray', font=('Helvetica', 9))
+        help_text.grid(row=6, column=0, columnspan=2, sticky=tk.W, pady=(10, 0))
 
         # Buttons
         button_frame = ttk.Frame(frame)
-        button_frame.grid(row=14, column=0, columnspan=2, pady=20)
+        button_frame.grid(row=7, column=0, columnspan=2, pady=(20, 0))
 
         def save_settings():
-            self.settings['sensitivity'] = sensitivity_var.get()
-            self.settings['confidence_threshold'] = confidence_var.get()
-            self.settings['use_gpu'] = gpu_var.get()
-            self.settings['use_visual_detection'] = visual_var.get()
-            self.settings['use_fuzzy_matching'] = fuzzy_var.get()
-            self.settings['move_hits'] = move_var.get()
-            self.settings['create_log'] = log_var.get()
-            self.settings['log_format'] = log_format_var.get()
-            # Performance optimization settings
+            # Save ONLY performance optimization settings
+            # Other settings remain at their default/configured values
             self.settings['enable_early_exit'] = early_exit_var.get()
             self.settings['early_exit_threshold'] = early_exit_threshold_var.get()
             self.settings['quick_scan_pages'] = quick_scan_pages_var.get()
             self.settings['parallel_workers'] = parallel_workers_var.get()
 
             self.save_settings_to_file()
-            self.log_message("Settings saved", "success")
+            self.log_message("Performance settings saved", "success")
             settings_window.destroy()
+
+        def on_closing():
+            """Handle window close event (X button)"""
+            result = messagebox.askyesnocancel(
+                "Save Settings",
+                "Do you want to save your changes?",
+                parent=settings_window
+            )
+            if result is True:  # Yes - save and close
+                save_settings()
+            elif result is False:  # No - discard and close
+                settings_window.destroy()
+            # None/Cancel - do nothing (keep window open)
+
+        # Set protocol for window close button (X)
+        settings_window.protocol("WM_DELETE_WINDOW", on_closing)
 
         ttk.Button(button_frame, text="Save", command=save_settings).pack(side=tk.LEFT, padx=5)
         ttk.Button(button_frame, text="Cancel", command=settings_window.destroy).pack(side=tk.LEFT, padx=5)

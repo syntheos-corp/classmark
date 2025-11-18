@@ -163,6 +163,287 @@ Critical review of the classmark system against 2024-2025 state-of-the-art revea
 
 ## Context Manifest
 
+### Fuzzy Matching Support for Fast Pattern Matcher: Implementation Guide
+
+#### Overview
+
+This manifest provides complete context for adding fuzzy matching support to the FastPatternMatcher to detect garbled OCR text like ":LASSIFiED" (should match "CLASSIFIED"). The enhancement will run AFTER Aho-Corasick exact matching to preserve performance, using rapidfuzz for word-level fuzzy matching with configurable thresholds.
+
+#### Current Architecture: How Pattern Matching Works
+
+**Pattern Matching Flow (Fast Path)**:
+
+When a user scans a document, the ClassificationScanner initiates the scan_text() method (line 1337 in classification_scanner.py). This method first attempts fast pattern matching using FastPatternMatcher.match_all() (line 1344), which coordinates two matching strategies:
+
+1. **Aho-Corasick Literal Matching** (line 269): Executes match_literal_patterns() that uses the Aho-Corasick automaton built at initialization. The automaton is a finite state machine constructed from 20+ literal patterns (NOFORN, DECLASSIFIED, FOUO, etc.) defined in the LITERAL_PATTERNS dict (lines 66-101 in fast_pattern_matcher.py). This runs in O(text_length + matches) complexity regardless of pattern count, making it extremely fast. The automaton iterates over text_upper (uppercase normalized) and checks word boundaries with _check_word_boundary() (line 211) to avoid partial matches like "SCI" matching within "SCIENTIST".
+
+2. **Regex Complex Pattern Matching** (line 270): Executes match_regex_patterns() for patterns requiring lookahead/lookbehind, like the SECRET pattern with negative lookahead to avoid "SECRET SERVICE" false positives (line 112).
+
+Both results are deduplicated (line 276) using category priority (level > structural > authority > declassification > control) and confidence scores, then sorted by position (line 279).
+
+**Word Boundary Checking Logic**:
+
+The _check_word_boundary() method (lines 283-314) validates that a match is a complete word by checking:
+- Character before match position: if it's alphabetic, reject (indicates partial word like "SCI" in "SCIENTIST")
+- Character after match position: if it's alphabetic, reject (indicates word like "IFIED" after "CLASS")
+- Non-alphabetic characters (digits, symbols, whitespace) are allowed as boundaries
+
+This prevents false positives like matching "ORM" in "INFORMATION".
+
+**Match Object Structure**:
+
+Each match returned is a PatternMatch dataclass (lines 28-36) with:
+- pattern: str - Name of the pattern matched (e.g., "NOFORN")
+- category: str - Type category (level, control, declassification, authority)
+- start/end: int - Position in original text
+- matched_text: str - Actual text matched (used in further analysis)
+- confidence: float - Initially 1.0 for exact matches, 0.95 for regex complex patterns
+
+**Integration with ClassificationScanner**:
+
+In scan_text() (line 1337), each PatternMatch undergoes:
+1. JSON metadata filtering (line 1352) - Skip matches in OCR coordinate data
+2. Category-specific validation (lines 1356-1394) - Job title rejection, authority block format checking
+3. Context analysis (line 1397) using ContextAnalyzer
+4. Confidence calculation (lines 1399-1452) starting from match.confidence and boosted/penalized based on context
+5. Threshold filtering (line 1455-1456) against config.get('confidence_threshold', 0.3)
+
+#### Existing Fuzzy Matching Pattern: Visual Pattern Detector
+
+The codebase already implements fuzzy matching in VisualPatternDetector (visual_pattern_detector.py), providing a reference pattern for integration:
+
+**Fuzzy Matching Configuration** (lines 105-114):
+```python
+def __init__(
+    self,
+    model_name: str = 'microsoft/layoutlmv3-base',
+    use_gpu: bool = True,
+    dpi: int = 200,
+    max_pages: Optional[int] = None,
+    cache_dir: Optional[str] = None,
+    fuzzy_matching: bool = True,        # Feature flag
+    fuzzy_threshold: int = 85           # Configurable threshold
+):
+    self.fuzzy_matching = fuzzy_matching
+    self.fuzzy_threshold = fuzzy_threshold
+```
+
+**Fuzzy Implementation Pattern** (lines 616-634):
+```python
+def has_keyword_match(text: str, keyword: str) -> bool:
+    """Check if keyword appears as complete word in text (exact or fuzzy)"""
+    # First try exact word boundary match (fast path)
+    pattern = r'\b' + re.escape(keyword) + r'\b'
+    if re.search(pattern, text) is not None:
+        return True
+
+    # If fuzzy matching enabled, try fuzzy match on individual words
+    if self.fuzzy_matching:
+        # Split text into words and check each word
+        words = re.findall(r'\b\w+\b', text)
+        for word in words:
+            # Skip short words (< 5 chars) to avoid false positives
+            if len(word) >= 5:
+                score = fuzz.ratio(word.upper(), keyword.upper())
+                if score >= self.fuzzy_threshold:
+                    return True
+
+    return False
+```
+
+**Key Patterns to Follow**:
+1. Feature flag: fuzzy_matching parameter controls enable/disable
+2. Threshold configuration: fuzzy_threshold as configurable int (0-100, default 85)
+3. Tiered matching: exact match first (fast), then fuzzy fallback (slower)
+4. Word length validation: skip very short words (< 5 chars) to avoid "ICE" matching "CLASSIFIED"
+5. Word boundary checking: use regex word extraction r'\b\w+\b' to get individual words
+6. Case-insensitive comparison: .upper() on both patterns and candidate words
+7. Library choice: rapidfuzz (fuzz.ratio for simple similarity) is already in requirements.txt
+
+#### Configuration Pattern in ClassificationScanner
+
+Fuzzy matching configuration is passed from ClassificationScanner.__init__() (lines 1217-1253):
+
+```python
+self.config = config
+self.fuzzy_matcher = FuzzyMatcher(
+    threshold=config.get('fuzzy_threshold', 85)
+) if config.get('fuzzy_matching', False) else None
+```
+
+And in visual detector initialization (lines 1241-1248):
+```python
+self.visual_detector = VisualPatternDetector(
+    use_gpu=config.get('use_gpu', True),
+    dpi=200,
+    max_pages=config.get('max_pages_visual', None),
+    fuzzy_matching=config.get('fuzzy_matching', True),
+    fuzzy_threshold=config.get('fuzzy_threshold', 85)
+)
+```
+
+**Expected config dict structure** (from run_baseline_evaluation.py lines 44-50):
+```python
+config = {
+    'sensitivity_threshold': 0.5,
+    'fuzzy_matching': True,          # Enable/disable fuzzy matching
+    'fuzzy_threshold': 85,            # 0-100 similarity threshold
+    'use_llm': False,
+    'llm_model': 'qwen3:8b'
+}
+```
+
+#### Best Integration Point: Match_All Method
+
+The optimal integration point is in the match_all() method (lines 255-281 in fast_pattern_matcher.py):
+
+```python
+def match_all(self, text: str) -> List[PatternMatch]:
+    """Match all patterns (both literal and regex)"""
+    if not self._initialized:
+        self.initialize()
+
+    # Run both matchers
+    literal_matches = self.match_literal_patterns(text)
+    regex_matches = self.match_regex_patterns(text)
+
+    # Combine and deduplicate
+    all_matches = literal_matches + regex_matches
+
+    # Remove overlapping matches (keep highest confidence)
+    all_matches = self._deduplicate_matches(all_matches)
+
+    # Sort by position
+    all_matches.sort(key=lambda m: (m.start, -m.confidence))
+
+    return all_matches
+```
+
+**The fuzzy matching pass should be inserted AFTER regex_matches but BEFORE deduplication**:
+
+1. **After exact matching**: Preserves Aho-Corasick performance (still O(text_length))
+2. **Before deduplication**: Fuzzy matches can be deduplicated alongside exact matches using the same priority system
+3. **Optional second pass**: Only run if fuzzy_matching is enabled (via config or parameter)
+4. **Separate pattern list**: Use a distinct FUZZY_PATTERNS list for words to fuzzy-match against
+
+#### Literal Patterns Available for Fuzzy Matching
+
+The LITERAL_PATTERNS dict (lines 66-101) provides the canonical terms to fuzzy-match against:
+
+**High-Priority Patterns (common OCR errors)**:
+- 'CLASSIFIED' - Appears in CLASSIFIED BY (high OCR error rate: "CLASSIFIEF", ":LASSIFiED", "CLASIFIED")
+- 'DECLASSIFIED' - Explicitly marked (OCR errors: "DECASSIFIED", "DECLA$$IFIED")
+- 'SECRET' - Core classification term (OCR errors: "$ECRET", "5ECRET")
+- 'CONFIDENTIAL' - Core classification term (OCR errors: "CONFIDENTIAI", "CONFDENTIAL")
+
+**Control Markings** (shorter, harder to fuzzy match due to false positives):
+- 'NOFORN', 'ORCON', 'IMCON', 'RELIDO', 'PROPIN', 'FISA', 'SCI' - Use minimum word length >= 5 chars
+
+**Authority Markings** (multi-word - handle specially):
+- 'DERIVED FROM' - Handle as phrase
+- 'CLASSIFIED BY' - Already handles partial "CLASSIFIED"
+- 'DECLASSIFY ON' - Handle as phrase
+
+#### Performance Considerations
+
+**Why Fuzzy Matching AFTER Exact Matching**:
+1. Exact matches are O(text_length) via Aho-Corasick - very fast
+2. Fuzzy matching is O(words × patterns) - slower, but only on unmatched text
+3. Typical document has 200-500 words, most classification patterns match exactly
+4. Fuzzy matching typically catches <5% additional matches per document
+
+**Word Extraction Strategy** (from visual_pattern_detector.py line 626):
+```python
+words = re.findall(r'\b\w+\b', text)  # Split on word boundaries
+```
+
+This extracts words that haven't been matched by exact patterns. For each unmatched word, fuzzy-match against literal pattern names.
+
+**Minimum Word Length** (line 628):
+```python
+if len(word) >= 5:  # Skip very short words
+```
+
+This prevents fuzzy matching on fragments like:
+- "ICE" matching "CLASSIFIED" (would be 60% match) - rejected
+- "RET" matching "SECRET" - rejected
+- "FIA" matching "CONFIDENTIAL" - rejected
+
+But allows:
+- "CLASIFIED" → "CLASSIFIED" (95% match) - accepted at 85% threshold
+- "SECRETED" → "SECRET" (75% match at 1-char difference) - might need length check
+
+#### Dependencies Already Available
+
+All fuzzy matching dependencies are already in requirements.txt (line 12):
+```
+rapidfuzz>=3.0.0            # Fuzzy string matching
+```
+
+The code also has fallback support (classification_scanner.py lines 83-91):
+```python
+try:
+    from rapidfuzz import fuzz, process
+    HAS_RAPIDFUZZ = True
+except ImportError:
+    try:
+        from fuzzywuzzy import fuzz, process
+        HAS_RAPIDFUZZ = True
+    except ImportError:
+        HAS_RAPIDFUZZ = False
+```
+
+Rapidfuzz is preferred (faster, better maintained), but fuzzywuzzy is available as fallback.
+
+**Import pattern to use in fast_pattern_matcher.py**:
+```python
+try:
+    from rapidfuzz import fuzz
+    HAS_RAPIDFUZZ = True
+except ImportError:
+    try:
+        from fuzzywuzzy import fuzz
+        HAS_RAPIDFUZZ = True
+    except ImportError:
+        HAS_RAPIDFUZZ = False
+```
+
+#### Avoiding False Positives: Strategy
+
+OCR garbling can create problematic matches. Prevention strategy:
+
+1. **Word Length Minimum**: >= 5 characters
+   - Prevents "ICE" (from "CLASSIFIED") matching other words
+   - Allows "CLASSIFIED" variations (usually 9-12 chars)
+
+2. **Threshold Default**: 85% similarity
+   - Allows 1-2 character differences per 10-char word (consistent with industry standards)
+   - "CLASIFIED" (1 char missing) → 90% match ✓
+   - "SECRETED" (4 chars extra) → 75% match ✗ (needs 5-char minimum)
+
+3. **Pattern-Specific Thresholds**: Optional refinement
+   - High-confidence words (like "CLASSIFIED"): threshold 80%
+   - Medium-confidence control markings (like "NOFORN"): threshold 90%
+   - Short acronyms (like "SCI"): disable fuzzy (too error-prone)
+
+4. **Context Filtering**: Already handled in scan_text()
+   - JSON metadata filtering (line 1352)
+   - Authority block validation (lines 1376-1394)
+   - Context analysis (line 1397)
+   - These apply to fuzzy matches as well
+
+#### Match Confidence for Fuzzy Matches
+
+Unlike exact matches (confidence 1.0) and regex complex patterns (confidence 0.95), fuzzy matches should have proportional confidence based on similarity score:
+
+```python
+# For a fuzzy match with score 87/100 at 85% threshold:
+fuzzy_confidence = (score / 100) * 0.95  # 0.83 confidence
+# This gets further boosted/penalized by context analysis
+```
+
+This allows scan_text() to weight fuzzy matches appropriately (boost for official context, penalize for casual context).
+
 ### Key Code Locations
 
 **classification_scanner.py** (1,583 lines) - Core detection engine

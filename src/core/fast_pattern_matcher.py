@@ -24,6 +24,12 @@ try:
 except ImportError:
     HAS_AHOCORASICK = False
 
+try:
+    from rapidfuzz import fuzz
+    HAS_RAPIDFUZZ = True
+except ImportError:
+    HAS_RAPIDFUZZ = False
+
 
 @dataclass
 class PatternMatch:
@@ -55,12 +61,20 @@ class FastPatternMatcher:
     - Word boundary handling for literal patterns
     """
 
-    def __init__(self):
-        """Initialize the fast pattern matcher"""
+    def __init__(self, fuzzy_matching: bool = True, fuzzy_threshold: int = 85):
+        """
+        Initialize the fast pattern matcher
+
+        Args:
+            fuzzy_matching: Enable fuzzy matching for OCR error tolerance
+            fuzzy_threshold: Similarity threshold (0-100) for fuzzy matching
+        """
         self.automaton = None
         self.regex_patterns = []
         self.literal_patterns = []
         self._initialized = False
+        self.fuzzy_matching = fuzzy_matching
+        self.fuzzy_threshold = fuzzy_threshold
 
         # Classification terms for Aho-Corasick (literal strings only)
         self.LITERAL_PATTERNS = {
@@ -252,9 +266,78 @@ class FastPatternMatcher:
 
         return matches
 
+    def match_fuzzy_patterns(self, text: str) -> List[PatternMatch]:
+        """
+        Match patterns using fuzzy string matching for OCR error tolerance
+
+        Only fuzzy-matches high-value patterns prone to OCR errors:
+        - CLASSIFIED (->:LASSIFiED, CLASSIFIEF, etc.)
+        - DECLASSIFIED (->DECLASIFIED, etc.)
+        - SECRET (->$ECRET, SECREF, etc.)
+        - CONFIDENTIAL (->CONFIDENTIAI, etc.)
+
+        Args:
+            text: Text to search
+
+        Returns:
+            List of PatternMatch objects with confidence < 1.0
+        """
+        if not self._initialized:
+            self.initialize()
+
+        if not HAS_RAPIDFUZZ or not self.fuzzy_matching:
+            return []
+
+        # High-value patterns for fuzzy matching (prone to OCR errors)
+        fuzzy_patterns = {
+            'CLASSIFIED': ('authority', 'CLASSIFIED_BY'),
+            'DECLASSIFIED': ('declassification', 'DECLASSIFIED'),
+            'SECRET': ('level', 'SECRET'),
+            'CONFIDENTIAL': ('level', 'CONFIDENTIAL'),
+        }
+
+        matches = []
+
+        # Extract words from text (alphanumeric sequences)
+        words = re.findall(r'\b[A-Za-z0-9]+\b', text)
+
+        # Track word positions for accurate match locations
+        word_positions = [(m.start(), m.end(), m.group()) for m in re.finditer(r'\b[A-Za-z0-9]+\b', text)]
+
+        for pos_idx, (start_pos, end_pos, word) in enumerate(word_positions):
+            # Skip short words to avoid false positives
+            if len(word) < 5:
+                continue
+
+            word_upper = word.upper()
+
+            # Try fuzzy matching against each pattern
+            for pattern_text, (category, name) in fuzzy_patterns.items():
+                similarity = fuzz.ratio(word_upper, pattern_text)
+
+                if similarity >= self.fuzzy_threshold:
+                    # Check word boundaries
+                    if self._check_word_boundary(text, start_pos, end_pos):
+                        # Calculate confidence: use full similarity score
+                        # Note: scan_text multiplies by 0.5, so we use full score here
+                        # to compensate (e.g., 95% -> 0.95 -> 0.475 after 0.5 multiplier)
+                        # Using 1.0 scaling ensures strong fuzzy matches survive the multiplier
+                        confidence = similarity / 100.0
+
+                        matches.append(PatternMatch(
+                            pattern=name,
+                            category=category,
+                            start=start_pos,
+                            end=end_pos,
+                            matched_text=word,
+                            confidence=confidence
+                        ))
+
+        return matches
+
     def match_all(self, text: str) -> List[PatternMatch]:
         """
-        Match all patterns (both literal and regex)
+        Match all patterns (literal, regex, and fuzzy)
 
         Args:
             text: Text to search
@@ -265,12 +348,13 @@ class FastPatternMatcher:
         if not self._initialized:
             self.initialize()
 
-        # Run both matchers
+        # Run all matchers
         literal_matches = self.match_literal_patterns(text)
         regex_matches = self.match_regex_patterns(text)
+        fuzzy_matches = self.match_fuzzy_patterns(text)
 
         # Combine and deduplicate
-        all_matches = literal_matches + regex_matches
+        all_matches = literal_matches + regex_matches + fuzzy_matches
 
         # Remove overlapping matches (keep highest confidence)
         all_matches = self._deduplicate_matches(all_matches)
