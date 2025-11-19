@@ -1,0 +1,646 @@
+AWM
+* AWMF - SF - 0 0 0 5 *
+AWMF-SF-0005
+B1 F2 4
+Subject/Title
+Non-Western Threats and the Social Sciences
+Document Type
+Article
+Date
+8/18/2014
+Author
+Anna Simmons
+arch
+SCAN
+www.archscan.com
+FPRI
+Non-Western Threats and the Social Sciences
+August 18, 2014
+By Anna Simons
+Anna Simons is a Professor of Defense Analysis at the U.S. Naval Postgraduate School
+(NPS), joining the faculty in 1998. She is on the Board of Editors of Orbis journal and is the
+author of Networks of Dissolution: Somalia Undone and The Company They Keep: Life Inside the U.S.
+Army Special Forces, as well as co-author of The Sovereignty Solution: A Common Sense Approach to
+Global Security. She holds a Ph.D. in social anthropology from Harvard University.
+Abstract: As the Department of Defense strives to take the social sciences more seriously in the face
+of threats emanating from the non-West, it confronts several challenges. Among them, we
+Westerners cannot model non-Western minds. Nor can we devise a methodology that will
+accurately capture contingency. We may already be doing our "scientific" best with "pattern of life"
+targeting. Consequently, DoD should invest more heavily in individuals who already have an
+affinity for, and interest in, the non-West and who show promise as future commanders and
+talented analysts rather than spend large sums on trying to devise more comprehensive models,
+methodologies, and metrics.
+S
+till stumped by Islamists more than a decade after 9/11, the Department of
+Defense continues to try to make better use of the social sciences. But the
+ways in which it does so pose several dangers.1 For instance, thinking that
+"the social sciences can provide a rigorous framework" to explain "a broad
+spectrum of complex social threats facing the United States in the twenty-first
+1 For the purposes of this essay, non-Westerners are people(s) who emphasize the group or
+collective over the individual. The contrast I am drawing is between us and tribal societies-
+peoples for whom social relations are morally fraught and not just transactional (as they
+often are for Westerners). Chinese and many other Asians might well be included under this
+loose definition of non-Western, but lumping everyone non-Western together defies my
+main point: it is all the differences, and not similarities, among people that matter.
+@ 2014 Published for the Foreign Policy Research Institute by Elsevier Ltd.
+doi: 10.1016/j.orbis.2014.08.011
+Fall 2014 | 552
+1
+1
+Non-Western Threats and the Social Sciences
+century including radicalization, cyber radicalization, instability, and insurgency" or
+that such a framework can "guide research, analysis, and operations" reflects classic
+American optimism.2 But, unfortunately, a "comprehensive analytical framework"
+is not possible.3 Attempting to build such a framework ignores the entire history of
+anthropology-a discipline that has recently begun to disintegrate because
+professionals across an array of sub-fields cannot countenance one another's
+perspectives, let alone their methodological approaches. Worse, it distracts from
+investing in what is needed most: individuals who understand the non-West. There
+are two reasons for my assertion.
+Conceptual Problems
+First, it will always be possible to find social scientists who will sign up for
+the idea that a comprehensive analytical framework can be devised, and validated.
+They will support this idea for the same reason many highly qualified Ph.D.s often
+agree with one another and form distinct "schools of thought." Most academics,
+like humans in general, enjoy the comfort of crowds. They also thrive on rivalries,
+which is what turns schools of thought into competing schools, which would be fine if
+the schools remained impartial. But, instead, they turn partisan; those most talented
+at articulating the "group's view" overstate both their and their opponents' positions
+in order to win over others. Or, as Hegel and Marx might have put it: thesis
+guarantees antithesis. Eventually, an upstart third school will propose a synthesis.
+But, the truth is that accuracy does not always lie somewhere in the middle.
+Consensuses can be wrong and split-the-difference aggregated compromises can
+mislead.
+Meanwhile, social scientists' ability to split the difference (for instance, to go
+from primordialism to instrumentalism to constructivism) should expose the degree
+to which the social sciences are nothing like the more dependable of the hard
+sciences, which can accurately describe and predict irrefutable realities-otherwise,
+planes would not fly and machines would not run. Tellingly, too, physicists did not
+split their differences in order. to split atoms. Instead, J. Robert Oppenheimer's
+scientists came up with different ways to achieve fission.
+Bottom line: the conceit that a framework can be devised to cover the
+West, the non-West, and all the differences within and between, reflects little more
+than a particular Western point of view, not universal in any way. What such a
+notion already misses is the possibility that it is different ways of thinking that make
+non-Westerners non-Western.
+Although the prevailing groupthink among anthropologists and others has
+long been that humans are humans the world over, and that we are more alike than
+unalike in our perceptions, logics, and emotions, ample evidence suggests this is not
+the case. However, because this evidence does not square with the way social
+scientists are supposed to think, the academy has developed a vested interest in
+2 Hriar Cabayan et al., "Operational Relevance of Behavioral & Social Science to DoD
+Missions," SMA Report (DoD), March 2013, p. 4
+3 LTG Michael Flynn, SMA Report, "Preface," p. 2.
+Fall 2014 | 553
+-
+-
+1
+SIMONS
+rejecting the possibility that profound differences exist. By profound differences, I
+refer to differences in priorities, values, and drives.
+To be clear, just because profound differences exist does not mean people
+cannot understand many things about one another across cultures. This would be
+akin to saying men and women cannot understand one another. They can-but
+they still differ significantly in perspectives, priorities, values, concerns, and
+expectations. Take, for instance, sex, the one act that encourages both parties to try
+to be in sync. Men and women can think they know what each other feel when it
+comes to literal (hetero)sexual relations, but they can never actually know. In some
+relationships this inability to really know turns out to be all to the good; in others it is
+disastrous.
+Cross-cultural differences amount to similar kinds of differences between
+some (but not all) societies, regarding some (but certainly not all) things. Consider,
+for instance, how tribal peoples have purposely, consciously, and/or willfully
+prevented anthropologists from gaining access to (or understanding about) their
+most sacred religious practices and beliefs. American Indian history is replete with
+examples. Essentially, if I, as member of Tribe X, want you to understand
+something, I will do my best to explain and try to help you understand. However,
+particularly when it comes to totems, taboos, and rituals in general, forget it; these
+will remain impenetrable, and thus impossible for you to accurately interpret
+without assistance.
+As humans, we are all amateur anthropologists, sociologists, and
+psychologists. As dedicated observers of other people, this makes us much more
+"natural" at the "-ologies" than we are at economics or political science. But
+consequently, it is also extremely difficult for us to change each other's minds about
+the nature of subject matter we have all been studying since birth: namely, our
+fellow human beings.
+Ask anyone who has taught anthropology for any length of time. Formal
+education can only go so far in rooting out misconceptions and misperceptions.
+Some students come to class ready to have their assumptions challenged (and will
+buy into whatever are the latest trends). Others end up willing to re-think some
+things. However, a percentage of students simply refuse to shift their point of view
+at all. Meanwhile, anything taught is pre-digested-by those doing the teaching.
+This means that what students receive is, at best, second-hand, while if it happens to
+concern people or a part of the world students have never visited, it is all just
+theoretical.
+None of this is ideal. In the same way that no one can be turned into a
+decent speaker of another language without interacting with fluent speakers of that
+language, getting people to understand non-Westerners requires spending time with
+non-Westerners. Some direct experience is vital. Or, stated candidly: you cannot
+get inside another way of thinking once or twice removed.
+This is something the Army, Navy, Air Force, and Marine Corps know in
+their bones. Otherwise, they would not need to put everyone through basic training
+-recruits could simply be shown several months' worth of PowerPoint®
+554 | Orbis
+Non-Western Threats and the Social Sciences
+presentations instead.
+It is also why those who urge that the Department of
+Defense broadens Service members' experiences with time spent studying abroad
+deserve support.4
+Only two methods exist for transmitting an appreciation for how different
+the non-West is: first, via deep first-hand exposure, and second, by ensuring that
+members of the military learn more history-which is how experience is gained
+second-hand. Both provide context. Both also expand and shift people's base of
+knowledge, which is the only way to alter their perspectives. As for building
+expertise, that can only be done by iteratively encountering non-Westerners and
+studying the non-West.
+In an ideal world, the Armed Services would carefully select and invest in
+those individuals best suited for this kind of exposure, individuals who show
+promise as future commanders and/or talented analysts. Undoubtedly, this kind of
+talent management would be expensive and difficult. Nevertheless, one might think
+that if-as is being suggested-operators in the future will need to be the "masters
+of the human domain," then the ability to excel (and not just cope) cross-culturally
+would already be considered as critical a trait to assess as is leadership. But it is not.
+Of course, even if it were acknowledged to be a critical capability, the military would
+then need to overcome another of its biases, which is to treat traits as skills. For its
+own institutional reasons-and in keeping with the conviction that leaders can be
+made (and are not just born)-the U.S. Military typically views traits as nothing
+more than skills that it can train. But certainly, in the case of cross-cultural affinity,
+this constitutes a major error.
+Cross-cultural affinity represents the first major problem for the United
+States Military as it strives to take the social sciences more seriously. To begin with,
+not everyone has it. Nor is cross-cultural affinity transferable-either from person
+to person, or from location to location. For instance, everyone loves to cite T.E.
+Lawrence as the paragon of cross-cultural ability. But, while Lawrence may well
+have been able to out-Bedouin the Bedouin, it is clear that he would not have been
+as comfortable, or as successful, had he been assigned to operate in any location
+other than Arabia; even he admitted he would have done miserably with town-
+dwelling versus desert-dwelling Arabs-never mind with Japanese, Chinese or some
+other set of people.
+In addition, Lawrence was a Bedouinist well before World War I and the
+Arab Revolt kicked off. Consequently, his example-like that of Joseph Stilwell,
+Douglas MacArthur, and numerous others-should further argue for carefully
+crafting a selection process, investing in a select number of individuals, and ensuring
+that they become familiar with the non-West prior to the onset of hostilities.5 As for
+how much social science training such individuals would need, the answer is very
+little if selection were undertaken correctly.
+Indeed, the military is on the verge of making operating in the human
+domain far more complicated than it needs to be. For instance, no one gleans more
+information faster in unfamiliar, chaotic settings than journalists. During the pre-
+4 Though then the time spent abroad needs to be in the non-West, not Western Europe.
+5 Arguably, if the right individuals were in the right places, hostilities might even be avoided.
+Fall 2014 | 555
+1
+SIMONS
+Internet heyday of objective newspapering, journalists only needed to carry a
+notepad, a pen, and six questions into the field with them. The six questions were:
+who, what, where, when, why, and how? Reporters did not need a social science
+slide rule, a manual, or a set of algorithms.
+So, why do those leading the military think they need such expensive,
+sophisticated tools today?
+A cynical answer would be that the defense-intelligence-industrial complex
+is pushing them in this direction because it stands to profit. More reasonable
+answers could well include the military's need to disseminate standardized or
+standardizable tactics, techniques and procedures (TTPs) or its equally
+understandable need for inputs it can sequence. Then, too, we Americans clearly
+like to engineer solutions. There is also our affinity for technology, with techniques
+being the closest thing to technology that social scientists have to offer. Of course,
+it could also be that some people truly believe it is possible to devise a social science
+equivalent of a C-130 or an M-4-a reliable, modifiable system/platform that
+should prove useful in all sorts of environments for decades to come.
+However, while it may be possible to field strip (as in disassemble) another
+culture into its constituent pieces and parts (which is something the best
+anthropologists proved able to do decades ago), figuring out how to get the enemy
+to undo himself is hardly the same. This requires individuals with a fingerspitzengefuhl,
+or instinct, for both the enemy and for us.6 No model or framework can help
+individuals figure out how to develop this. Nor will a model help anyone gauge how
+well their subordinates are doing. For starters, any model, framework, or set of
+metrics would have to flex too much to accommodate the fact that every situation is
+unique in critically subtle ways. Indeed, the entire sweep of military history should
+serve as a cautionary reminder that it is the differences between them and us, then and
+now, and here and there that always matter.7
+Unfortunately, the re-usability of certain techniques can prove alluringly
+misleading. Take the combined effects of signals intelligence (SIGINT), drones,
+and special operators, a combination that has been credited with undoing networks
+in multiple locales: Afghanistan, Yemen, Somalia. As General Stanley McChrystal
+makes clear in My Share of the Task, and as Admiral William H. McRaven's push for a
+Global SOF Network implies, the organization both men headed-Joint Special
+Operations Command (JSOC)-has developed and continues to refine a targeting
+methodology it believes it can and should apply globally.
+Yet, just because TTPs can be applied successfully in a variety of settings
+does not mean that they add up to overall success. Has the application of this
+methodology achieved permanent game-changing effects on the enemy's inability to
+adapt in any one of these locales? Have we dampened the enemy's ardor anywhere?
+6 Anna Simons, "Got Vision? What It Is and Why We Need It," Strategic Studies Institute,
+July 2010. .
+7 Considerable debate exists on whether history belongs to the social sciences or to the
+humanities, with those who believe it belongs to the humanities pointing to its narrative (as
+in, this-is-a-unique-story) approach.
+556 | Orbis
+Non-Western Threats and the Social Sciences
+The answers to both these and related questions, no matter how discomfiting,
+should cause defense analysts to rethink what constitutes success, especially when
+metrics that can be made to suggest we are succeeding belie definitive results.8
+Using an internally consistent logic to prove an operational concept is
+always problematic. Consider, for instance, the Son Tay raid to rescue POWs in
+Vietnam. It is still taught as a supremely successful operation even though no
+prisoners were rescued because none were there when the raid occurred. Or, if we
+return to Special Operations Forces' activities in Iraq and Afghanistan, clearly SOF
+has mastered its environment in the sense that numerous bad actors and entire
+networks have been (and still are being) removed from the battlefield. Targeting
+individuals and networks halfway around the world from the United States is an
+unquestionably impressive feat. Yet, to judge the effects of a methodology on
+having successfully applied it still tells us nothing about whether the results we tout
+are the results we should have sought. Or, to be truly impolitic, absent an overarching
+strategy, operational and tactical successes-as in, "we plan, we execute the plan,
+ergo we succeed"-will always be tautologically satisfying. Beneath the churn,
+however, lurks a bubble in the making.9
+Meanwhile, were a social science approach to be used to rethink military
+methods overall-and not just ways in which uniformed personnel should tackle the
+human domain-the trifurcation into tactical, operational, and strategic levels of
+analysis would likely disappear. As the terms "strategic corporal" and "tactical
+general" suggest, clear distinctions between these three levels no longer exist if they
+ever did. From a human terrain perspective, a far more logical method for dividing
+and nesting responsibilities would instead re-focus on local, regional, and supra-
+regional (or global) spans of control. Imagine: if the military sliced reality more
+realistically, it could shift everyone from an overly linear "crawl, walk, run"
+approach to having to consider the effects of actions short- through long-term. Not
+only would this "liberate" commanders at all levels to adjust and readjust their
+"ways and means" situationally, but, a reallocation of labor would help mitigate
+micro-management and other current scourges, and also could assist with mission
+command-but all of these are issues beyond the scope of this article.
+Here the question is to what extent twenty-first century "ways and means"
+should include models, methodologies, and metrics-the 3Ms.
+Input Problems
+Without question, today's modeling capabilities offer one distinct advantage
+over those of the recent past: they can capture change over time, and even point to
+the significance of timing and the convergence of events. They, thus, ensure that
+more dynamism is infused into the ways models depict reality. But what they still
+8 In some regards the War on Terror resembles the War on Drugs. DoD may consider Plan
+Colombia to be a success, but at what cost to Mexico?
+9 To return to the "comprehensive analytical framework" goal: just because numerous cross-
+checks will be built into constructing the framework-thereby making devising the framework
+seem valid-that will not mean the framework is what DoD should be investing in.
+Fall 2014 | 557
+1
+SIMONS
+cannot do, any more than social scientists can, is take into account (or account for)
+the force of personalities, never mind interactions among personalities.
+Human chemistry, thus, becomes the second major problem. Social
+scientists have always been better at mapping the physics of human relations than the
+dynamics among individuals. This, after all, is how we get social structure. Also,
+social scientists can help with "who is where vis a vis whom, and what," both in real
+time and over time. But what social scientists are not good at explaining is why
+people might do what they do when they do it-either in advance or retrospectively.
+Even with the benefit of hindsight, singular explanations are faulty for being
+singular, while the more compelling an explanation is, the less honest it is likely to
+be about what it does not reveal. 10
+For instance, say you are trying to make sense of the politics afoot in Somalia's
+latest version of a central government. At a minimum, you would need to
+understand:
+1) intra- and inter-clan dynamics-historically, locally, sub-nationally (e.g., at
+the district level), and nationally.
+In order to understand those dynamics, you would also need to understand:
+2) local socio-ecologies countrywide-e.g., the distribution of resources;
+relations between sub-populations and their modes of livelihood and sources of
+income; the cumulative effects of differential development, etc.
+3) regional politics-to include cross-border relations with Ethiopia, Kenya,
+Djibouti and, moving outward from there: Egypt, Eritrea, the Gulf states
+4) supra-local level politics-ties with the former colonial powers Italy,
+France, and Britain; and the Cold War powers: the United States, USSR, East
+Germany, West Germany, etc.
+You would have to examine how all of these intersected with each other,
+and then were transected (or bisected) by both timing (when events occurred) and
+personalities (of formal leaders, informal leaders, traditional leaders, spoilers, and so
+on)
+Just ask Somalis. None of this can be adequately captured in a neat
+retrospective narrative that all actors (or witnesses) would consider accurate. So,
+how then do you choose what to include, exclude, turn into variables, or quantify
+when it comes to trying to model Somalis' decision-making, thought processes, or
+likely future actions? Clearly, that would depend on whose accounts you rely on-
+10 There is no more vivid proof of this than the first blush of books about the Iraq war by
+George Packer, Tom Ricks, and others. Who these journalists could and could not interview
+colors their narrative, which nonetheless is presented as if it is seamless eyewitness history.
+€
+558 | Orbis
+1
+Non-Western Threats and the Social Sciences
+while you cannot reasonably determine whose accounts to rely on without sufficient
+prior knowledge and an ability to read Somalis. In other words, you will not have a
+reliable sense of what to draw a bead on without already knowing what you are
+looking at - in which case, it is not you who needs a model, method, or set of
+metrics, but those to whom you want to convey what you know.
+Certainly, many things can be known and documented: dates, names,
+sequences. However, influences and reasons for why people behave as they do are
+difficult to capture, and, even if captured, are impossible to accurately weight.
+Individuals cannot always articulate to themselves why they do what they do, and
+especially not when we, as humans, are all subject to self-deception.
+Take decision trees. For a time (and maybe still) some anthropologists
+thought these could illuminate how people make decisions. But whenever I sat in
+.on discussions about decision trees, I was reminded of a visit to the opthamologist,
+and his questions about which lens was better: 1 or 2? After going through a series
+of different 1s and 2s in an artificial, dimly lit environment, I invariably reached the
+point where I could no longer tell-which may have been the opthamologist's aim.
+Decision trees are even worse because they require people to rationalize ex
+post facto, as you (the anthropologist) walk them through a set of "why did you
+choose A and not B?" questions that they never posed to themselves.
+Arguably, whenever people have to decide something-as in weigh options
+-that is a sure sign they do not already know what to do. If they do not know what
+to do, then (by definition) they have entered the realm of the unknown, where
+getting from A to B requires plunging ahead or a leap of faith (no matter how small
+the step taken may actually feel). Essentially, choice boils down to a gut call.
+Ironically, this remains true no matter how much advice people solicit. And, even
+should they cede control to a methodology that, too, is a choice.
+Thus, although data in the aggregate may point to the wisdom of crowds
+and Big Data may promise "big" social science, that still will not get us inside the
+heads of the Saddam Husseins, Hamid Karzais, or Bashar al-Assads of the world-
+individuals whose thinking has presumably been studied in depth by intelligence
+agencies. Meanwhile, what about the thinking of jihadists no one has heard of?
+In other words, in addition to there being no way to devise a methodology
+that will ever accurately capture contingency, let alone inarticulable intuition, there is
+the problem of opaque non-Western worlds, which brings us to the third major
+problem.
+Mapping social structure and trying to understand the principles that guide
+behavior in tribal societies can certainly yield a lot of information, especially since
+gathering an abundance of information is necessary to map the social structure in
+the first place. In fact, this is one reason earlier generations of anthropologists were
+drawn to kinship charts.
+However, relying on genealogy creates a Goldilocks challenge. Too heavy a
+focus on kinship will result in inadvertent misdirection, since what no kinship chart
+can reveal is the content of people's relations, let alone the chemistry among them.
+What do I mean by chemistry ?- who people like, who they dislike, and how much
+of either emotion they can afford to reveal. Emotion and chemistry matter not only
+because they are the stuff from which competition, tension, rivalry, enmity,
+Fall 2014 | 559
+.
+SIMONS
+suspicion, mistrust, and distrust builds, but because some personalities inspire more
+of this than others.
+Also, no matter how important genealogy might seem-and regardless of
+whether individuals trace descent up their father's line, mother's line, or both
+lines-cross-cutting ties likewise matter. These can include ties to in-laws, or to
+anyone outside of a blood relation: neighbors, school mates, work colleagues,
+members of a religious brotherhood, and so on. Overall, even when genealogy acts
+as the fixed axis that indelibly "fixes" identities, it hardly prevents individuals from
+falling into other inter-personal orbits; individuals can still develop relationships that
+will throw a monkey wrench into others' ability to always predict their behavior.
+Shrewd leaders in all societies know how to make strategic use of just such
+social information, and ambitious social actors will play on (and with) both the fixed
+and the flexible elements embedded in what they know about others' associations.
+They also usually use such information with a degree of suppleness no outsiders can
+track. Not even all insiders can-otherwise, rivals would never be able to one-up
+one another.
+Consequently, what this means is that they will always have more complete
+information about themselves than we will have, which means we will always be: 1)
+at a disadvantage, and 2) playing catch-up. Our advantages come from being able to
+gain more information about other factions, external actors, and those whom locals
+don't have access to-which should enable us to put together a more complete
+overarching picture. But the weeds will always belong to them. Thus, my argument
+in "Got Vision?": instead of us ineffectively trying to reproduce what they know, we
+should identify those who already have that knowledge (e.g., their Connectors,
+Mavens, and Salesmen) and tap into them.
+I say this, too, because the most difficult challenge the non-West poses for
+social scientists is that we Westerners cannot model non-Western minds. Nor is it
+clear that non-Westerners raised in the West or educated according to Western
+methods can do much better.11
+This is not a topic anyone in academe wants to touch with a ten-foot pole.
+As alluded to at the outset, most anthropologists continue to insist that there is a
+psychic unity of mankind: our cultural differences are really pretty fungible. Never
+mind that many people-and, indeed, many peoples are willing to die on behalf of
+cultural differences, or that no one has been able to say definitively which portions
+of human behavior are hard- rather than soft-wired. But just consider: the very idea
+that we think in terms of hard- and soft-wiring is itself Western-centric.
+In addition to the fact that "wiring" is eminently Western, computers and
+networks are, as well. Indeed, no such things as non-Western computers or non-
+Western software exist. There are non-Western-manufactured computers, just as there
+is code written by non-Westerners. But, conceptually, there is no non-Western
+11 Think of Edward Said who, in his autobiography, and only in passing, admits that he did
+not understand the draw of tribes or blood ties for Middle Easterners.
+560 | Orbis
+4
+Non-Western Threats and the Social Sciences
+personal computer any more than there is any other class of artificially-powered
+machinery invented outside the West.12
+Does this matter? I do not know, but suspect it must since it suggests a gap
+that, even if only initially accidental and geographic, appears to have become
+cumulative over time.13 Still more germane to the 3Ms: there is no such thing as
+non-Western social network analysis. This does matter. Here is how.
+Take the Italian mob-not exactly a non-Western organization. In their
+heyday, members of the Mafia probably did not think of themselves in social
+network analysis terms. If asked to depict themselves graphically, their image
+probably would not have looked anything like the FBI's line and block charts, while
+the descriptive they likely would have used for themselves would have been
+family-not network. Granted, in the interim, images popularized by Hollywood
+have become so internalized that members of today's Mafia may see themselves
+exactly as the authorities do. But this is surely not the case for tribal peoples.
+People in tribal societies do not think of themselves in terms of networks
+and no one draws kinship charts.14 They do not need to. At the same time, the
+most politically astute (and connected) individuals carry what we would consider to
+be Rolodexes® full of information around with them in their heads. Do we know
+how they would depict this information graphically if we asked them to? No. Do
+we know whether they could depict it graphically at all? No, again.
+Many potential analogies spring to mind for how non-Westerners make use
+of their connections. One I used several decades ago for Somalis was tending
+traplines. Yet, our most enduring images for how people relate to each other
+remain tree-based.15
+The classic genealogical approach begins with a trunk,
+representing people's root-stock. Sub-groups branch off from it, and further sub-
+divide. More recently, trees have been tipped on their sides and now resemble dog
+pedigree charts (as seen in Ancestry.com television commercials, for example).
+Tellingly, the anthropological version still remains vertical: the founder of a group
+sits at the top of the chart-all his progeny, their progeny, and the splits among
+them flow from him.
+Yet, regardless of which set of images we prefer, none describes intra-tribal
+social relations from a tribal perspective, while even if members did think of
+themselves as individuals in trees, they would be looking at the tree-and one
+another-from a twig's or branch's point of view, and not as we do, in the round.
+12 An abacus may compute, but not without a human manipulating the beads.
+13
+It says quite a bit about the political correctness of the "-ologies" that no one discusses
+such matters these days, since the cause clearly has nothing to do with social science's old
+shibboleth of race. People from all races and genetic backgrounds are as Western today as
+any WASP-and are over-represented in the IT realm.
+14 Of course, police probably do-but no one else in an adversarial relationship with one
+another does.
+15 Trees are all wrong for lots of reasons: they are static structures whose branches may
+wave in the wind, but otherwise never change position. Yet, as the German anthropologist
+Gunther Schlee painstakingly demonstrated decades ago, entire lineages will shift identities
+(or, to stick with the tree metaphor, will successfully remove themselves from one tree and
+graft themselves onto another).
+Fall 2014 | 561
+:
+SIMONS
+As for what kind of chart we might design that would mark an
+improvement on these, I have joked in classes about Google Social Structure,
+something that would enable analysts to zoom in and out from micro to macro and
+back again, much as is done with Google Earth®. The problem with anything like
+Google Social Structure, however, is that no matter how analytically convenient
+zooming in and out might be, it would still offer only a distorted view of people's
+lived reality, which in turn would distort our view of how others navigate their
+reality. Among the reasons: no one zooms in and out of his/her own life from
+micro to macro with everything remaining "to scale."
+Or, to put the problem in classically anthropological terms, the real issue
+with any graphic analysis is that it schematizes our version of others' reality from an
+outside-in (or etic), not inside-out (or emic) perspective. Social network analyses
+might look like they tell us who values whom, given the frequency (or infrequency
+and secrecy) of contacts, as represented by the size of nodes, the density of links, or
+what have you. But the only thing networks really map is a set of transaction-based
+connections-the visible/audible/physical residue of people's interactions. Among
+people(s) who have mutual dependencies and moral interdependencies, however,
+associations are never just transactional. All relations are laden with meaning, to
+include neglected relations, since even neglect means something.
+In many if not most non-Western societies, the heaviest moral
+commitments are typically unspoken. How then can we, as outsiders, accurately
+assess what is really prompting people to act? Are people doing each other favors
+out of moral compulsion, convenience, co-incidence, or some combination? And,
+how can we tell? And then, what happens when one set of commitments or loyalties
+is cross-cut by other allegiances? Maybe commitments are life-long but only
+occasionally activated.
+Or, maybe individuals temporarily choose to be
+"unavailable" to others. As the standard catch-line "I against my brother, my
+brothers and I against our cousins, our cousins and us against the world" implies,
+contexts always shift. When they do, so can alliances and enmities.
+In tribal settings everything can depend. Thus, even if we learned
+everything there is to know about others' personal histories and their prior
+interactions, we still would never know enough. At best, this level of detail might
+reveal who might throw in with or line up against whom, and what could motivate
+them. But since people often decide what to do depending on who else is aligned,
+how, predicting is not just a contingent affair; contingence itself is situational.
+Situationalism is the lubricant in tribal settings-and is determined by who of
+note acts when, while who is of note depends on the situation.16 This brings us back
+to the significance of personalities and timing, the two critical variables, factors and
+vectors (it is hard to know what to call them), which will remain beyond the 3Ms'
+reach-akin to "acts of God."
+16 Situationalism is not only important in tribal settings. Its valences just happen to be
+different under acephalous vs. hierarchical conditions.
+562 | Orbis
+.
+Non-Western Threats and the Social Sciences
+Ironically, yet another reason DoD should set aside the idea of a
+comprehensive analytical anything when it comes to human behavior is that
+organizations like JSOC may have already perfected the only viable method for
+targeting individuals and degrading networks, by relying on "patterns of life." What
+recent successful targeting demonstrates is that if you track someone in real time
+with enough dedicated assets, there is only so far he can travel or only so long he
+can disappear before, eventually, you will pick him up again. Of course, the
+downside to using "patterns of life" to nail people is that once potential targets
+know you are studying them, they adapt and evolve. Of course, too, Afghanistan,
+Iraq, the FATA, and other locations where U.S. Forces have tracked bad actors via
+their "patterns of life" have been places where the United States has possessed
+drone (and air and signal) dominance. Perhaps this will continue to hold for all
+tribal zones. But it certainly will not hold for all adversaries in the future.
+Arguably then-and without even realizing it-DoD may have already
+reached the limits of what it can do well in the realm of social science: namely, real-
+time "pattern of life" analysis, as opposed to trying to get inside non-Westerners'
+heads by etically mapping their societies.
+Alternatives to the 3Ms
+As for how else DoD might take advantage of the social sciences, the short
+answer is that the Department of Defense should stop trying to create a
+comprehensive analytical framework. Instead, it should take the hefty sums of
+money going to the Pentagon's social science industrial complex and invest them in
+individuals who have an affinity for non-Westerners and their situationalism.
+Frontload selection. Rely on flesh-and-blood ethnographic sensors. Then, let those
+who have developed an appreciation for the non-West decide which of the 3Ms to
+use as their communication aids.
+It could well be that the best way to make the non-West make sense to
+members of the U.S. Military writ large is to do so graphically, through charts,
+models, and graphs. But those with experience in, and an affinity for, the non-West
+need to be the judges of which of these tools to use.17 Technocrats should no more
+be the arbiters of this than policymakers who have spent no time on their own in
+the non-West should be allowed to craft strategy aimed at the non-West.18
+17 Should such individuals have to have an affinity for non-Westerners? Yes. Do such
+individuals have to approve of everything non-Westerners do? Absolutely not. But they do
+have to be cultural (not moral) relativists, able to make sense of the non-West for those for
+whom this does not come easily or naturally.
+18 Herbert Goldhamer wrote "Over two thousand years ago, Aristotle had already observed
+that youths do extremely well in mathematics but that young men of practical wisdom are
+difficult to find. Mathematics deals with universals and abstractions that do not require the
+prolonged context of a large variety of particulars that only a lengthy experience can give."
+(The Adviser [Elsevier, 1978], p. 69). Worth noting is that the policy realm is full of such
+young men (and women) these days, steeped in quantitative methods and theories learned in
+grad school, not from time spent navigating the non-West.
+Fall 2014 | 563
+SIMONS
+Otherwise, the 3M seduction will only further indenture soldiers and marines to
+databases, rather than the reverse.
+Databases represent a very useful tool for storing and accessing
+information. But populating them has now become a virtual end in itself. Worse,
+by turning humans into bits and bytes, databases make information about people
+seem eminently manipulable, and people themselves increasingly reducible to a set
+(or sequence) of transactional relations. This may play to Western sensibilities. But
+no humans are this reducible. And non-Westerners certainly are not.
+Combat veterans, military historians, and others already know the extent to
+which intangible qualities like morale, esprit, and the "will to win" matter in conflict.
+Presumably, military leaders similarly recognize that no academic discipline or set of
+disciplines can explain group chemistry or why some social bonds are stronger than
+others.19 At the same time, what should be apparent to all participants and
+observers after a decade-plus of fixating on networks in Iraq, Afghanistan, Somalia,
+and elsewhere is that taking out nodes and snipping links is hardly sufficient. What
+is needed, instead, is a solvent-though to dissolve people's social bonds requires
+something altogether different than anything tried thus far.
+Perhaps the inadequacy of social "science" tools will become clearer as the
+fascination with networks gives way to new constructs, which it is bound to do;
+progress promises nothing less. In the meantime, it would not surprise me if the
+interim silver bullet does not turn out to be something like connectomes. Sebastian
+Seung describes connectomes this way: "a connectome is the totality of connections
+between the neurons in a nervous system."20 As he goes on to note, "Unlike your
+genome, which is fixed from the moment of conception, your connectome changes
+throughout life ... there is good evidence that all four R's-reweighting,
+reconnection, rewiring, and regeneration-are affected by your experiences."21
+Essentially, connectomes make each of us our own dialectic.
+Even better, like a tangle of cooked spaghetti, connectomes touch one
+another in multiple ways. They thus do a much better job of graphically depicting
+our relations than the spirograph or splatter screen version of networked
+interactions do.
+Yet, no matter how attractive the connectome metaphor might seem to be,
+it too presents a problem since not even those who study connectomes can explain
+how spurts of neurotransmitters turn themselves into thoughts, ideas, or images.
+Consequently, while connectomes are surely suggestive, they fall short; something
+vital still remains missing-which, in turn, suggests that metaphors might amount to
+a fourth M.
+19 Experientially, everyone in uniform should recognize this, too. What accounts for some
+units possessing more esprit de corps or better morale than others? Why do some gel better
+than others? There is no formula. If only there were, all units would always excel-across
+the board.
+20 Sebastian Seung, Connectome (Houghton Mifflin Harcourt, 2012), p. xiii.
+21 Seung, Connectome, p. xv.
+564 | Orbis
+1
+-
+-
+A
+Non-Western Threats and the Social Sciences
+Metaphors certainly seem useful, especially since, like analogies, they provide
+a vivid alternative to anything too quantitative. However, metaphors (like analogies)
+fail to throw differences into high relief. Or to paraphrase the French anthropologist
+Claude Levi-Strauss, while metaphors, analogies, models, methodologies, and
+metrics may all be good to think, we are too prone to let them channel-not
+challenge-how we think.22
+As for suitable alternatives, my proposal would be: open-ended questions
+that force members of the military to have to think in terms of positioning rather
+than just transactions. Ironically, this way of thinking should already be familiar to
+those in uniform given the degree to which they routinely alter their behavior and
+even speech depending on the rank of those they interact with.
+For example, by posing questions like: Who is where, vis a vis whom, and
+what? Who colludes with whom? How stable are their arrangements? And who has
+an interest in keeping them stable (or not)? it should be possible to probe relevant
+dynamics, especially since such questions can be scaled up or down, projected
+backward or forward, and used to compare between Time Now with Times Before.
+Of course, arguably the greatest advantage to a handful of questions is that they are
+easy to remember, eminently portable, and situationally ecumenical-much like the
+"who, what, when, where, why, and how?" questions that journalists historically
+used to unparalleled effect.
+Finally, although it may seem silly to point out that particulars should not
+be generalized, combine this with the fact that all politics is never only local-since
+all sorts of outside influences have an impact, yet all conflict is locally fought (in the
+sense that it is waged somewhere, and usually in multiple somewheres)-and it should
+be obvious why DoD should forget ginning up some overly expensive and
+ultimately useless "comprehensive analytical framework." Instead, the Services
+would do far better to put money where only lip service is paid right now. Manage
+talent. Determine who in uniform today has what it takes to discern
+how non-Western non-Westerners actually are (or are not), and invest
+deeply in those individuals.
+.. .. . . . ... .. ..
+22 Often models, charts, and graphs highlight differences rather than similarities. Either way,
+any graphic approach will do one or the other, but cannot focus viewers simultaneously on
+both.
+Fall 2014 | 565

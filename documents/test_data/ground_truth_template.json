@@ -1,0 +1,40 @@
+{
+  "_schema_version": "1.0",
+  "_description": "Ground truth annotations for classification marking detection evaluation",
+  "_fields": {
+    "file_path": "Relative or absolute path to the document",
+    "has_classification": "Boolean - does document contain classification markings?",
+    "classification_level": "String - TOP SECRET, SECRET, CONFIDENTIAL, CUI, or null",
+    "control_markings": "List of strings - NOFORN, SCI, ORCON, IMCON, etc.",
+    "has_portion_marks": "Boolean - contains portion markings like (TS), (S), (C)?",
+    "has_banner": "Boolean - has classification banners at top/bottom of pages?",
+    "has_authority_block": "Boolean - has CLASSIFIED BY, DERIVED FROM, etc.?",
+    "is_declassified": "Boolean - is this a declassified document?",
+    "expected_confidence_range": "Array [min, max] - expected confidence score range (0.0-1.0)",
+    "notes": "String - additional notes about the document"
+  },
+  "_example_annotations": {
+    "documents/test_data/ts_00_top_secret_memo.txt": {
+      "has_classification": true,
+      "classification_level": "TOP SECRET",
+      "control_markings": ["NOFORN"],
+      "has_portion_marks": true,
+      "has_banner": true,
+      "has_authority_block": true,
+      "is_declassified": false,
+      "expected_confidence_range": [0.85, 1.0],
+      "notes": "Standard TOP SECRET memo with proper authority block"
+    },
+    "documents/test_data/false_positive_00_casual_usage.txt": {
+      "has_classification": false,
+      "classification_level": null,
+      "control_markings": [],
+      "has_portion_marks": false,
+      "has_banner": false,
+      "has_authority_block": false,
+      "is_declassified": false,
+      "expected_confidence_range": [0.0, 0.3],
+      "notes": "Contains casual usage like 'the secret ingredient' - should NOT be flagged"
+    }
+  }
+}

@@ -1,0 +1,30 @@
+[ HlNifER~UlfB1eNf O.lG lffiOJMll.OJDlf»Y ]
+[CONFIDENTIAL ORIGINAL]
+
+SANITIZED COPY
+
+This document contains OCR artifacts from scanning of original
+classified documents. The scanner may have difficulty reading
+degraded or faint classification markings.
+
+Original header: CQNFIDENTIAL (OCR read as: CQNFlDENTlAL)
+
+INTELLIGENCE REPORT
+
+Subject: Assessment of Regional Threats
+
+(e) Analysis indicates moderate threat levels.
+
+(S) Source reporting suggests [text degraded] activity in region.
+
+Original footer marking: CONFIDENTIAL
+OCR may read as: C0NFlDENTlAL or similar variants
+
+Note: This test file simulates common OCR recognition issues with
+classification markings, including:
+- Letter substitution (O for 0, I for l)
+- Garbled special characters
+- Spacing issues
+- Degraded text quality
+
+CONFIDENTIAL

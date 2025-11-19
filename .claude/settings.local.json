@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(python annotate_ground_truth.py:*)",
+      "Bash(python fast_pattern_matcher.py:*)",
+      "Bash(python:*)",
+      "Bash(python3:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

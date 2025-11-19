@@ -20,6 +20,14 @@ from dataclasses import dataclass
 import warnings
 warnings.filterwarnings('ignore')
 
+# Import PDF image cache and poppler path
+try:
+    from .classification_scanner import PDFImageCache, POPPLER_PATH
+    HAS_IMAGE_CACHE = True
+except ImportError:
+    HAS_IMAGE_CACHE = False
+    POPPLER_PATH = None
+
 # Import offline configuration
 try:
     from offline_config import get_config_manager
@@ -302,13 +310,31 @@ class YOLOTextDetector:
         print(f"Converting PDF to images (DPI: {self.dpi_for_conversion})...")
 
         try:
-            # Convert PDF to images
-            images = convert_from_path(
-                pdf_path,
-                dpi=self.dpi_for_conversion,
-                first_page=first_page,
-                last_page=last_page
-            )
+            # Convert PDF to images (use cache if available)
+            # Calculate max_pages for cache from first_page/last_page if specified
+            cache_max_pages = None
+            if last_page:
+                cache_max_pages = last_page
+            elif max_pages:
+                cache_max_pages = max_pages
+
+            if HAS_IMAGE_CACHE and first_page == 1:
+                # Use cache only for page 1 onwards (cache doesn't support arbitrary first_page yet)
+                images = PDFImageCache.get_or_convert(
+                    pdf_path,
+                    dpi=self.dpi_for_conversion,
+                    max_pages=cache_max_pages
+                )
+            else:
+                # Fall back to direct conversion for non-standard page ranges
+                kwargs = {
+                    'dpi': self.dpi_for_conversion,
+                    'first_page': first_page,
+                    'last_page': last_page
+                }
+                if POPPLER_PATH:
+                    kwargs['poppler_path'] = POPPLER_PATH
+                images = convert_from_path(pdf_path, **kwargs)
 
             print(f"✓ Converted {len(images)} pages to images")
 

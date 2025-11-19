@@ -1,0 +1,21 @@
+SECRET
+
+CLASSIFIED BY: John Smith
+REASON: 1.4(c)
+DECLASSIFY ON: 20301231
+
+INTELLIGENCE MEMORANDUM
+
+This paragraph discusses secret information but is missing its portion mark.
+
+(S) This paragraph is properly marked.
+
+(C) This paragraph is marked CONFIDENTIAL but document is SECRET - inconsistent!
+
+(TS) This paragraph is marked TOP SECRET but document overall is SECRET - error!
+
+This is another paragraph without a portion mark - common error.
+
+(U) This unclassified paragraph is properly marked.
+
+SECRET

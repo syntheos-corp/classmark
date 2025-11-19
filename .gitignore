@@ -188,7 +188,13 @@ sessions/.archived/
 #sessions/
 
 # Claude Code files
-.claude
-CLAUDE.md
+#.claude
+#CLAUDE.md
 
-documents/
+#documents/
+# External dependencies (auto-downloaded)
+external/poppler/
+external/tesseract/
+external/*.zip
+external/*.exe
+external/temp_*

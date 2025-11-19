@@ -34,6 +34,17 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 import multiprocessing
 import time
 
+# Detect WSL environment
+def is_wsl():
+    """Check if running on Windows Subsystem for Linux"""
+    try:
+        with open('/proc/version', 'r') as f:
+            return 'microsoft' in f.read().lower()
+    except:
+        return False
+
+IS_WSL = is_wsl()
+
 # Add src to path for imports
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
@@ -306,8 +317,19 @@ class ClassmarkGUI:
 
     def select_input_folder(self):
         """Open dialog to select input folder"""
-        folder = filedialog.askdirectory(title="Select Input Folder")
+        # WSL workaround: Use text input instead of file dialog
+        if IS_WSL:
+            folder = self.prompt_folder_path("Select Input Folder",
+                                            "Enter the full path to the input folder:")
+        else:
+            folder = filedialog.askdirectory(title="Select Input Folder")
+
         if folder:
+            # Validate folder exists
+            if not os.path.isdir(folder):
+                messagebox.showerror("Error", f"Folder does not exist: {folder}")
+                return
+
             self.input_folder = folder
             self.input_folder_var.set(folder)
 
@@ -322,11 +344,55 @@ class ClassmarkGUI:
 
     def select_output_folder(self):
         """Open dialog to select output folder"""
-        folder = filedialog.askdirectory(title="Select Output Folder")
+        # WSL workaround: Use text input instead of file dialog
+        if IS_WSL:
+            folder = self.prompt_folder_path("Select Output Folder",
+                                            "Enter the full path to the output folder:")
+        else:
+            folder = filedialog.askdirectory(title="Select Output Folder")
+
         if folder:
             self.output_folder = folder
             self.output_folder_var.set(folder)
             self.log_message(f"Output folder selected: {folder}", "info")
+
+    def prompt_folder_path(self, title, message):
+        """
+        Prompt user to enter a folder path manually (WSL workaround)
+
+        Args:
+            title: Dialog title
+            message: Prompt message
+
+        Returns:
+            Folder path or None if canceled
+        """
+        from tkinter import simpledialog
+
+        # Show info about WSL limitation
+        messagebox.showinfo(
+            "WSL Detected",
+            "File dialogs don't work properly on WSL.\n"
+            "Please enter the folder path manually.\n\n"
+            "Tip: Use Windows paths like:\n"
+            "/mnt/d/MyFolder or\n"
+            "D:\\MyFolder (will be converted)"
+        )
+
+        folder = simpledialog.askstring(title, message)
+
+        if folder:
+            # Convert Windows-style paths to WSL paths
+            folder = folder.strip().strip('"')
+
+            # Convert D:\path to /mnt/d/path
+            if len(folder) >= 3 and folder[1] == ':':
+                drive = folder[0].lower()
+                path = folder[2:].replace('\\', '/')
+                folder = f"/mnt/{drive}{path}"
+
+            return folder
+        return None
 
     def update_start_button(self):
         """Enable/disable start button based on selections"""

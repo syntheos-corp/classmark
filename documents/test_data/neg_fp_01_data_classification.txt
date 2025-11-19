@@ -1,0 +1,3 @@
+Data can be classified as sensitive or non-sensitive.
+
+We use classification algorithms for analysis.

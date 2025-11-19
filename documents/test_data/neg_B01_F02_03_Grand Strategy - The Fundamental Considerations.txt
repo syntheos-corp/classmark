@@ -1,0 +1,606 @@
+AWM
+* AWMF - SF - 0004 *
+AWMF-SF-0004
+B1 F2 3
+Subject/Title
+Grand Strategy: The Fundamental Considerations
+Document Type
+Article
+Date
+8/18/2014
+Author
+F.G. Hoffman
+arch
+SCAN
+www.archscan.com
+E
+FPRI Grand Strategy:
+The Fundamental Considerations
+August 18, 2014
+By F. G. Hoffman
+F.G. Hoffman is a Senior Research Fellow at the Institute for National Strategic Studies,
+National Defense University, Washington, D.C. He is also on the Board of Advisors at the
+Foreign Policy Research Institute. This article does not reflect the position of the
+Department of Defense.
+Abstract: Grand or national strategy has emerged as a critical issue in security studies.
+Adam Garfinkle recently opined that American grand strategy has died a silent death.
+Too much attention has been devoted to definitions, or debates over the utility of strategy.
+Not enough consideration has been given to the complexities of actually building a robust
+strategy amidst that effectively integrates all elements of national power within a complex
+bureaucracy. Oddly, the exclusion of politics contradicts our understanding of war and
+conflict. Likewise, not enough attention has been applied to the fundamental components of
+building a competitive strategy that can be sustained over time. This essay offers an
+introductory discussion of the basic considerations or components of national strategy.
+1
+T
+This article deals with grand strategy, a subject that the last decade of conflict
+suggests remains highly relevant to students of strategic studies. Some have
+questioned the need for grand strategy at all; others lament the lack of one in
+America.1 Other scholars argue that the United States has lost the art of developing
+grand strategy and needs to regain its strategic competence.2 A number of books,
+1 Daniel W. Drezner, "Does Obama Have a Grand Strategy?" Foreign Affairs, July/Aug. 2011;
+Rosa Brooks, "Obama Needs a Grand Strategy," Foreign Policy, Jan. 23, 2013,
+C 2014 Published for the Foreign Policy Research Institute by Elsevier Ltd.
+doi: 10.1016/j.orbis.2014.08.002
+Fall 2014 | 472
+Grand Strategy
+drawn equally from both sides of the Atlantic, suggest that both the United States
+and United Kingdom share a common problem with conceptualizing and
+conducting national strategy.
+The recent track record suggests that strategic results have been subpar.
+Whatever one thinks about the level of success obtained in Iraq and Afghanistan, it
+is hard to overlook the 6,000 lives lost and the $2 trillion spent and conclude that
+good strategies were developed or executed. What national interests were secured
+and how did Allied actions achieve those desired ends, and at what cost? It brings
+to mind the comment of General William Howe regarding the pyrrhic British
+victory at Bunker Hill: "the success is too dearly bought." So, too, was "success" in
+the last decade.
+Not everyone agrees that sound strategy is a solution. Richard Betts has
+suggested that grand strategy is an illusion, and another American scholar of
+government has argued:
+Grand strategy has always been seductive because it promises policy
+coherence in the face of complexity. Yet the sorry truth is that American
+grand strategies are usually alluring but elusive. Containment during the
+Cold War, the most often cited example of grand strategy success, is a
+recent lonely exception that has driven political scientists and policy
+makers to keep hope alive. That hope is misguided. In the post-9/11
+world, forging a successful grand strategy is unlikely and dangerous. 3
+Other scholars suggest we stick to what former State Department
+planning official Stephen Krasner called "orienting principles" instead of grand
+visions of how we want to see the future unfold.4 Professor Amy Zegart of
+UCLA agrees that while principles are not glamorous, "they hold out the
+prospect of something better than foreign policy a la carte or a grand strategy that
+mis-estimates the threat environment and misunderstands the organizational
+requirements for success."5
+This is a pessimistic conclusion, and not a very useful prescription.
+There is nothing wrong with principles, but they have to be applied in context
+http://www.foreignpolicy.com/articles/2012/01/23/obama needs a grand strategy?page
+=0.1.
+2 Aaron L. Friedberg, "Strengthening U.S. Strategic Planning," The Washington Quarterly,
+Winter 2008, pp. 47-60; Andrew F. Krepinevich and Barry D. Watts, "Lost at the NSC," The
+National Interest, Jan./Feb. 2009.
+3 Richard K. Betts, "Is Strategy an Illusion?" International Security, Fall 2000, p. 3; quote from
+Amy Zegart, "Time to Give Up on an American Grand Strategy," Real Clear World, Nov. 23,
+2013,
+http://www.realclearworld.com/articles/2013/11/23/time to give up on an american g
+rand strategy 110108.html.
+4 Stephen D. Krasner, "An Orienting Principle for Foreign Policy," Policy Review, Oct. 1,
+2010.
+5 Zegart, "Time to Give Up on an American Grand Strategy."
+Fall 2014 | 473
+-
+HOFFMAN
+and they require the prudent exercise of power to implement them.6 Principles
+can be the foundation of a sound strategy, but they do not serve to shape and
+develop the necessary instruments of national power required to achieve desired
+effects and objectives by themselves. Nor do principles help create a reality-
+tested set of tradeoffs or a risk assessment worthy of its name. A true strategy
+does. Principles are necessary but not sufficient.
+Difficult as it is, strategy is not an illusion. We cannot avoid the discipline
+without penalty in the future. We can and must do better. But first we'll have to
+consider what strategy is, what its various components are, and what considerations
+should influence its design.
+The last decade clearly demonstrates a distinctive degradation in the ability
+to weigh the national interest, and design effective strategies to achieve designated
+goals at efficient levels of means. It is quite true that historically most major
+powers have been deficient in grand strategy, as noted by Williamson Murray in The
+Shaping of Grand Strategy.7 In his superbly argued book, What Good is Grand Strategy?,
+Duke University's Hal Brands has noted that "grand strategy is neither a chimera
+nor an elusive holy grail, but rather an immensely demanding task that talented
+policy makers have still managed to do quite well."8
+But to do better we will have to invest in a comprehensive education about
+strategy-which involves grappling with the desirable, the immutable, and the
+unknown. Deciphering which is which is what makes strategy hard work and an art.
+A fundamental lesson from history is that strategy is necessarily purposeful, but
+must be designed in a world of ambiguity, complexity, and uncertainty.
+Strategy is elusive these days as the term has become too generalized and
+has lost its meaning. But grand, or national, strategy does not have to remain lost by
+modern practitioners of the art, whether they come from the civilian or military side.
+Some historians and students of war have recently argued that strategy pertains only
+to the use of military force. I find that limiting and ahistoric. Colin Gray's definition
+of grand strategy is laudable: "the direction and use made of any or all the assets of a
+security community, including its military instrument, for the purposes of policy as
+decided by politics."9 If one accepts this, then true grand strategy requires the
+conceptualization of all of the elements of national power. A narrow reading of
+Clausewitz may have led some to a misinterpretation, but he did not rule out the
+role of diplomacy or other instruments in either the preparation or conduct of war.
+Nor do I agree that strategy is a competence or discipline that is performed uniquely
+6 Mackubin T. Owens, "Principle and Prudence in American Foreign Policy," FPRI E-
+Note, Jan. 2014, http://www.fpri.org/articles/2014/01/principle-and-prudence-
+american-foreign-policy.
+7 Williamson Murray, Richard Hart Sinnreich, James Lacey, eds., The Shaping of Grand Strategy:
+Policy, Diplomacy, and War (New York: Cambridge University Press, 2011).
+8 Hal Brands, What Good is Grand Strategy? Power and Purpose in American Statecraft from Harry S.
+Truman to George W. Bush (Ithaca, NY: Cornell University Press, 2014), pp. 190-191.
+9 Colin S. Gray, The Strategy Bridge, Theory for Practice (New York: Oxford University Press,
+2011), p. 3.
+474 | Orbis
+-
+Grand Strategy
+by military professionals as Hew Strachan has suggested in his most recent and rich
+anthology The Direction of War.10
+To help frame and examine the many factors that influence the direction
+and use of our security assets, this article briefly lays out the most important eight
+considerations. These represent the most critical components that both Clausewitz
+and Colin Gray have sought to offer strategists, as they struggle to obtain their
+nation's policy aims. It is these elements that collectively comprise a holistic
+understanding of what grand or national strategy is and what makes strategy so easy
+to conceive and so terribly difficult to implement successfully.
+1. Context and Culture. Context is the basis for strategy, providing a grasp of
+the strategic and operational environment in which one's strategy is to be
+conducted. Professor Gray appropriately has referred to the "Sovereignty of
+Context," to highlight its importance. He has also listed the sources of context we
+should seek to understand; the political, military, socio-cultural, geographic,
+technological, and historical contexts.11
+Comprehending the strategic context
+frames our understanding of our adversary and the particular environment in which
+our strategies must operate within. The notion of strategic culture as a frame of
+reference for understanding strategic thinking and the distinctive (but not
+predictive) approaches of various cultures has some value. In his latest book, Gray
+emphasizes that strategic culture is not fixed nor determinant but it does cue or
+frame problem recognition and initially forms a lens on solutions.12 Hew Strachan
+disagrees with the concept entirely, holding that it tends to be used prescriptively as
+if foreign leaders were bound by it.13
+But strategic culture is also a useful starting point for self-awareness,
+something Americans are often lacking.14
+Grand strategy, Williamson Murray
+concludes, must also "rest on a realistic assessment and understanding not only of
+one's opponents but also of oneself."15 American strategic culture tends to embrace
+technological and short-term solutions to long-standing human problems. Cold
+War grand strategies were formulated with an understanding of the culture we were
+competing with, but also an understanding of our strengths and weaknesses.
+In addition to strategic culture, we must appreciate the relevance of
+geography, what Gray has called the mother of strategy.16
+10 Hew Strachan, The Direction of War: Contemporary Strategy in Historical Perspective (Cambridge:
+Cambridge University Press, 2014).
+11 Colin S. Gray, National Security Dilemmas, Challenges and Opportunities (Washington, DC:
+Potomac Books, 2009), pp. 36-149.
+12 Colin S. Gray, Perspectives on Strategy (New York: Oxford University Press, 2013), p. 202.
+13 On the limitations of strategic culture, see Strachan, The Direction of War, pp. 136-150.
+14 On American culture, see Theo Farrell, "Strategic Culture and American Empire," SAIS
+Review, Nov. 2, 2005, pp. 3-18. On strategic culture in general, see Colin Gray, Perspectives on
+Strategy, pp. 79-115.
+15 Williamson Murray, "Thoughts on Grand Strategy," in Murray, Sinnreich, Lacey, eds., The
+Shaping of Grand Strategy, p. 5.
+16 Colin Gray and Geoff Sloan, eds., Geopolitics: Geography and Strategy (London: Frank Cass,
+2003), p. iii.
+Fall 2014 | 475
+1
+HOFFMAN
+A good appreciation for context, geographical and cultural, goes far and
+explains much about U.S. strategic performance. Shortfalls over the last decade in
+Iraq and Afghanistan come partially from a lack of detailed comprehension of the
+particular context and culture we sought to operate in. As Bernard Brodie noted
+two generations ago, good strategy presumes good sociology and anthropology.17
+Apparently both are in short supply among U.S policymakers and their close
+advisors.
+2. Constraints. The second consideration deals with limits. One makes
+strategy and executes it in the real world, and the real world is an environment in
+which constraints are almost always operative. The most obvious of which are time,
+information and resources.
+War in general and operations more explicitly are competitive and decisions
+are made in an environment that rewards timely actions relevant to the opponent.
+National strategies are longer term, but their implementation is still guided by time
+limits. There is generally not enough time to make deliberative steps and there are
+advantages to preempt one's adversary in the temporal dimension by anticipating,
+deciding and action with time as a precious resource.
+Information is another common constraint, despite prodigious amounts of
+great intelligence. As Colin Gray has stressed, the future is not foreseeable and
+strategy must be founded on assumptions, logic, and genius. It must also accept
+known and unknown "unknowns." Uncertainty is just one of many constraints. 18
+There are pundits in the United States that believe strategies should be
+unconstrained, reflecting that American predisposition towards engineered solutions
+and massive resources. The latest U.S. defense guidance, in support of our current
+national strategy, is explicitly constrained with more explicit priorities in missions,
+regions of interest and investment. As means become limited, it places greater
+demands on the strategist to contrive creative' "ways" to overcome these limits.
+The essence of strategy is the making of choices, prioritizing objectives, and making
+tradeoffs. It is also about recognizing and accounting for risk and the unknown or
+unknowable. As Harry Yarger once noted, policy ensures that strategy pursues
+appropriate aims while strategy informs policy of the art of the possible.19 Thinking
+of strategy without understanding the limits of means or resources is woefully
+delusionary.
+The United States has enjoyed a few decades of enormous technological
+and material advantage-problems could be solved with massive funding or
+expensive solutions. These advantages may have led to rust in the machinery and
+practice of strategic thinking. That surplus of resources will be a thing of the past.
+17 Bernard Brodie, War and Politics (New York: Macmillan, 1973), p. 332.
+18 Colin S. Gray, "Strategic Thoughts for Defence Planners," Survival, June-July 2010.
+19 Harry R. Yarger, Strategic Theory for the 21st Century: The Little Book on Big Strategy (Carlisle,
+PA: Army War College), Feb. 2006.
+476 | Orbis
+r
+Grand Strategy
+Future U.S. national security strategies will have to seek creative and relevant
+solutions with fewer resources.
+3.
+Compromise and Consensus by Council. This element deals with the
+development of strategies, the essence of strategy as a process not just a written or
+implicit product. The discourse required to create and refine strategies are generally
+achieved by committees or councils of war. Ultimately, policymakers and their
+strategists "must weigh imponderables through structured debates that pare away
+personal, organizational, and national illusions and conceits."20
+They must squarely face the parochial predispositions of bureaucracy,
+accurately discern strategic options, and make choices with imperfect information.
+The metaphorical bridge function described by Professor Gray in The Strategy Bridge,
+occurs often in summits, Cabinet meetings, or policy councils. Here strategists seek
+to resolve or reconcile grand policy aims with practical operational ways and means
+in an integrated way. What Eliot Cohen once called the "unequal dialogue" occurs
+in these councils-the intense interaction between civilian and military
+perspectives.21 Consensus need not mean lowest common denominator thinking
+but it does imply an open discourse of contending perspectives. Whether it's an
+unequal dialogue or collaborative confrontation, this discourse leads to better
+strategy.22
+Civil-military interaction in the development of strategy is critical to
+strategic success, and, of course, a great source of tension.23 Within such councils,
+the preferences of policy are contrasted with the gritty reality of ways and means.
+As Colin Gray lucidly notes, national strategies are developed to support
+the attainment of "policy as determined by politics."24 This is the best definition of
+national strategy since politics are infused in policy and influence strategy, as well.
+Politics need not be the. enemy of strategy; instead policymakers and strategists,
+Brands argues, should embrace democratic messiness.25
+Our strategists must also accept, as Clausewitz highlighted, that politics is
+far more than just an intrusion into strategy and war. The strategist, who holds the
+proverbial bridge between policy and military means, must accept the historical fact
+that purely rational methods are not the norm in crafting strategy. Strategy's natural
+spawning grounds are the confluence of politics, complexity, uncertainty and
+20 Williamson Murray, MacGregor Knox, and Alvin Bernstein, eds., The Making of Strategy:
+States, Rulers, and War (New York: Cambridge University Press, 1994).
+21 Eliot A. Cohen, Supreme Command: Soldiers, Statesmen, and Leadership in Wartime (New York:
+Free Press, 2002).
+22 F. G. Hoffman, "History and Future Civil-Military Relations, Bridging the Gaps," in
+Williamson Murray and Richard Hart Sinnreich, eds., The Past as Prologue: The Importance of
+History to the Military Profession (New York: Cambridge University Press, 2006).
+23 Colin S. Gray, Modern Strategy (New York: Oxford University Press, 1999), p. 58.
+24 Gray, The Strategy Bridge, p. 3. For valuable historical insights on definitions see Lukas
+Milevski, "The Mythology of Grand Strategy," Infinity Journal, Winter, 2012, pp. 29-33.
+25 Brands, What Good is Grand Strategy?, p. 201. The phrase "politics is the enemy of strategy"
+is a chapter in Gordon M. Goldstein's Lessons in Disaster: McGeorge Bundy and the Path to War in
+Vietnam (New York: Henry Holt and Company, 2008), pp. 97-143.
+Fall 2014 | 477
+HOFFMAN
+constraints. This is obvious to anyone claiming to be a disciple of Clausewitz. But
+our Prussian sage is more often quoted than read or understood, especially among
+the U.S. military. As General David Petraeus commented once, "Though most
+military officers quote flawlessly Clausewitz' dictum that war is a continuation of
+politics by other means-many do not appear to accept fully the implications of his
+logic."26
+Strategies are usually the product of negotiation and compromise, and these
+compromises are hammered out in councils of war and dialogue.27 These can be
+contested debates of collaborative or creative confrontation. Too often the edges of
+risk, assumptions and alternatives are watered down at lower levels. Leaders should
+ensure that clear alternatives and debate are used productively to fully examine true
+options.
+In retrospect, the last decade reveals defects in the National Security
+Council-centered system in its ability to pare away illusions, challenge shaky
+assumptions, and parochial inclinations. Initial strategies were not well integrated
+and failed to reconcile grand ambitions with operational plans generated by military
+staffs. The NSC structure has been altered to enhance institutional integration, but
+flaws in the conception of strategy across all the instruments of power at the council
+table still exist. Too often operational planning was confused with strategic
+thinking. Hew Strachan's lament is reinforced by this experience; the meaning of
+strategy has been lost, and replaced by operational planning.28 They are not the
+same.
+4.
+Competiveness. A strategy must be competitive. National strategies
+should be based on the need to define, create and sustain a competitive
+advantage relative to the opponent or the environment. This is not commonly
+recognized:
+What you often get instead are lists. Lists of geographic theaters, lists of
+lofty goals Washington will seek there, lists of assets, etc. Seldom is there
+much about the mechanics of how to execute the strategy, bringing about
+all these wonderful things in the face of determined opposition.
+Oftentimes it goes unmentioned that there is opposition.29
+26 David Petraeus, "The American Military and the Lessons from Vietnam: A Study of
+American Influence and the Use of Force in the Post-Vietnam Era," Woodrow Wilson
+School, Princeton, NJ, 1987, unpublished doctoral dissertation.
+27 Hal Brands, "The Promises and Pitfalls of Grand Strategy," Carlisle, PA: Army War
+College, Strategic Studies Institute, August 2012, p. 52.
+28 Hew Strachan, "The Lost Meaning of Strategy," Survival, Autumn, 2005, pp. 33-54. Cf.
+"Strategy: Historical Perspectives," in The Direction of War, pp. 26-45.
+29 James R. Holmes, "The Essential Guide to Writing a Best-Selling Strategy," The Diplomat,
+Feb. 27, 2014, http://thediplomat.com/2014/02/the-essential-guide-to-writing-a-best-
+selling-strategy /.
+478 | Orbis
+Grand Strategy
+This is a consideration on behalf of which the Pentagon's Andrew Marshall
+and other proponents, like Richard Rumelt, have argued.30 Competitive strategies
+seek to frame the contest to our advantage rather than play by someone else's
+rules.31 To craft a strategy that is competitive recognizes that it must operate in an
+adversarial setting and reflect the reality that strategy and war are reciprocal, as well
+as involve an interactive series of action, response, and counteraction.
+This consideration is the essence of the strategy function, whereby the
+strategist exploits the comprehension generated from context and cognitively creates
+a strategic concept and logic that represents an untested hypothesis that promises to
+attain policy ends within the means allotted and the constraints that exist. A good
+strategy must have an internal logic that ties policy to both ways and means to create
+desired strategic effects. That logic is a continuous thread of thinking that provides
+strategic intent and informs ways, and creates linkages in strategic design that drives
+the application of means via military operations. This factor is the component that
+involves calculation, cunning, and the creation of a strategic logic or chain of effects.
+The strategist's art or most important skill is devising a strategic logic that obtains
+policy's goals within the given constraints and means.
+The Cold War strategy of containment was predicated upon a strategic logic
+that understood the inherent advantages of the West and sought to shore up the
+capacity of democratic states to withstand the built-in contradictions of the Soviet
+Union. Grand strategy since 1991 has not been built upon an explicit competitive
+logic of action. Initial U.S. strategies in Afghanistan and Iraq too quickly dismissed
+our adversary. We then strove hard to reassess and regain the initiative. Strategic
+reviews in both wars had to work to gain an appreciation for events on the ground,
+assess the right metrics, and design a renewed approach to obtain policy aims at
+some reasonable cost. A failure to think competitively has squandered
+opportunities in contemporary application, at great cost.
+Considerations in Grand/National Strategy
+1.
+Culture and Context
+2.
+Constraints
+3.
+Compromise and Consensus
+4.
+Competitiveness
+5.
+Coherence
+6.
+Contingency
+7.
+Continuous Assessment/Adaptation
+8.
+Communication
+5. Coherence. The fifth consideration is coherence. Creating and sustaining
+coherence is the art of strategic practice where the strategist earns his keep and applies
+30 Richard Rumelt, Good Strategy, Bad Strategy, The Difference and Why it Matters (New York:
+Crown Business, 2011).
+31 Thomas G. Mahnken, "Thinking about Competitive Strategies," in Thomas G. Mahnken,
+ed., Competitive Strategies for the 21st Century: Theory, History and Practice (Stanford, CA: Stanford
+University Press, 2012).
+Fall 2014 | 479
+.
+HOFFMAN
+his creativity and experience. Coherence involves consistency in the logic that binds
+ends/ways/means. The enduring formula of ends/ways/means must be logically
+and coherently linked. If a strategy employs a "way" that is inconsistent with policy,
+or if policymakers provide too little means, then it lacks coherence. The prospects
+for success are very suspect if coherence is not sustained. Altering one part of the
+formula automatically alters the resultant strategy, and if strategy cannot be
+executed, it should force a reconsideration of the policy itself.
+Coherence works in multiple directions horizontally and vertically. In the
+horizontal dimension, coherent logic integrates in time and space the deployment of
+all instruments of national power-the coherent linking of diplomacy, economic,
+information and military tools. The strategic concept divined and proposed by the
+strategist should establish this coherence-and he or she must strive mightily to
+keep them connected in balance.
+Coherence can also be considered vertically, in the consistent thread of
+logic that ties strategy to operations to tactics. The debate about the use of drones
+to support strike operations may be one example where coherence is difficult to
+define and sustain.
+Coherence in U.S. strategy sometimes has been suspect. Hew Strachan is
+correct to criticize the U.S. national security community for a "profoundly
+astrategic" approach in Iraq and the broader conflict against violent extremists.32
+The need to think strategically about the ends/ways/means chain is quite evident in
+the conduct of strategy in Iraq and Afghanistan. What was generally lacking or
+astrategic about U.S. actions was the lack of a coherent linkage between desired ends
+and the ultimate means required. Failures in council to create a strategic logic and
+coherent linkages that bound. the application of military, diplomatic and
+developmental resources to the desired strategic effect. Thanks to bureaucratic
+blinders and personal blind spots inside the National Security Council and at the
+theater command, American strategists have frequently struggled with preserving a
+logic chain in recent conflicts.
+Because of its attempt to minimize civilian interference in what it
+erroneously defined as its professional sphere, Strachan criticizes the Powell
+Doctrine and the U.S. military's devotion to the operational level of war for leaving
+strategy without a home. Strategy deals less with the subordination of the military
+effort to policy, and more about its proper harmonization-which is the function of
+strategy. He contends "the true evil in war is the inability to hammer out how the
+two are to be reconciled."33 The linkage between policy and effort is the coherence
+that only strategy can provide.
+32 The phrase is Hew Strachan's, "Making strategy: civil-military relations after Iraq,"
+Survival, 48: 3, 2006, p. 59.
+33 Strachan, The Direction of War, p. 78.
+480 | Orbis
+.
+Grand Strategy
+6. Contingency. This is the often overlooked realm of chance in the
+execution of strategy.34 In his opus Strategy: A History, Sir Lawrence Freedman
+addresses its pernicious effects: "The inherent unpredictability of human affairs, due
+to chance events as well as the efforts of opponents and the missteps of friends,
+provides strategy with its challenge and drama."35
+As Clausewitz noted, we do not fight or operate against inanimate objects,
+but real people with ideas and a will of their own. Strategy operates as an inherently
+human enterprise.36 There is no need to belabor the Prussian sage's emphasis on
+friction in war. But it is not just a factor at the operational or tactical level of
+warfare. It exists at all levels, including the conference table. Recall the words from
+Winston Churchill, another Anglo-American with a strategic flair:
+The Statesman who yields to war fever must realize that once the signal is
+given, he is no longer the master of policy but the slave of unforeseeable
+and uncontrollable events. Antiquated War Offices, weak, incompetent
+or arrogant Commanders, untrustworthy allies, hostile neutrals, malignant
+Fortune, ugly surprises, awful miscalculations-all take their seats at the
+Council Board on the morrow of a declaration of war.37
+We should note that Churchill failed to give well-meaning but misinformed
+"civilian policymakers" a seat at the table in that list. Since he was certainly a
+statesman deeply read in history and statecraft, this oversight can be forgiven. But
+modern strategists must connect the disparate cultures of policymakers on one
+hand, and the operational planners on the other. Policymakers may not always be as
+familiar with the instrument they select or always grasp the logic of force or
+understand its limits.
+The conduct of U.S. strategy in the contemporary conflict over the last
+decade, including the sudden collapse and reemergence of the Taliban, and al
+Qaeda's attempt to interfere in Iraq, demonstrates the role of contingency and the
+· need to respond to both opportunity and unanticipated circumstances. Our recent
+threat of force against Syria shows how quickly a crisis can produce sudden
+opportunities or pitfalls.
+7. Continuous Assessment and Adaptation. The confluence of contingency and
+competiveness produces the need for an additional component-that of constant
+evaluation of ongoing operations and continuous measurement of progress. "Like
+a vessel under sail," notes retired Army strategist Rick Sinnreich, "grand strategy is
+at the mercy of uncontrollable and often unpredictable political, economic and
+military winds and currents, and executing it effectively requires both alertness to
+those changes and constant tiller correction."38
+34 Strachan, The Direction of War, pp. 235-252.
+.35 Lawrence Freedman, Strategy: A History (New York: Oxford University Press 2013), p. xi.
+36 Yarger, Strategic Theory for the 21st Century, p. 10.
+37 Winston S. Churchill, My Early Life: A Roving Commission, 1930, p. 246.
+38 Richard H. Sinnreich in Murray, Sinnreich, Lacey, eds., The Shaping of Grand Strategy, p.
+256.
+Fall 2014 | 481
+-
+HOFFMAN
+This is the basis for co-adaptation in form and function as our strategy
+interacts with the real world and the will of an opponent. According to Oxford's
+Hew Strachan, we must recognize that in war, the creation and execution of strategy
+are locked into an iterative relationship, which rests on an inherently dynamic and
+changing situation and which has to respond to the counters of the enemy.39 No
+strategy should be seen as unalterable or a fixed blueprint written in stone.40 Good
+strategists, Dr. Rich Hooker, former NSC staffer observes, "must be ready to
+jettison failed policies and strategies and make new ones when needed."41
+Operational planners are well versed in the need for crafting branches and
+sequels to plans to account for critical points in campaigns. The virtue for branches
+in national strategy should not be underestimated. "Good strategy development
+provides for flexibility and adaptability," one commendable strategist has noted, "so
+that planning and execution can be tailored to more immediate circumstances and
+respond to unanticipated opportunities and constraints."42
+Since strategy is an evolving contact sport, one should avoid what Lord
+Salisbury called the most common error, "sticking to the carcass of dead policy."
+Strategies should be thought of as adaptive in nature. As Henry Mintzberg has
+stressed, the making of strategy is an iterative exercise that is dynamic, irregular,
+discontinuous, with learning and synthesis.43 Mintzberg's views from the corporate
+world match a deep body of historical work on grand strategy. Strategy has to be
+seen as a process, "a constant adaptation to shifting conditions and circumstances in
+a world where chance, uncertainty, and ambiguity dominate."44 Freedman echoes
+Mintzberg and his emphasis on adaptive or emergent strategy, and stresses that
+grand strategy has to involve feedback and course corrections. An essential aspect
+of strategic leadership is the creation of an atmosphere in which honest
+reassessment can occur. 45
+Mechanisms and assets to objectively produce this continuous evaluation
+and adaptation have now been created in our NSC structure. They should be
+retained if not strengthened. The strategy process does not end with the decision to
+select an option, it must endure as strategy is executed and eventually evaluated.
+Purpose and process-one requires the other in the making and conduct of
+effective grand strategy.
+39 Hew Strachan, "Strategy and Contingency," The Direction of War, pp. 235-252.
+40 Brands, "Promises and Pitfalls of Grand Strategy," p. 49.
+41 Richard Hooker, "The Strange Voyage: A Short Precis on Strategy," Parameters,
+Winter/Spring 2013, p. 63.
+42 Yarger, Strategic Theory for the 21st Century, p. 31.
+43 Henry Mintzberg, The Rise and Fall of Strategic Planning (New York: Free Press, 1994), p.
+318.
+44 Williamson Murray and Mark Grimsley, "Introduction: On Strategy," in Murray, Knox,
+and Bernstein, eds., The Making of Strategy: Rules, States and War (New York: Cambridge
+University Press, 1994), p. 1.
+45 Brands, What Good is Grand Strategy?, pp. 199, 204.
+482 | Orbis
+Grand Strategy
+8. Communication. The importance of narratives in explaining national
+purpose, myths, and goals should not be underestimated. Policymakers need to
+create and sustain support for a national or grand strategy, particularly in democratic
+states. Strategies need to be sustained by support, and to be sustained, they must be
+explained.
+A good national security strategy does not have to be an inspiring
+document, but it should paint a compelling narrative and a clear direction. Most
+importantly, it cannot be simply aspirational, merely listing a litany of desired
+objectives with little discussion of "how" these objective are to be achieved or in
+what priority. Even if too long-range or too inspirational in tone (as some are), and
+too general, it can be the basis for subordinate plans by the subordinate instruments
+of national power. But one of its critical purposes is to establish a narrative that
+influences the principal audience(s), allots priorities and allocates resources to shape
+and apply the instruments of national power towards a common purpose.
+The need to create and promulgate a strategic narrative is not new to our
+leaders. From Woodrow Wilson's 14 Points, to the issuance of the Atlantic Charter
+by Franklin D. Roosevelt and Churchill, to Ronald Reagan as the Great
+Communicator, the value of a strategic narrative has been understood in the United
+States. "Grand strategy requires great language," is an observation from John Lewis
+Gaddis that should be taken to heart.46 Strategy returns to issues of language and .
+communication "because strategy is meaningless without them."47 But such a
+compelling narrative has been hard to craft since 1991. Certainly, in the aftermath
+of 9/11, there was a narrative that was naturally reactive to the tragedy. But we have
+been less consistent in explaining and defending our role in the world and the global
+struggle against violent extremism since the Iraq invasion. As Lawrence Freedman
+and Emile Simpson have noted, the importance of a persuasive narrative in
+contemporary conflict is now well established.48
+But strategic narratives are necessary too, and one must search hard today
+to find that national story today beyond the "rebalance" to the Pacific and nation-
+building here at home. As Adam Garfinkle wrote recently, "A nation does not have.
+a grand strategy if those responsible for devising and implementing it cannot
+articulate what it is."49 He may be correct in bemoaning the silent death of
+American grand strategy.
+These eight considerations cannot be thought of in isolation. The art of
+strategy requires consideration of what Colin Gray has called the "whole house."50
+46 John Lewis Gaddis, "The Past and Future of American Grand Strategy," Charles Grant
+Lecture, April 21, 2005, http://thetenoclockscholar.blogspot.com/2005/05/grand-
+strategy.html.
+47 Freedman, Strategy: A History, p. 614.
+48 On scripts, stories and narrative see Lawrence Freedman, Strategy: A History, pp. 614-630;
+Emile Simpson, War from the Ground Up, 21st Century Combat as Politics ( London: Hurst, 2013),
+especially Chapters 8 and 9.
+49 Adam Garfinkle, "The silent death of American grand strategy," The American Review, May
+2014.
+50 Gray, "The Whole House of Strategy," in his Perspectives on Strategy, pp. 191-205.
+Fall 2014 | 483
+HOFFMAN
+The various elements interact and even create tension. Hal Brands has captured the
+same conclusion:
+Indeed the more one studies grand strategy, the more one can see that the
+·very concept is beset by a number of fundamental tensions- between the
+quest for coherence and the reality of complexity; between the need for
+foresight and the fact of uncertainty; between the steadiness and purpose
+that are necessary to plan ahead, and the agility that is required to adapt
+on the fly.51
+Conclusion
+A grand strategy ensures that policy and strategic machinery are aligned
+and in good working order. Strategy should purposely link policy aims to
+competitive ways, with sustainable means. While many strategy documents claim to
+be strategy, events over the last two decades suggest that the common
+understanding of what strategy entails needs updating. Likewise, institutional
+mechanisms and intellectual concepts need revising. Given that the margin for
+error is shrinking, by a combination of increased challenge and reduced resources,
+we can no longer afford to be indifferent to strategy in the real arena of a multi-
+polar world. While the United States and NATO remain quite powerful, relative
+decline in power can be offset with better strategy implementation to preserve order
+and advance our interests.
+We need to reinvest and conduct "good" strategy if we are to avoid wasting
+the lives of American warriors and improvidently expending our dwindling treasury.
+Strategy must be more than mere fluff; it cannot be founded upon an inadequate
+diagnosis or simply a mere list of goals.52 As Hal Brands concluded, "Refusing to
+do grand strategy will not allow the United States to escape the dilemmas that make
+that task so difficult; it will only exacerbate the confusion and contradictions within
+American policy."53
+Overall this framework of eight considerations offers a useful guide for
+thinking about strategy. These factors provide a foundation to think about, design
+and apply a national strategy. A proper appreciation of these components will
+increase the likelihood that U.S. national strategies will have a better chance of
+success in the future.
+.
+Grand strategy is difficult work and far more is involved than writing a
+glossy publication with the White House crest on the cover. Strategies, both the
+process and the product, are essential to spanning the black hole from desired policy
+aims to achieved strategic effect. There is a calculation and compromise involved in
+crafting and implementing sound strategy, and while the difficulties might appear
+51 Brands, What Good is Grand Strategy?, p.193.
+52 Richard Rumelt, "The Perils of Strategy," Mckinsey Quarterly, June 2011.
+53 Brands, What Good is Grand Strategy?, p. 195.
+484 | Orbis
+Grand Strategy
+insurmountable, it must be done. As Clausewitz said, in war the simplest of things
+are not necessarily easy. The same is true for strategy.
+Fall 2014 | 485

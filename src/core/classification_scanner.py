@@ -103,8 +103,34 @@ try:
     import pytesseract
     from pdf2image import convert_from_path
     HAS_OCR = True
+
+    # Auto-setup external dependencies (bundled binaries)
+    try:
+        from src.utils.setup_poppler import get_poppler_path
+        from src.utils.setup_tesseract import get_tesseract_path
+
+        POPPLER_PATH = get_poppler_path()
+        TESSERACT_PATH = get_tesseract_path()
+
+        # Configure pytesseract to use detected tesseract
+        if TESSERACT_PATH:
+            pytesseract.pytesseract.tesseract_cmd = TESSERACT_PATH
+
+            # Also ensure TESSDATA_PREFIX is set
+            import os
+            from pathlib import Path
+            if "TESSDATA_PREFIX" not in os.environ:
+                tesseract_dir = Path(TESSERACT_PATH).parent
+                tessdata_path = tesseract_dir / "tessdata"
+                if tessdata_path.exists():
+                    os.environ["TESSDATA_PREFIX"] = str(tessdata_path)
+    except Exception as e:
+        POPPLER_PATH = None
+        TESSERACT_PATH = None
 except ImportError:
     HAS_OCR = False
+    POPPLER_PATH = None
+    TESSERACT_PATH = None
 
 # OCR - YOLO+Tesseract for SOTA text detection
 try:
@@ -455,6 +481,95 @@ class ContextAnalyzer:
         }
 
 
+class PDFImageCache:
+    """
+    Global cache for PDF→image conversions to avoid redundant processing.
+    Shared across all components (visual detector, OCR, etc.)
+    """
+    _instance = None
+    _cache = {}
+    _cache_size_bytes = 0
+    _max_size_bytes = 500 * 1024 * 1024  # 500MB default
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(PDFImageCache, cls).__new__(cls)
+        return cls._instance
+
+    @classmethod
+    def get_or_convert(cls, pdf_path: str, dpi: int = 200, max_pages: Optional[int] = None) -> List:
+        """
+        Get images from cache or convert PDF if not cached.
+
+        Args:
+            pdf_path: Path to PDF file
+            dpi: DPI for conversion (default 200)
+            max_pages: Maximum pages to convert (None = all)
+
+        Returns:
+            List of PIL Image objects
+        """
+        # Create cache key
+        cache_key = (pdf_path, dpi, max_pages)
+
+        # Check cache
+        if cache_key in cls._cache:
+            return cls._cache[cache_key]
+
+        # Not in cache - convert PDF
+        if HAS_OCR:
+            try:
+                # Use bundled poppler if available
+                kwargs = {
+                    'dpi': dpi,
+                    'first_page': 1,
+                    'last_page': max_pages
+                }
+                if POPPLER_PATH:
+                    kwargs['poppler_path'] = POPPLER_PATH
+
+                images = convert_from_path(pdf_path, **kwargs)
+
+                # Estimate memory size (very rough estimate)
+                if images:
+                    # Estimate: width × height × 3 bytes per pixel (RGB)
+                    estimated_size = sum(
+                        img.width * img.height * 3
+                        for img in images
+                    )
+
+                    # Only cache if within size limit
+                    if cls._cache_size_bytes + estimated_size < cls._max_size_bytes:
+                        cls._cache[cache_key] = images
+                        cls._cache_size_bytes += estimated_size
+                    else:
+                        # Cache full - consider LRU eviction in future
+                        print(f"  ⚠ PDF image cache full ({cls._cache_size_bytes / 1024 / 1024:.0f}MB), "
+                              f"not caching {pdf_path}", file=sys.stderr)
+
+                return images
+            except Exception as e:
+                print(f"PDF conversion error for {pdf_path}: {e}", file=sys.stderr)
+                return []
+        else:
+            return []
+
+    @classmethod
+    def clear(cls):
+        """Clear the entire cache"""
+        cls._cache.clear()
+        cls._cache_size_bytes = 0
+
+    @classmethod
+    def get_stats(cls) -> Dict:
+        """Get cache statistics"""
+        return {
+            'entries': len(cls._cache),
+            'size_mb': cls._cache_size_bytes / 1024 / 1024,
+            'max_size_mb': cls._max_size_bytes / 1024 / 1024
+        }
+
+
 class TextExtractor:
     """Extract text from various document formats"""
 
@@ -645,13 +760,14 @@ class TextExtractor:
 
         return result
 
-    def extract_from_pdf_pymupdf(self, file_path: str, max_pages: Optional[int] = None) -> Dict[str, str]:
+    def extract_from_pdf_pymupdf(self, file_path: str, max_pages: Optional[int] = None, start_page: int = 0) -> Dict[str, str]:
         """
         Extract text from PDF using PyMuPDF (fitz) - faster and more efficient
 
         Args:
             file_path: Path to PDF file
-            max_pages: Maximum number of pages to extract (None = all pages)
+            max_pages: Maximum number of pages to extract from start_page (None = all remaining pages)
+            start_page: Page to start extraction from (0-indexed, default=0)
 
         Returns:
             Dict with 'body', 'headers', 'footers', 'metadata' keys
@@ -665,9 +781,10 @@ class TextExtractor:
                 print(f"Skipping {file_path}: {error_msg}", file=sys.stderr)
                 return result
 
-            # SECURITY: Validate max_pages parameter
+            # SECURITY: Validate parameters
             if max_pages is not None:
                 max_pages = max(1, min(max_pages, 10000))  # Clamp to reasonable range
+            start_page = max(0, min(start_page, 10000))  # Clamp start_page
 
             with fitz.open(file_path) as doc:
                 # Extract metadata
@@ -682,12 +799,14 @@ class TextExtractor:
                     print(f"Warning: PDF has {len(doc)} pages, limiting to 10000", file=sys.stderr)
                     result['total_pages'] = min(result['total_pages'], 10000)
 
-                # Determine number of pages to process
-                num_pages = min(max_pages, len(doc)) if max_pages else len(doc)
-                num_pages = min(num_pages, 10000)  # Hard limit for safety
+                # Determine page range to process
+                end_page = len(doc)
+                if max_pages:
+                    end_page = min(start_page + max_pages, len(doc))
+                end_page = min(end_page, 10000)  # Hard limit for safety
 
                 # Extract text from each page with region analysis
-                for page_idx in range(num_pages):  # 0-indexed
+                for page_idx in range(start_page, end_page):  # 0-indexed
                     page_num = page_idx + 1  # 1-indexed for display
                     page = doc.load_page(page_idx)  # or doc[page_idx]
                     page_text = page.get_text()  # or page.get_text("text")
@@ -705,9 +824,9 @@ class TextExtractor:
                             result['footers'].append(f"[PAGE {page_num} FOOTER]\n{regions['footer']}")
 
                 # Mark if this was a partial extraction
-                if max_pages and max_pages < len(doc):
+                if (max_pages and start_page + max_pages < len(doc)) or start_page > 0:
                     result['is_partial'] = True
-                    result['pages_extracted'] = max_pages
+                    result['pages_extracted'] = end_page - start_page
 
         except fitz.FileDataError as e:
             # Corrupted or malformed PDF
@@ -724,25 +843,26 @@ class TextExtractor:
 
         return result
 
-    def extract_from_pdf(self, file_path: str, max_pages: Optional[int] = None) -> Dict[str, str]:
+    def extract_from_pdf(self, file_path: str, max_pages: Optional[int] = None, start_page: int = 0) -> Dict[str, str]:
         """
         Extract text from PDF, trying best available library
 
         Args:
             file_path: Path to PDF file
-            max_pages: Maximum number of pages to extract (None = all pages)
+            max_pages: Maximum number of pages to extract from start_page (None = all pages)
+            start_page: Page to start extraction from (0-indexed, default=0)
 
         Priority order:
             1. PyMuPDF (fitz) - fastest, most efficient
             2. pdfplumber - good layout preservation
-            3. PyPDF2 - fallback (no max_pages support)
+            3. PyPDF2 - fallback (no max_pages/start_page support)
         """
         if HAS_PYMUPDF:
-            return self.extract_from_pdf_pymupdf(file_path, max_pages=max_pages)
+            return self.extract_from_pdf_pymupdf(file_path, max_pages=max_pages, start_page=start_page)
         elif HAS_PDFPLUMBER:
             return self.extract_from_pdf_pdfplumber(file_path, max_pages=max_pages)
         elif HAS_PYPDF2:
-            # WARNING: PyPDF2 doesn't support max_pages parameter
+            # WARNING: PyPDF2 doesn't support max_pages/start_page parameters
             return self.extract_from_pdf_pypdf2(file_path)
         else:
             return {'body': [], 'metadata': {}}
@@ -1053,13 +1173,14 @@ class TextExtractor:
 
         return result
 
-    def extract(self, file_path: str, max_pages: Optional[int] = None) -> Tuple[Dict[str, any], bool]:
+    def extract(self, file_path: str, max_pages: Optional[int] = None, start_page: int = 0) -> Tuple[Dict[str, any], bool]:
         """
         Extract text from file based on extension
 
         Args:
             file_path: Path to file
-            max_pages: For PDFs, maximum number of pages to extract (None = all pages)
+            max_pages: For PDFs, maximum number of pages to extract from start_page (None = all pages)
+            start_page: For PDFs, page to start extraction from (0-indexed, default=0)
 
         Returns: (extracted_data_dict, ocr_used_bool)
         """
@@ -1077,7 +1198,7 @@ class TextExtractor:
                 ocr_used = True
             else:
                 # Text-based PDF - do normal extraction
-                extracted = self.extract_from_pdf(file_path, max_pages=max_pages)
+                extracted = self.extract_from_pdf(file_path, max_pages=max_pages, start_page=start_page)
 
                 # Double-check if OCR needed (text layer present but insufficient)
                 if HAS_OCR and self.pdf_needs_ocr(extracted):
@@ -1285,6 +1406,31 @@ class ClassificationScanner:
             if not HAS_VISUAL_DETECTOR:
                 print("⚠ Visual pattern detector not available", file=sys.stderr)
 
+    @staticmethod
+    def _merge_extracted_data(data1: Dict, data2: Dict) -> Dict:
+        """
+        Merge two extracted data dictionaries (for incremental PDF processing)
+
+        Args:
+            data1: First extracted data (e.g., pages 1-N)
+            data2: Second extracted data (e.g., pages N+1 to end)
+
+        Returns:
+            Merged dictionary with combined headers, body, footers
+        """
+        merged = {
+            'headers': data1.get('headers', []) + data2.get('headers', []),
+            'body': data1.get('body', []) + data2.get('body', []),
+            'footers': data1.get('footers', []) + data2.get('footers', []),
+            'metadata': data1.get('metadata', {})  # Use first metadata
+        }
+        # Preserve total_pages if available
+        if 'total_pages' in data1:
+            merged['total_pages'] = data1['total_pages']
+        elif 'total_pages' in data2:
+            merged['total_pages'] = data2['total_pages']
+        return merged
+
     def find_repeated_markings(self, text_sections: List[str]) -> Dict[str, int]:
         """
         Analyze text sections (e.g., page headers/footers) to find repeated markings.
@@ -1310,9 +1456,33 @@ class ClassificationScanner:
 
         return dict(marking_counts)
 
-    def get_line_number(self, text: str, position: int) -> int:
-        """Get line number for a position in text"""
-        return text[:position].count('\n') + 1
+    def _build_line_index(self, text: str) -> List[int]:
+        """
+        Build line index for O(log n) line number lookups.
+        Returns list of positions where each line starts.
+        """
+        line_starts = [0]  # Line 1 starts at position 0
+        for i, char in enumerate(text):
+            if char == '\n':
+                line_starts.append(i + 1)  # Next line starts after newline
+        return line_starts
+
+    def get_line_number(self, position: int, line_index: List[int]) -> int:
+        """
+        Get line number for a position using binary search on line index.
+        Much faster than counting newlines (O(log n) vs O(n)).
+
+        Args:
+            position: Character position in text
+            line_index: Pre-built list of line start positions
+
+        Returns:
+            Line number (1-indexed)
+        """
+        import bisect
+        # Binary search to find which line this position is on
+        line_num = bisect.bisect_right(line_index, position)
+        return line_num
 
     def is_in_json_metadata(self, text: str, position: int, window: int = 200) -> bool:
         """Detect if a match is inside JSON metadata/coordinate data
@@ -1366,9 +1536,105 @@ class ClassificationScanner:
 
         return 'body'
 
+    def _calculate_match_confidence(
+        self,
+        match_text: str,
+        position: int,
+        base_confidence: float,
+        category: str,
+        context_info: Dict,
+        extracted_data: Dict,
+        text: str
+    ) -> float:
+        """
+        Calculate confidence score for a match based on context and category.
+        Extracted to avoid code duplication between fast matcher and regex paths.
+
+        Args:
+            match_text: The matched text
+            position: Position in the document
+            base_confidence: Starting confidence (from pattern matcher)
+            category: Match category (level, control, authority, etc.)
+            context_info: Context analysis results
+            extracted_data: Extracted document data
+            text: Full document text
+
+        Returns:
+            Confidence score (0.0-1.0)
+        """
+        # Start with base confidence
+        confidence = base_confidence * 0.5  # Scale down base
+
+        # Boost for official context
+        if context_info['has_official']:
+            confidence += 0.3
+
+        # Penalty for false positive indicators
+        # Reduce penalty for high-confidence fuzzy matches (OCR-garbled text won't have perfect context)
+        if context_info['has_false_positive']:
+            if base_confidence > 0.9:
+                confidence -= 0.2  # Reduced penalty for fuzzy matches
+            else:
+                confidence -= 0.4
+
+        # Boost for structural indicators
+        if context_info['at_line_start']:
+            confidence += 0.15
+        if context_info['has_slashes']:
+            confidence += 0.15
+
+        # CRITICAL: Reject matches embedded in prose (not official classification markings)
+        if context_info.get('embedded_in_prose', False):
+            # If embedded in prose AND no official context → likely casual usage
+            if not context_info['has_official']:
+                return 0.0  # Signal to skip this match
+            else:
+                # Even with official context, embedded prose reduces confidence
+                confidence -= 0.3
+
+        # Boost for specific categories
+        if category == 'level':
+            # Classification level patterns
+            is_fuzzy_match = base_confidence < 1.0
+            can_boost = (not context_info['has_false_positive'] or
+                        context_info['has_official'] or
+                        context_info['has_slashes'] or
+                        (is_fuzzy_match and context_info['at_line_start']))
+            if can_boost:
+                confidence += 0.3
+            # Extra boost for control markings
+            if '//' in match_text:
+                confidence += 0.2
+        elif category == 'structural':
+            confidence += 0.2
+        elif category == 'control' and context_info['has_official']:
+            confidence += 0.25
+        elif category == 'declassification':
+            if not context_info['has_false_positive']:
+                confidence += 0.25
+        elif category == 'authority':
+            confidence += 0.25
+
+        # Determine location and boost for header/footer (classification banners)
+        location = self.determine_location(text, position, extracted_data)
+        if location in ['header', 'footer']:
+            confidence += 0.2
+        elif location == 'metadata':
+            confidence += 0.1
+        elif location == 'body' and not context_info['has_official']:
+            # Body text without official context is more likely false positive
+            if not (category == 'level' and '//' in match_text):
+                confidence -= 0.2
+
+        # Clamp confidence
+        return max(0.0, min(1.0, confidence))
+
     def scan_text(self, text: str, extracted_data: Dict) -> List[Match]:
         """Scan text for classification markings using all detection layers"""
         matches = []
+
+        # PERFORMANCE: Build line index once for O(log n) line number lookups
+        line_index = self._build_line_index(text)
 
         # Layer 1: Pattern matching (Fast or Traditional)
         if self.fast_matcher:
@@ -1428,88 +1694,18 @@ class ClassificationScanner:
                 # Context analysis
                 context_info = self.context_analyzer.analyze(text, position)
 
-                # Calculate confidence (start with fast matcher confidence)
-                confidence = pm.confidence * 0.5  # Base confidence from pattern match
+                # Calculate confidence using shared helper method
+                confidence = self._calculate_match_confidence(
+                    match_text, position, pm.confidence, category,
+                    context_info, extracted_data, text
+                )
 
-                # Boost for official context
-                if context_info['has_official']:
-                    confidence += 0.3
+                # Skip if confidence calculation returned 0 (embedded in prose with no official context)
+                if confidence == 0.0:
+                    continue
 
-                # Penalty for false positive indicators
-                # BUT: Reduce penalty for high-confidence fuzzy matches (OCR-garbled text won't have perfect context)
-                if context_info['has_false_positive']:
-                    # High-confidence matches (>0.9) are likely valid despite context anomalies
-                    if pm.confidence > 0.9:
-                        confidence -= 0.2  # Reduced penalty for fuzzy matches
-                    else:
-                        confidence -= 0.4
-
-                # Boost for structural indicators
-                if context_info['at_line_start']:
-                    confidence += 0.15
-                if context_info['has_slashes']:
-                    confidence += 0.15
-
-                # CRITICAL: Reject matches embedded in prose (not official classification markings)
-                # Official markings are standalone, not surrounded by lowercase prose text
-                if context_info.get('embedded_in_prose', False):
-                    # If embedded in prose AND no official context → likely casual usage, not a marking
-                    if not context_info['has_official']:
-                        # Skip this match entirely - it's clearly not an official classification marking
-                        continue
-                    else:
-                        # Even with official context, embedded prose reduces confidence
-                        confidence -= 0.3
-
-                # Boost for specific categories
-                if category == 'level':
-                    # Classification level patterns (TOP SECRET, SECRET, CONFIDENTIAL, CUI)
-                    # BUT: Only boost if this doesn't look like casual usage
-                    # Allow boost if:
-                    # 1. Not a false positive, OR
-                    # 2. Has official context, OR
-                    # 3. Has slashes (control markings), OR
-                    # 4. Fuzzy match (pm.confidence < 1.0) at line start (likely OCR error)
-                    is_fuzzy_match = pm.confidence < 1.0
-                    can_boost = (not context_info['has_false_positive'] or
-                                context_info['has_official'] or
-                                context_info['has_slashes'] or
-                                (is_fuzzy_match and context_info['at_line_start']))
-                    if can_boost:
-                        confidence += 0.3
-                    # Extra boost if it includes control markings (e.g., SECRET//NOFORN)
-                    if '//' in match_text:
-                        confidence += 0.2
-                if category == 'structural':
-                    confidence += 0.2
-                if category == 'control' and context_info['has_official']:
-                    confidence += 0.25
-                if category == 'declassification':
-                    # Declassification indicators are explicit evidence document was classified
-                    # But NOT if context indicates false positive (editorial notations)
-                    if not context_info['has_false_positive']:
-                        confidence += 0.25
-                if category == 'authority':
-                    # Authority blocks are strong indicators
-                    confidence += 0.25
-
-                # Determine location and boost for header/footer (classification banners)
+                # Determine location for the match
                 location = self.determine_location(text, position, extracted_data)
-                if location in ['header', 'footer']:
-                    # Classification banners typically appear in headers/footers
-                    confidence += 0.2
-                elif location == 'metadata':
-                    # Metadata can contain official classification info
-                    confidence += 0.1
-                elif location == 'body' and not context_info['has_official']:
-                    # Body text without official context is more likely false positive
-                    # EXCEPT: Don't penalize classification level patterns with control markings
-                    # (e.g., SECRET//NOFORN) as these are official classification banners
-                    if not (category == 'level' and '//' in match_text):
-                        confidence -= 0.2
-
-                # Clamp confidence
-                confidence = max(0.0, min(1.0, confidence))
 
                 # Only keep matches above threshold
                 threshold = self.config.get('confidence_threshold', 0.3)
@@ -1517,7 +1713,7 @@ class ClassificationScanner:
                     matches.append(Match(
                         text=match_text,
                         position=position,
-                        line_number=self.get_line_number(text, position),
+                        line_number=self.get_line_number(position, line_index),
                         confidence=confidence,
                         context=context_info['context'][:200],
                         match_type='pattern_fast',
@@ -1534,57 +1730,18 @@ class ClassificationScanner:
                     # Context analysis
                     context_info = self.context_analyzer.analyze(text, position)
 
-                    # Calculate confidence
-                    confidence = 0.5
+                    # Calculate confidence using shared helper method (base confidence = 1.0 for regex)
+                    confidence = self._calculate_match_confidence(
+                        match_text, position, 1.0, category,
+                        context_info, extracted_data, text
+                    )
 
-                    # Boost for official context
-                    if context_info['has_official']:
-                        confidence += 0.3
+                    # Skip if confidence calculation returned 0 (embedded in prose with no official context)
+                    if confidence == 0.0:
+                        continue
 
-                    # Penalty for false positive indicators
-                    if context_info['has_false_positive']:
-                        confidence -= 0.4
-
-                    # Boost for structural indicators
-                    if context_info['at_line_start']:
-                        confidence += 0.15
-                    if context_info['has_slashes']:
-                        confidence += 0.15
-
-                    # CRITICAL: Reject matches embedded in prose (not official classification markings)
-                    # Official markings are standalone, not surrounded by lowercase prose text
-                    if context_info.get('embedded_in_prose', False):
-                        # If embedded in prose AND no official context → likely casual usage, not a marking
-                        if not context_info['has_official']:
-                            # Skip this match entirely - it's clearly not an official classification marking
-                            continue
-                        else:
-                            # Even with official context, embedded prose reduces confidence
-                            confidence -= 0.3
-
-                    # Boost for specific categories
-                    if category == 'structural':
-                        confidence += 0.2
-                    if category == 'control' and context_info['has_official']:
-                        confidence += 0.25
-                    if category == 'declassification':
-                        # Declassification indicators are explicit evidence document was classified
-                        confidence += 0.25
-
-                    # Determine location and boost for header/footer (classification banners)
+                    # Determine location for the match
                     location = self.determine_location(text, position, extracted_data)
-                    if location in ['header', 'footer']:
-                        # Classification banners typically appear in headers/footers
-                        confidence += 0.2
-                    elif location == 'metadata':
-                        # Metadata can contain official classification info
-                        confidence += 0.1
-                    elif location == 'body' and not context_info['has_official']:
-                        # Body text without official context is more likely false positive
-                        confidence -= 0.2
-
-                    # Clamp confidence
-                    confidence = max(0.0, min(1.0, confidence))
 
                     # Only keep matches above threshold
                     threshold = self.config.get('confidence_threshold', 0.3)
@@ -1592,7 +1749,7 @@ class ClassificationScanner:
                         matches.append(Match(
                             text=match_text,
                             position=position,
-                            line_number=self.get_line_number(text, position),
+                            line_number=self.get_line_number(position, line_index),
                             confidence=confidence,
                             context=context_info['context'][:200],
                             match_type='pattern',
@@ -1652,7 +1809,7 @@ class ClassificationScanner:
                     matches.append(Match(
                         text=f"{word_phrase} (fuzzy: {term})",
                         position=position,
-                        line_number=self.get_line_number(text, position),
+                        line_number=self.get_line_number(position, line_index),
                         confidence=confidence,
                         context=context_info['context'][:200],
                         match_type='fuzzy',
@@ -1690,39 +1847,50 @@ class ClassificationScanner:
 
                         # Strategy: Use visual matches to boost confidence of existing text-based matches
                         # and add new matches for visual-only patterns
-                        visual_match_texts = {vm.text.upper(): vm for vm in visual_matches}
+                        # PERFORMANCE: Build lookup structures once
+                        visual_match_dict = {vm.text.upper(): vm for vm in visual_matches}
+                        visual_texts_set = set(visual_match_dict.keys())
 
                         # Boost existing matches that have visual confirmation
+                        # OPTIMIZED: Use set operations instead of nested loops
                         for match in matches:
                             match_text_upper = match.text.upper()
 
-                            # Check if this match has visual confirmation
-                            for visual_text, visual_match in visual_match_texts.items():
-                                # Allow partial matches (e.g., "TOP SECRET" in "TOP SECRET//NOFORN")
-                                if visual_text in match_text_upper or match_text_upper in visual_text:
-                                    # Boost confidence based on visual confidence
-                                    visual_boost = visual_match.visual_confidence * 0.25
-                                    match.confidence = min(1.0, match.confidence + visual_boost)
-
-                                    # Update match type to indicate visual confirmation
-                                    if 'visual' not in match.match_type:
-                                        match.match_type = f"{match.match_type}+visual"
-
-                                    break
+                            # Check for exact match first (fast)
+                            if match_text_upper in visual_texts_set:
+                                visual_match = visual_match_dict[match_text_upper]
+                                visual_boost = visual_match.visual_confidence * 0.25
+                                match.confidence = min(1.0, match.confidence + visual_boost)
+                                if 'visual' not in match.match_type:
+                                    match.match_type = f"{match.match_type}+visual"
+                            else:
+                                # Check partial matches (slower, but only when no exact match)
+                                for visual_text in visual_texts_set:
+                                    if visual_text in match_text_upper or match_text_upper in visual_text:
+                                        visual_match = visual_match_dict[visual_text]
+                                        visual_boost = visual_match.visual_confidence * 0.25
+                                        match.confidence = min(1.0, match.confidence + visual_boost)
+                                        if 'visual' not in match.match_type:
+                                            match.match_type = f"{match.match_type}+visual"
+                                        break
 
                         # Add new matches for visual patterns not found by text-based detection
+                        # PERFORMANCE: Build set of existing match texts once
+                        existing_match_texts = {m.text.upper() for m in matches}
+
                         for visual_match in visual_matches:
                             # Check if this visual match is already covered by text-based matches
-                            is_covered = False
                             visual_text_upper = visual_match.text.upper()
 
-                            for existing_match in matches:
-                                existing_text_upper = existing_match.text.upper()
-                                # If texts overlap significantly, consider it covered
-                                if (visual_text_upper in existing_text_upper or
-                                    existing_text_upper in visual_text_upper):
-                                    is_covered = True
-                                    break
+                            # Check exact match first (fast)
+                            if visual_text_upper in existing_match_texts:
+                                continue  # Already covered
+
+                            # Check partial matches (slower, only if no exact match)
+                            is_covered = any(
+                                visual_text_upper in existing_text or existing_text in visual_text_upper
+                                for existing_text in existing_match_texts
+                            )
 
                             # Add visual-only matches
                             if not is_covered:
@@ -1926,8 +2094,25 @@ class ClassificationScanner:
                                 file_size=file_size
                             )
 
-        # FALLBACK: Full document scan (no early exit, low confidence, or non-PDF)
-        extracted_data, ocr_used = self.extractor.extract(file_path)
+            # PERFORMANCE FIX: Extract remaining pages and merge with quick_data
+            # Early exit was attempted but didn't trigger, extract rest of document
+            total_pages = quick_data.get('total_pages', quick_scan_pages)
+
+            if total_pages > quick_scan_pages:
+                # Extract pages after quick_scan_pages
+                remaining_data, remaining_ocr = self.extractor.extract(
+                    file_path,
+                    start_page=quick_scan_pages
+                )
+                # Merge quick_data with remaining_data
+                extracted_data = self._merge_extracted_data(quick_data, remaining_data)
+                ocr_used = quick_ocr or remaining_ocr
+            else:
+                # Quick scan covered all pages
+                extracted_data, ocr_used = quick_data, quick_ocr
+        else:
+            # FALLBACK: Full document scan (no early exit attempted)
+            extracted_data, ocr_used = self.extractor.extract(file_path)
 
         # Combine all text sections
         text_parts = []
@@ -1973,18 +2158,24 @@ class ClassificationScanner:
             if len(all_sections) > 1:  # Only analyze if multiple pages
                 repeated_markings = self.find_repeated_markings(all_sections)
 
+                # PERFORMANCE: Pre-filter repeated markings by frequency
+                high_freq_threshold = len(all_sections) * 0.5  # 50%+ of pages
+                high_freq_terms = {term for term, count in repeated_markings.items()
+                                  if count >= high_freq_threshold}
+                med_freq_terms = {term for term, count in repeated_markings.items()
+                                 if 3 <= count < high_freq_threshold}
+
                 # Boost confidence for matches that appear repeatedly
+                # OPTIMIZED: Use set lookups instead of nested loops
                 for match in matches:
                     match_text_upper = match.text.upper()
 
-                    for repeated_term, count in repeated_markings.items():
-                        if repeated_term in match_text_upper:
-                            # Markings repeated on multiple pages are likely official banners
-                            # Boost confidence based on repetition frequency
-                            if count >= len(all_sections) * 0.5:  # On 50%+ of pages
-                                match.confidence = min(1.0, match.confidence + 0.2)
-                            elif count >= 3:  # On 3+ pages
-                                match.confidence = min(1.0, match.confidence + 0.15)
+                    # Check high frequency terms first (fast set lookup)
+                    if any(term in match_text_upper for term in high_freq_terms):
+                        match.confidence = min(1.0, match.confidence + 0.2)
+                    # Then check medium frequency terms
+                    elif any(term in match_text_upper for term in med_freq_terms):
+                        match.confidence = min(1.0, match.confidence + 0.15)
 
         # LLM verification
         llm_verified = False

@@ -26,7 +26,46 @@ from typing import List, Dict, Tuple, Optional, Set
 from dataclasses import dataclass
 from pathlib import Path
 from enum import Enum
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from rapidfuzz import fuzz
+
+# Import PDF image cache and poppler path
+try:
+    from .classification_scanner import PDFImageCache, POPPLER_PATH
+    HAS_IMAGE_CACHE = True
+except ImportError:
+    HAS_IMAGE_CACHE = False
+    POPPLER_PATH = None
+
+# Configure Tesseract for LayoutLMv3 OCR
+# CRITICAL: Must be done before importing LayoutLMv3Processor
+try:
+    # Try relative import first (when used as package)
+    try:
+        from ..utils.setup_tesseract import get_tesseract_path
+    except (ImportError, ValueError):
+        # Fall back to absolute import (when run directly)
+        from src.utils.setup_tesseract import get_tesseract_path
+
+    import pytesseract
+
+    TESSERACT_PATH = get_tesseract_path()
+
+    if TESSERACT_PATH:
+        # Set pytesseract command
+        pytesseract.pytesseract.tesseract_cmd = TESSERACT_PATH
+
+        # Ensure TESSDATA_PREFIX is set (LayoutLMv3 processor needs this)
+        if "TESSDATA_PREFIX" not in os.environ:
+            from pathlib import Path
+            tesseract_dir = Path(TESSERACT_PATH).parent
+            tessdata_path = tesseract_dir / "tessdata"
+            if tessdata_path.exists():
+                os.environ["TESSDATA_PREFIX"] = str(tessdata_path)
+                print(f"✓ Set TESSDATA_PREFIX: {tessdata_path}", file=sys.stderr)
+except Exception as e:
+    print(f"⚠ Tesseract configuration warning: {e}", file=sys.stderr)
+    TESSERACT_PATH = None
 
 # Import offline configuration
 try:
@@ -110,7 +149,8 @@ class VisualPatternDetector:
         max_pages: Optional[int] = None,
         cache_dir: Optional[str] = None,
         fuzzy_matching: bool = True,
-        fuzzy_threshold: int = 85
+        fuzzy_threshold: int = 85,
+        batch_size: int = 4  # Process 4 pages at once for GPU efficiency
     ):
         """
         Initialize visual pattern detector
@@ -123,6 +163,7 @@ class VisualPatternDetector:
             cache_dir: Directory for model cache
             fuzzy_matching: Enable fuzzy matching for OCR errors
             fuzzy_threshold: Fuzzy match threshold (0-100, default 85)
+            batch_size: Number of pages to process simultaneously (default 4)
         """
         self.model_name = model_name
         self.use_gpu = use_gpu
@@ -131,6 +172,7 @@ class VisualPatternDetector:
         self.cache_dir = cache_dir or os.path.expanduser('~/.cache/huggingface')
         self.fuzzy_matching = fuzzy_matching
         self.fuzzy_threshold = fuzzy_threshold
+        self.batch_size = batch_size
 
         self.model = None
         self.processor = None
@@ -255,21 +297,34 @@ class VisualPatternDetector:
             return []
 
         try:
-            # Convert PDF to images
+            # Convert PDF to images (use cache if available)
             print(f"Converting PDF to images (DPI: {self.dpi})...", file=sys.stderr)
-            images = convert_from_path(pdf_path, dpi=self.dpi)
-
-            if self.max_pages:
-                images = images[:self.max_pages]
+            if HAS_IMAGE_CACHE:
+                images = PDFImageCache.get_or_convert(pdf_path, dpi=self.dpi, max_pages=self.max_pages)
+            else:
+                # Use bundled poppler if available
+                kwargs = {'dpi': self.dpi}
+                if POPPLER_PATH:
+                    kwargs['poppler_path'] = POPPLER_PATH
+                images = convert_from_path(pdf_path, **kwargs)
+                if self.max_pages:
+                    images = images[:self.max_pages]
 
             print(f"✓ Loaded {len(images)} pages", file=sys.stderr)
 
-            # Process each page
+            # Process pages in batches for GPU efficiency
             all_matches = []
-            for page_num, image in enumerate(images, 1):
-                print(f"Analyzing page {page_num}/{len(images)} (visual features)...", file=sys.stderr)
-                page_matches = self._process_page(image, page_num)
-                all_matches.extend(page_matches)
+            num_pages = len(images)
+
+            for batch_start in range(0, num_pages, self.batch_size):
+                batch_end = min(batch_start + self.batch_size, num_pages)
+                batch_images = images[batch_start:batch_end]
+                batch_page_nums = list(range(batch_start + 1, batch_end + 1))
+
+                print(f"Analyzing pages {batch_page_nums[0]}-{batch_page_nums[-1]}/{num_pages} (batch of {len(batch_images)})...", file=sys.stderr)
+
+                batch_matches = self._process_batch(batch_images, batch_page_nums)
+                all_matches.extend(batch_matches)
 
             print(f"✓ Found {len(all_matches)} visual pattern matches", file=sys.stderr)
             return all_matches
@@ -277,6 +332,156 @@ class VisualPatternDetector:
         except Exception as e:
             print(f"⚠ Visual pattern detection error: {e}", file=sys.stderr)
             return []
+
+    def _process_batch(
+        self,
+        images: List[Image.Image],
+        page_nums: List[int]
+    ) -> List[VisualMatch]:
+        """
+        Process a batch of pages with LayoutLMv3 for GPU efficiency
+
+        Args:
+            images: List of PIL Images (batch_size pages)
+            page_nums: List of page numbers corresponding to images
+
+        Returns:
+            List of VisualMatch objects for all pages in batch
+        """
+        all_matches = []
+
+        try:
+            # Process each image with Tesseract via LayoutLMv3 processor
+            # Parallelize OCR preprocessing for CPU efficiency (Tesseract is CPU-bound)
+            encodings = []
+            page_dims = []
+
+            def process_single_image(image):
+                """Process a single image with OCR - called in parallel"""
+                encoding = self.processor(
+                    image,
+                    return_tensors="pt",
+                    truncation=True,
+                    max_length=512
+                )
+                return encoding, image.size
+
+            # Use ThreadPoolExecutor to parallelize Tesseract OCR calls
+            # This gives 2-4× speedup on multi-core CPUs
+            with ThreadPoolExecutor(max_workers=min(len(images), 4)) as executor:
+                # Submit all OCR tasks
+                future_to_idx = {executor.submit(process_single_image, img): i
+                                for i, img in enumerate(images)}
+
+                # Collect results in original order
+                results = [None] * len(images)
+                for future in as_completed(future_to_idx):
+                    idx = future_to_idx[future]
+                    results[idx] = future.result()
+
+                # Unpack results
+                for encoding, page_size in results:
+                    encodings.append(encoding)
+                    page_dims.append(page_size)
+
+            # Batch the encodings by stacking tensors
+            # Find max sequence length in batch for padding
+            max_seq_len = max(enc['input_ids'].shape[1] for enc in encodings)
+
+            # Pad all encodings to same length and stack
+            batched_encoding = {
+                'input_ids': [],
+                'attention_mask': [],
+                'bbox': []
+            }
+
+            for enc in encodings:
+                seq_len = enc['input_ids'].shape[1]
+                padding_len = max_seq_len - seq_len
+
+                if padding_len > 0:
+                    # Pad input_ids with pad_token_id (0)
+                    padded_input_ids = torch.cat([
+                        enc['input_ids'],
+                        torch.zeros((1, padding_len), dtype=torch.long)
+                    ], dim=1)
+
+                    # Pad attention_mask with 0
+                    padded_attention_mask = torch.cat([
+                        enc['attention_mask'],
+                        torch.zeros((1, padding_len), dtype=torch.long)
+                    ], dim=1)
+
+                    # Pad bbox with zeros
+                    padded_bbox = torch.cat([
+                        enc['bbox'],
+                        torch.zeros((1, padding_len, 4), dtype=torch.long)
+                    ], dim=1)
+                else:
+                    padded_input_ids = enc['input_ids']
+                    padded_attention_mask = enc['attention_mask']
+                    padded_bbox = enc['bbox']
+
+                batched_encoding['input_ids'].append(padded_input_ids)
+                batched_encoding['attention_mask'].append(padded_attention_mask)
+                batched_encoding['bbox'].append(padded_bbox)
+
+            # Stack into batch tensors
+            batched_encoding = {
+                k: torch.cat(v, dim=0) for k, v in batched_encoding.items()
+            }
+
+            # Move to device
+            batched_encoding = {k: v.to(self.device) for k, v in batched_encoding.items()}
+
+            # Run batched model inference (KEY OPTIMIZATION)
+            with torch.no_grad():
+                outputs = self.model(**batched_encoding)
+
+            # Process each page's results
+            for idx, (image, page_num, encoding) in enumerate(zip(images, page_nums, encodings)):
+                try:
+                    # Extract this page's results from batch
+                    if 'bbox' in encoding:
+                        bboxes = encoding['bbox'][0].cpu().numpy()
+                        tokens = self.processor.tokenizer.convert_ids_to_tokens(
+                            encoding['input_ids'][0].cpu().numpy()
+                        )
+
+                        # Get page dimensions
+                        page_width, page_height = page_dims[idx]
+
+                        # Group tokens into regions and extract visual features
+                        regions = self._extract_regions(
+                            tokens,
+                            bboxes,
+                            page_width,
+                            page_height,
+                            page_num
+                        )
+
+                        # Analyze each region for classification patterns
+                        for region in regions:
+                            if self._is_classification_region(region):
+                                visual_confidence = self._calculate_visual_confidence(region)
+                                pattern_type = self._identify_pattern_type(region)
+
+                                match = VisualMatch(
+                                    text=region.text,
+                                    region=region,
+                                    visual_confidence=visual_confidence,
+                                    pattern_type=pattern_type,
+                                    visual_features=region.visual_features
+                                )
+                                all_matches.append(match)
+
+                except Exception as e:
+                    print(f"  ⚠ Page {page_num} processing error: {e}", file=sys.stderr)
+
+        except Exception as e:
+            print(f"  ⚠ Batch processing error: {e}", file=sys.stderr)
+
+        return all_matches
 
     def _process_page(
         self,
@@ -735,7 +940,8 @@ class VisualPatternDetector:
             'model_name': self.model_name,
             'device': str(self.device) if self.device else None,
             'dpi': self.dpi,
-            'max_pages': self.max_pages
+            'max_pages': self.max_pages,
+            'batch_size': self.batch_size
         }
 
         if HAS_LAYOUTLM and self.model:

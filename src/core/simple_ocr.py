@@ -15,6 +15,14 @@ import time
 from pathlib import Path
 from typing import List, Dict, Optional, Tuple
 
+# Import PDF image cache and poppler path
+try:
+    from .classification_scanner import PDFImageCache, POPPLER_PATH
+    HAS_IMAGE_CACHE = True
+except ImportError:
+    HAS_IMAGE_CACHE = False
+    POPPLER_PATH = None
+
 # Check for basic OCR dependencies
 try:
     from PIL import Image
@@ -49,13 +57,19 @@ def extract_text_from_pdf_simple_ocr(
     try:
         print(f"Converting PDF to images (DPI: {dpi}, max pages: {max_pages})...")
 
-        # Convert PDF to images
-        images = convert_from_path(pdf_path, dpi=dpi)
-
-        # Limit pages
-        if max_pages and len(images) > max_pages:
-            print(f"Limiting to first {max_pages} pages")
-            images = images[:max_pages]
+        # Convert PDF to images (use cache if available)
+        if HAS_IMAGE_CACHE:
+            images = PDFImageCache.get_or_convert(pdf_path, dpi=dpi, max_pages=max_pages)
+        else:
+            # Use bundled poppler if available
+            kwargs = {'dpi': dpi}
+            if POPPLER_PATH:
+                kwargs['poppler_path'] = POPPLER_PATH
+            images = convert_from_path(pdf_path, **kwargs)
+            # Limit pages
+            if max_pages and len(images) > max_pages:
+                print(f"Limiting to first {max_pages} pages")
+                images = images[:max_pages]
 
         print(f"✓ Converted {len(images)} pages to images")
 

@@ -1,0 +1,864 @@
+{
+  "documents/test_data/GENERATION_REPORT.txt": {
+    "has_classification": false,
+    "classification_level": null,
+    "control_markings": [
+      "NOFORN",
+      "ORCON"
+    ],
+    "has_portion_marks": false,
+    "has_banner": false,
+    "has_authority_block": false,
+    "is_declassified": true,
+    "expected_confidence_range": null,
+    "notes": ""
+  },
+  "documents/test_data/c_00_confidential_cable.txt": {
+    "has_classification": true,
+    "classification_level": "CONFIDENTIAL",
+    "control_markings": [],
+    "has_portion_marks": true,
+    "has_banner": true,
+    "has_authority_block": true,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.75,
+      1.0
+    ],
+    "notes": "CONFIDENTIAL document with proper markings"
+  },
+  "documents/test_data/c_01_confidential_cable.txt": {
+    "has_classification": true,
+    "classification_level": "CONFIDENTIAL",
+    "control_markings": [],
+    "has_portion_marks": true,
+    "has_banner": true,
+    "has_authority_block": true,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.75,
+      1.0
+    ],
+    "notes": "CONFIDENTIAL document with proper markings"
+  },
+  "documents/test_data/c_02_confidential_cable.txt": {
+    "has_classification": true,
+    "classification_level": "CONFIDENTIAL",
+    "control_markings": [],
+    "has_portion_marks": true,
+    "has_banner": true,
+    "has_authority_block": true,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.75,
+      1.0
+    ],
+    "notes": "CONFIDENTIAL document with proper markings"
+  },
+  "documents/test_data/c_03_confidential_cable.txt": {
+    "has_classification": true,
+    "classification_level": "CONFIDENTIAL",
+    "control_markings": [],
+    "has_portion_marks": true,
+    "has_banner": true,
+    "has_authority_block": true,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.75,
+      1.0
+    ],
+    "notes": "CONFIDENTIAL document with proper markings"
+  },
+  "documents/test_data/c_04_confidential_cable.txt": {
+    "has_classification": true,
+    "classification_level": "CONFIDENTIAL",
+    "control_markings": [],
+    "has_portion_marks": true,
+    "has_banner": true,
+    "has_authority_block": true,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.75,
+      1.0
+    ],
+    "notes": "CONFIDENTIAL document with proper markings"
+  },
+  "documents/test_data/cui_00_cui_document.txt": {
+    "has_classification": true,
+    "classification_level": "CUI",
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": true,
+    "has_authority_block": false,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.7,
+      0.95
+    ],
+    "notes": "CUI document"
+  },
+  "documents/test_data/cui_01_cui_document.txt": {
+    "has_classification": true,
+    "classification_level": "CUI",
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": true,
+    "has_authority_block": false,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.7,
+      0.95
+    ],
+    "notes": "CUI document"
+  },
+  "documents/test_data/cui_02_cui_document.txt": {
+    "has_classification": true,
+    "classification_level": "CUI",
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": true,
+    "has_authority_block": false,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.7,
+      0.95
+    ],
+    "notes": "CUI document"
+  },
+  "documents/test_data/cui_03_cui_document.txt": {
+    "has_classification": true,
+    "classification_level": "CUI",
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": true,
+    "has_authority_block": false,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.7,
+      0.95
+    ],
+    "notes": "CUI document"
+  },
+  "documents/test_data/cui_04_cui_document.txt": {
+    "has_classification": true,
+    "classification_level": "CUI",
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": true,
+    "has_authority_block": false,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.7,
+      0.95
+    ],
+    "notes": "CUI document"
+  },
+  "documents/test_data/declassified_00_historical_memo.txt": {
+    "has_classification": true,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": true,
+    "has_authority_block": true,
+    "is_declassified": true,
+    "expected_confidence_range": [
+      0.7,
+      0.95
+    ],
+    "notes": "Declassified document with original markings visible"
+  },
+  "documents/test_data/declassified_01_foia_release.txt": {
+    "has_classification": true,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": true,
+    "has_banner": true,
+    "has_authority_block": true,
+    "is_declassified": true,
+    "expected_confidence_range": [
+      0.7,
+      0.95
+    ],
+    "notes": "Declassified document with original markings visible"
+  },
+  "documents/test_data/declassified_02_ocr_artifacts.txt": {
+    "has_classification": true,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": true,
+    "has_banner": true,
+    "has_authority_block": true,
+    "is_declassified": true,
+    "expected_confidence_range": [
+      0.7,
+      0.95
+    ],
+    "notes": "Declassified document with original markings visible"
+  },
+  "documents/test_data/declassified_03_historical_format.txt": {
+    "has_classification": true,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": true,
+    "has_banner": true,
+    "has_authority_block": true,
+    "is_declassified": true,
+    "expected_confidence_range": [
+      0.7,
+      0.95
+    ],
+    "notes": "Declassified document with original markings visible"
+  },
+  "documents/test_data/declassified_04_hybrid_markings.txt": {
+    "has_classification": true,
+    "classification_level": null,
+    "control_markings": [
+      "NOFORN"
+    ],
+    "has_portion_marks": true,
+    "has_banner": true,
+    "has_authority_block": true,
+    "is_declassified": true,
+    "expected_confidence_range": [
+      0.7,
+      0.95
+    ],
+    "notes": "Declassified document with original markings visible"
+  },
+  "documents/test_data/declassified_05_multiple_agencies.txt": {
+    "has_classification": true,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": true,
+    "has_banner": true,
+    "has_authority_block": true,
+    "is_declassified": true,
+    "expected_confidence_range": [
+      0.7,
+      0.95
+    ],
+    "notes": "Declassified document with original markings visible"
+  },
+  "documents/test_data/declassified_06_page_headers.txt": {
+    "has_classification": true,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": true,
+    "has_banner": true,
+    "has_authority_block": true,
+    "is_declassified": true,
+    "expected_confidence_range": [
+      0.7,
+      0.95
+    ],
+    "notes": "Declassified document with original markings visible"
+  },
+  "documents/test_data/errors_00_document_with_errors.txt": {
+    "has_classification": true,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": true,
+    "has_banner": false,
+    "has_authority_block": true,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.5,
+      0.85
+    ],
+    "notes": "Document with marking errors (missing required elements)"
+  },
+  "documents/test_data/errors_01_document_with_errors.txt": {
+    "has_classification": true,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": true,
+    "has_banner": false,
+    "has_authority_block": true,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.5,
+      0.85
+    ],
+    "notes": "Document with marking errors (missing required elements)"
+  },
+  "documents/test_data/errors_02_document_with_errors.txt": {
+    "has_classification": true,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": true,
+    "has_banner": false,
+    "has_authority_block": true,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.5,
+      0.85
+    ],
+    "notes": "Document with marking errors (missing required elements)"
+  },
+  "documents/test_data/errors_03_document_with_errors.txt": {
+    "has_classification": true,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": true,
+    "has_banner": false,
+    "has_authority_block": true,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.5,
+      0.85
+    ],
+    "notes": "Document with marking errors (missing required elements)"
+  },
+  "documents/test_data/errors_04_document_with_errors.txt": {
+    "has_classification": true,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": true,
+    "has_banner": false,
+    "has_authority_block": true,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.5,
+      0.85
+    ],
+    "notes": "Document with marking errors (missing required elements)"
+  },
+  "documents/test_data/fp_00_recipe.txt": {
+    "has_classification": false,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": false,
+    "has_authority_block": false,
+    "is_declassified": false,
+    "expected_confidence_range": null,
+    "notes": ""
+  },
+  "documents/test_data/fp_01_data_classification.txt": {
+    "has_classification": false,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": false,
+    "has_authority_block": false,
+    "is_declassified": false,
+    "expected_confidence_range": null,
+    "notes": ""
+  },
+  "documents/test_data/fp_02_recipe.txt": {
+    "has_classification": false,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": false,
+    "has_authority_block": false,
+    "is_declassified": false,
+    "expected_confidence_range": null,
+    "notes": ""
+  },
+  "documents/test_data/fp_03_data_classification.txt": {
+    "has_classification": false,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": false,
+    "has_authority_block": false,
+    "is_declassified": false,
+    "expected_confidence_range": null,
+    "notes": ""
+  },
+  "documents/test_data/fp_04_newspaper_article.txt": {
+    "has_classification": false,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": false,
+    "has_authority_block": false,
+    "is_declassified": false,
+    "expected_confidence_range": null,
+    "notes": ""
+  },
+  "documents/test_data/legacy_00_legacy_fouo.txt": {
+    "has_classification": true,
+    "classification_level": "CUI",
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": true,
+    "has_authority_block": false,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.65,
+      0.9
+    ],
+    "notes": "Legacy CUI marking (FOUO/SBU/LES)"
+  },
+  "documents/test_data/legacy_01_legacy_sensitive_but_unclassified.txt": {
+    "has_classification": false,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": false,
+    "has_authority_block": false,
+    "is_declassified": false,
+    "expected_confidence_range": null,
+    "notes": ""
+  },
+  "documents/test_data/legacy_02_legacy_fouo.txt": {
+    "has_classification": true,
+    "classification_level": "CUI",
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": true,
+    "has_authority_block": false,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.65,
+      0.9
+    ],
+    "notes": "Legacy CUI marking (FOUO/SBU/LES)"
+  },
+  "documents/test_data/legacy_03_legacy_sensitive_but_unclassified.txt": {
+    "has_classification": false,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": false,
+    "has_authority_block": false,
+    "is_declassified": false,
+    "expected_confidence_range": null,
+    "notes": ""
+  },
+  "documents/test_data/legacy_04_legacy_les.txt": {
+    "has_classification": true,
+    "classification_level": "CUI",
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": true,
+    "has_authority_block": false,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.65,
+      0.9
+    ],
+    "notes": "Legacy CUI marking (FOUO/SBU/LES)"
+  },
+  "documents/test_data/mixed_00_mixed_classification_report.txt": {
+    "has_classification": true,
+    "classification_level": "TOP SECRET",
+    "control_markings": [
+      "NOFORN"
+    ],
+    "has_portion_marks": true,
+    "has_banner": true,
+    "has_authority_block": true,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.75,
+      1.0
+    ],
+    "notes": "Document with multiple classification levels (highest: TOP SECRET)"
+  },
+  "documents/test_data/mixed_01_mixed_classification_report.txt": {
+    "has_classification": true,
+    "classification_level": "TOP SECRET",
+    "control_markings": [
+      "NOFORN"
+    ],
+    "has_portion_marks": true,
+    "has_banner": true,
+    "has_authority_block": true,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.75,
+      1.0
+    ],
+    "notes": "Document with multiple classification levels (highest: TOP SECRET)"
+  },
+  "documents/test_data/mixed_02_mixed_classification_report.txt": {
+    "has_classification": true,
+    "classification_level": "TOP SECRET",
+    "control_markings": [
+      "NOFORN"
+    ],
+    "has_portion_marks": true,
+    "has_banner": true,
+    "has_authority_block": true,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.75,
+      1.0
+    ],
+    "notes": "Document with multiple classification levels (highest: TOP SECRET)"
+  },
+  "documents/test_data/mixed_03_mixed_classification_report.txt": {
+    "has_classification": true,
+    "classification_level": "TOP SECRET",
+    "control_markings": [
+      "NOFORN"
+    ],
+    "has_portion_marks": true,
+    "has_banner": true,
+    "has_authority_block": true,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.75,
+      1.0
+    ],
+    "notes": "Document with multiple classification levels (highest: TOP SECRET)"
+  },
+  "documents/test_data/mixed_04_mixed_classification_report.txt": {
+    "has_classification": true,
+    "classification_level": "TOP SECRET",
+    "control_markings": [
+      "NOFORN"
+    ],
+    "has_portion_marks": true,
+    "has_banner": true,
+    "has_authority_block": true,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.75,
+      1.0
+    ],
+    "notes": "Document with multiple classification levels (highest: TOP SECRET)"
+  },
+  "documents/test_data/s_00_secret_assessment.txt": {
+    "has_classification": true,
+    "classification_level": "SECRET",
+    "control_markings": [
+      "NOFORN"
+    ],
+    "has_portion_marks": true,
+    "has_banner": true,
+    "has_authority_block": true,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.8,
+      1.0
+    ],
+    "notes": "SECRET document with proper markings"
+  },
+  "documents/test_data/s_01_secret_assessment.txt": {
+    "has_classification": true,
+    "classification_level": "SECRET",
+    "control_markings": [],
+    "has_portion_marks": true,
+    "has_banner": true,
+    "has_authority_block": true,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.8,
+      1.0
+    ],
+    "notes": "SECRET document with proper markings"
+  },
+  "documents/test_data/s_02_secret_assessment.txt": {
+    "has_classification": true,
+    "classification_level": "SECRET",
+    "control_markings": [
+      "NOFORN"
+    ],
+    "has_portion_marks": true,
+    "has_banner": true,
+    "has_authority_block": true,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.8,
+      1.0
+    ],
+    "notes": "SECRET document with proper markings"
+  },
+  "documents/test_data/s_03_secret_assessment.txt": {
+    "has_classification": true,
+    "classification_level": "SECRET",
+    "control_markings": [],
+    "has_portion_marks": true,
+    "has_banner": true,
+    "has_authority_block": true,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.8,
+      1.0
+    ],
+    "notes": "SECRET document with proper markings"
+  },
+  "documents/test_data/s_04_secret_assessment.txt": {
+    "has_classification": true,
+    "classification_level": "SECRET",
+    "control_markings": [
+      "NOFORN"
+    ],
+    "has_portion_marks": true,
+    "has_banner": true,
+    "has_authority_block": true,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.8,
+      1.0
+    ],
+    "notes": "SECRET document with proper markings"
+  },
+  "documents/test_data/ts_00_top_secret_memo.txt": {
+    "has_classification": true,
+    "classification_level": "TOP SECRET",
+    "control_markings": [
+      "NOFORN"
+    ],
+    "has_portion_marks": true,
+    "has_banner": true,
+    "has_authority_block": true,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.85,
+      1.0
+    ],
+    "notes": "TOP SECRET document with proper markings"
+  },
+  "documents/test_data/ts_01_top_secret_memo.txt": {
+    "has_classification": true,
+    "classification_level": "TOP SECRET",
+    "control_markings": [
+      "IMCON"
+    ],
+    "has_portion_marks": true,
+    "has_banner": true,
+    "has_authority_block": true,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.85,
+      1.0
+    ],
+    "notes": "TOP SECRET document with proper markings"
+  },
+  "documents/test_data/ts_02_top_secret_memo.txt": {
+    "has_classification": true,
+    "classification_level": "TOP SECRET",
+    "control_markings": [
+      "FISA"
+    ],
+    "has_portion_marks": true,
+    "has_banner": true,
+    "has_authority_block": true,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.85,
+      1.0
+    ],
+    "notes": "TOP SECRET document with proper markings"
+  },
+  "documents/test_data/ts_03_top_secret_memo.txt": {
+    "has_classification": true,
+    "classification_level": "TOP SECRET",
+    "control_markings": [
+      "NOFORN",
+      "SCI"
+    ],
+    "has_portion_marks": true,
+    "has_banner": true,
+    "has_authority_block": true,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.85,
+      1.0
+    ],
+    "notes": "TOP SECRET document with proper markings"
+  },
+  "documents/test_data/ts_04_top_secret_memo.txt": {
+    "has_classification": true,
+    "classification_level": "TOP SECRET",
+    "control_markings": [
+      "IMCON"
+    ],
+    "has_portion_marks": true,
+    "has_banner": true,
+    "has_authority_block": true,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.85,
+      1.0
+    ],
+    "notes": "TOP SECRET document with proper markings"
+  },
+  "documents/1971 BureBehav&StratComp.pdf": {
+    "has_classification": false,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": false,
+    "has_authority_block": false,
+    "is_declassified": true,
+    "expected_confidence_range": [
+      0.0,
+      0.3
+    ],
+    "notes": "Historical document (1971) - likely fully declassified or unclassified"
+  },
+  "documents/1975-12-06 From A. W. Marshall re Key Military Balances .pdf": {
+    "has_classification": true,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": false,
+    "has_authority_block": false,
+    "is_declassified": true,
+    "expected_confidence_range": [
+      0.5,
+      0.8
+    ],
+    "notes": "Historical memo (1975) - may have FOUO or SECRET markings, now declassified"
+  },
+  "documents/1976 Team B Report.pdf": {
+    "has_classification": true,
+    "classification_level": "SECRET",
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": false,
+    "has_authority_block": false,
+    "is_declassified": true,
+    "expected_confidence_range": [
+      0.6,
+      0.9
+    ],
+    "notes": "CIA Team B Report (1976) - originally SECRET, now declassified"
+  },
+  "documents/19760323 from AWM re McClellan Letter on Recent Trends in the Military Balance Between U.S. and Soviet Union.pdf": {
+    "has_classification": true,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": false,
+    "has_authority_block": false,
+    "is_declassified": true,
+    "expected_confidence_range": [
+      0.4,
+      0.7
+    ],
+    "notes": "Military assessment (1976) - may have classification markings"
+  },
+  "documents/1979 FRUS NA Ground Forces Assessment.pdf": {
+    "has_classification": true,
+    "classification_level": "SECRET",
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": false,
+    "has_authority_block": false,
+    "is_declassified": true,
+    "expected_confidence_range": [
+      0.5,
+      0.8
+    ],
+    "notes": "FRUS (Foreign Relations of the U.S.) document - likely originally classified"
+  },
+  "documents/19940502-AWM-RMA-Update.pdf": {
+    "has_classification": false,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": false,
+    "has_authority_block": false,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.0,
+      0.3
+    ],
+    "notes": "RMA Update (1994) - likely unclassified technical document"
+  },
+  "documents/2000 AWM ThoughtsFutureNAs.pdf": {
+    "has_classification": false,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": false,
+    "has_authority_block": false,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.0,
+      0.3
+    ],
+    "notes": "Future analysis document (2000) - likely unclassified"
+  },
+  "documents/B01_F01_01_A Neo-Leitesian, Psycho-Cultural Analysis of Chinese Movies.pdf": {
+    "has_classification": false,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": false,
+    "has_authority_block": false,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.0,
+      0.2
+    ],
+    "notes": "Academic analysis - unclassified"
+  },
+  "documents/B01_F02_01_The Truth About Islam.pdf": {
+    "has_classification": false,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": false,
+    "has_authority_block": false,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.0,
+      0.2
+    ],
+    "notes": "Academic/cultural analysis - unclassified"
+  },
+  "documents/B01_F02_04_Non-Western Threats and the Social Sciences.pdf": {
+    "has_classification": false,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": false,
+    "has_authority_block": false,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.0,
+      0.2
+    ],
+    "notes": "Academic analysis - unclassified"
+  },
+  "documents/R862.pdf": {
+    "has_classification": false,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": false,
+    "has_authority_block": false,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.0,
+      0.3
+    ],
+    "notes": "RAND document - typically unclassified research"
+  },
+  "documents/RM2301.pdf": {
+    "has_classification": false,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": false,
+    "has_authority_block": false,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.0,
+      0.3
+    ],
+    "notes": "RAND memorandum - typically unclassified research"
+  },
+  "documents/yx275qm3713.pdf": {
+    "has_classification": false,
+    "classification_level": null,
+    "control_markings": [],
+    "has_portion_marks": false,
+    "has_banner": false,
+    "has_authority_block": false,
+    "is_declassified": false,
+    "expected_confidence_range": [
+      0.0,
+      0.3
+    ],
+    "notes": "Unknown document - appears to be unclassified"
+  }
+}
