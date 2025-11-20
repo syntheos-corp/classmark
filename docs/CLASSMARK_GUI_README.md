@@ -31,6 +31,10 @@ Classmark is a state-of-the-art classification marking detection system that aut
 - **Multiple File Formats:** Supports PDF, DOCX, and TXT files
 - **High Accuracy:** Uses advanced AI models (LayoutLMv3 + YOLOv8) for 93%+ precision
 - **Fast Performance:** Processes 2.2 million documents per minute on modern hardware
+- **Modern UI:** Dark mode support with automatic theme detection (New in v1.1)
+- **Keyboard Shortcuts:** Efficient keyboard navigation for power users (New in v1.1)
+- **System Notifications:** Desktop notifications when processing completes (New in v1.1)
+- **Platform-Native:** Optimized for Windows, macOS, and Linux with native fonts and styling (New in v1.1)
 
 ---
 
@@ -269,6 +273,49 @@ Classmark is a state-of-the-art classification marking detection system that aut
 **Log Format:**
 - **CSV:** Easy to open in Excel
 - **JSON:** Better for programmatic processing
+
+### User Interface Settings (New in v1.1)
+
+**Theme:**
+- **Auto:** Automatically matches your system theme (light/dark)
+- **Light:** Always use light theme
+- **Dark:** Always use dark theme
+
+**System Notifications:**
+- Enable to receive desktop notifications when processing completes
+- Works on Windows, macOS, and Linux
+- Notifications show total files processed and classification hits found
+
+### Keyboard Shortcuts
+
+**File Operations:**
+- **Ctrl+O** (Windows/Linux) or **⌘O** (Mac): Open input folder dialog
+- **Ctrl+S** (Windows/Linux) or **⌘S** (Mac): Open output folder dialog
+- **Ctrl+R** (Windows/Linux) or **⌘R** (Mac): Start processing
+- **Escape**: Stop processing
+
+**Application:**
+- **Ctrl+,** (Windows/Linux) or **⌘,** (Mac): Open settings
+- **F1**: Show about dialog
+
+### Platform-Specific Features
+
+**macOS:**
+- Native San Francisco font for better readability
+- Automatic dark mode detection
+- System accent color integration
+- Retina display optimization
+
+**Windows:**
+- Segoe UI font for Windows 11 consistency
+- Automatic dark mode detection
+- Windows accent color support
+- Native file dialogs
+
+**Linux/WSL:**
+- GTK theme detection for dark mode
+- Enhanced WSL support with path conversion
+- Alternative file selection for WSL environments
 
 ---
 

@@ -811,7 +811,7 @@ class VisualPatternDetector:
         classification_keywords = [
             'SECRET', 'CONFIDENTIAL', 'TOP SECRET', 'CLASSIFIED',
             'NOFORN', 'ORCON', 'IMCON', 'RELIDO', 'FISA',
-            'DERIVED FROM', 'DECLASSIFY ON', 'CLASSIFIED BY'
+            'DERIVED FROM', 'DECLASSIFY ON', 'DECLASSIFIED', 'CLASSIFIED BY'
         ]
 
         # SECURITY FIX: Use word boundaries to avoid matching partial words
@@ -910,7 +910,7 @@ class VisualPatternDetector:
         text_upper = region.text.upper()
 
         # Check for authority block patterns
-        if any(kw in text_upper for kw in ['CLASSIFIED BY', 'DERIVED FROM', 'DECLASSIFY ON']):
+        if any(kw in text_upper for kw in ['CLASSIFIED BY', 'DERIVED FROM', 'DECLASSIFY ON', 'DECLASSIFIED']):
             return 'authority_block'
 
         # Check for banner patterns

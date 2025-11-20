@@ -36,11 +36,14 @@ Classmark automatically detects US Government security classification markings i
 - ✅ Scanned document OCR
 
 ### User Features
-- 🖥️ **Desktop GUI** - User-friendly interface
+- 🖥️ **Modern Desktop GUI** - User-friendly interface with dark mode support
 - 📁 **Batch Processing** - Scan entire folders
 - 🔄 **Auto Organization** - Move classified files automatically
 - 📊 **Detailed Logs** - CSV/JSON with confidence scores
 - ⚙️ **Configurable** - Sensitivity, thresholds, GPU toggle
+- ⌨️ **Keyboard Shortcuts** - Efficient keyboard navigation
+- 🔔 **System Notifications** - Desktop alerts when processing completes
+- 🎨 **Platform-Native** - Optimized for Windows, macOS, and Linux
 - 🔒 **100% Offline** - No internet required
 
 ---

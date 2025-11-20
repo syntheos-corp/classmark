@@ -1,28 +1,36 @@
 # Classification Scanner Dependencies
 # Install with: pip install -r requirements.txt
 
+# Document Processing
 PyMuPDF>=1.25.0             # Primary PDF library (fast, efficient)
 PyPDF2>=3.0.0               # Fallback PDF library
 python-docx>=1.0.0
-
 pdfplumber>=0.10.0          # Fallback PDF library (good layout preservation)
 docx2python>=2.0.0          # Enhanced DOCX extraction
+
+# String Matching & Search
 rapidfuzz>=3.0.0            # Fuzzy string matching
+pyahocorasick>=2.2.0        # Fast pattern matching (Aho-Corasick automaton)
+
+# UI/UX
 tqdm>=4.65.0                # Progress bars
+ttkbootstrap>=1.10.1        # Modern themes for tkinter GUI
+
+# LLM Integration
 ollama>=0.1.0               # Local LLM verification
 
+# OCR & Image Processing
 pytesseract>=0.3.10         # OCR engine wrapper
 Pillow>=10.0.0              # Image processing
 pdf2image>=1.16.0           # Convert PDF pages to images for OCR
 
+# Machine Learning
 torch>=2.9.0                # PyTorch 2.7.1 (Oct 2025, CUDA 12.8, Blackwell GPU support)
 torchvision>=0.24.0         # TorchVision 0.24.0 (Oct 2025, compatible with PyTorch 2.7)
 ultralytics>=8.3.227        # Ultralytics 8.3.226 (Nov 2025, supports YOLO11)
-
 transformers>=4.57.1        # HuggingFace Transformers 4.57.1 (Oct 2025, latest stable)
-
-pyahocorasick>=2.2.0        # pyahocorasick 2.2.0 (Jun 2025, Python 3.10-3.13 support)
-
 scikit-learn>=1.7.2         # scikit-learn 1.7.2 (Sep 2025, Python 3.14 support)
+
+# Data Processing & Visualization
 pandas>=2.3.3               # pandas 2.3.3 (Sep 2025, Python 3.14 compatible)
 matplotlib>=3.10.7          # matplotlib 3.10.7 (Oct 2025, latest bugfix)

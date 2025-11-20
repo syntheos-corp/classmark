@@ -19,7 +19,7 @@ Date: 2025-11-10
 """
 
 import tkinter as tk
-from tkinter import ttk, filedialog, messagebox, scrolledtext
+from tkinter import filedialog, messagebox, scrolledtext
 import os
 import sys
 import json
@@ -34,16 +34,25 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 import multiprocessing
 import time
 
-# Detect WSL environment
-def is_wsl():
-    """Check if running on Windows Subsystem for Linux"""
-    try:
-        with open('/proc/version', 'r') as f:
-            return 'microsoft' in f.read().lower()
-    except:
-        return False
+# Try to import ttkbootstrap, fallback to regular ttk
+try:
+    import ttkbootstrap as ttk
+    from ttkbootstrap.constants import *
+    TTKBOOTSTRAP_AVAILABLE = True
+except ImportError:
+    from tkinter import ttk
+    TTKBOOTSTRAP_AVAILABLE = False
 
-IS_WSL = is_wsl()
+# Import platform utilities
+try:
+    from .platform_utils import get_platform_info, get_notification_command, Platform
+except ImportError:
+    # Handle direct script execution
+    from platform_utils import get_platform_info, get_notification_command, Platform
+
+# Get platform info
+PLATFORM_INFO = get_platform_info()
+IS_WSL = PLATFORM_INFO.is_wsl
 
 # Add src to path for imports
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
@@ -183,7 +192,10 @@ class ClassmarkGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("Classmark - Classification Marking Detection")
-        self.root.geometry("1000x700")
+        self.root.geometry("1000x750")  # Slightly taller for better spacing
+
+        # Set minimum window size
+        self.root.minsize(800, 600)
 
         # Application state
         self.input_folder = None
@@ -212,10 +224,16 @@ class ClassmarkGUI:
             'enable_early_exit': True,
             'early_exit_threshold': 0.90,
             'quick_scan_pages': 3,
-            'parallel_workers': max(1, multiprocessing.cpu_count() // 2)
+            'parallel_workers': max(1, multiprocessing.cpu_count() // 2),
+            # UI settings
+            'theme': 'auto',  # auto, light, dark
+            'show_notifications': True
         }
 
         self.load_settings()
+
+        # Apply theme
+        self._apply_theme()
 
         # Create UI
         self.create_widgets()
@@ -224,14 +242,82 @@ class ClassmarkGUI:
         if not SCANNER_AVAILABLE:
             self.log_message("⚠ Warning: Classification scanner not available. Please check installation.", "warning")
 
+        # Setup keyboard shortcuts
+        self._setup_keyboard_shortcuts()
+
         # Start result processing
         self.root.after(100, self.process_results)
+
+    def _apply_theme(self):
+        """Apply the selected theme"""
+        if not TTKBOOTSTRAP_AVAILABLE:
+            return
+
+        theme_mode = self.settings.get('theme', 'auto')
+
+        # Determine theme based on setting and system preference
+        if theme_mode == 'auto':
+            use_dark = PLATFORM_INFO.is_dark_mode
+        elif theme_mode == 'dark':
+            use_dark = True
+        else:
+            use_dark = False
+
+        # Select theme
+        if use_dark:
+            # Dark themes
+            if PLATFORM_INFO.is_macos:
+                theme_name = 'darkly'  # Clean dark theme
+            else:
+                theme_name = 'darkly'
+        else:
+            # Light themes
+            if PLATFORM_INFO.is_macos:
+                theme_name = 'flatly'  # Clean light theme
+            else:
+                theme_name = 'flatly'
+
+        # Apply theme if using ttkbootstrap root
+        if isinstance(self.root, ttk.Window):
+            self.root.style.theme_use(theme_name)
+
+    def _setup_keyboard_shortcuts(self):
+        """Setup keyboard shortcuts"""
+        # Input folder
+        if PLATFORM_INFO.is_macos:
+            self.root.bind('<Command-o>', lambda e: self.select_input_folder())
+            self.root.bind('<Command-s>', lambda e: self.select_output_folder())
+            self.root.bind('<Command-comma>', lambda e: self.open_settings())
+            self.root.bind('<Command-r>', lambda e: self.start_processing() if not self.processing else None)
+        else:
+            self.root.bind('<Control-o>', lambda e: self.select_input_folder())
+            self.root.bind('<Control-s>', lambda e: self.select_output_folder())
+            self.root.bind('<Control-comma>', lambda e: self.open_settings())
+            self.root.bind('<Control-r>', lambda e: self.start_processing() if not self.processing else None)
+
+        # Universal shortcuts
+        self.root.bind('<Escape>', lambda e: self.stop_processing() if self.processing else None)
+        self.root.bind('<F1>', lambda e: self.show_about())
+
+    def _show_notification(self, title: str, message: str):
+        """Show system notification"""
+        if not self.settings.get('show_notifications', True):
+            return
+
+        try:
+            import subprocess
+            cmd = get_notification_command(title, message)
+            if cmd:
+                subprocess.run(cmd, capture_output=True, timeout=2)
+        except Exception as e:
+            # Notifications are non-critical, just log
+            print(f"Notification failed: {e}")
 
     def create_widgets(self):
         """Create all GUI widgets"""
 
         # Main container with padding
-        main_frame = ttk.Frame(self.root, padding="10")
+        main_frame = ttk.Frame(self.root, padding="15")
         main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
 
         # Configure grid weights for resizing
@@ -240,13 +326,14 @@ class ClassmarkGUI:
         main_frame.columnconfigure(0, weight=1)
         main_frame.rowconfigure(3, weight=1)
 
-        # Title
+        # Title with platform-specific font
+        title_font = (PLATFORM_INFO.system_font, 18, 'bold')
         title_label = ttk.Label(main_frame, text="Classmark Classification Scanner",
-                               font=('Helvetica', 16, 'bold'))
+                               font=title_font)
         title_label.grid(row=0, column=0, columnspan=2, pady=(0, 10))
 
         # Folder Selection Frame
-        folder_frame = ttk.LabelFrame(main_frame, text="Folder Selection", padding="10")
+        folder_frame = ttk.Labelframe(main_frame, text="Folder Selection", padding="10")
         folder_frame.grid(row=1, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(0, 10))
         folder_frame.columnconfigure(1, weight=1)
 
@@ -280,7 +367,7 @@ class ClassmarkGUI:
         ttk.Button(control_frame, text="About", command=self.show_about).grid(row=0, column=3, padx=5)
 
         # Progress Frame
-        progress_frame = ttk.LabelFrame(main_frame, text="Progress", padding="10")
+        progress_frame = ttk.Labelframe(main_frame, text="Progress", padding="10")
         progress_frame.grid(row=3, column=0, columnspan=2, sticky=(tk.W, tk.E, tk.N, tk.S), pady=(0, 10))
         progress_frame.columnconfigure(0, weight=1)
         progress_frame.rowconfigure(1, weight=1)
@@ -296,9 +383,10 @@ class ClassmarkGUI:
         progress_label = ttk.Label(progress_frame, textvariable=self.progress_label_var)
         progress_label.grid(row=0, column=1, padx=(10, 0))
 
-        # Log text area
+        # Log text area with platform-specific monospace font
+        log_font = (PLATFORM_INFO.monospace_font, 10)
         self.log_text = scrolledtext.ScrolledText(progress_frame, height=20, state='disabled',
-                                                  wrap=tk.WORD, font=('Courier', 9))
+                                                  wrap=tk.WORD, font=log_font)
         self.log_text.grid(row=1, column=0, columnspan=2, sticky=(tk.W, tk.E, tk.N, tk.S))
 
         # Configure text tags for colored messages
@@ -591,6 +679,12 @@ class ClassmarkGUI:
             if self.settings['create_log']:
                 self.results_queue.put(('success', f"Log saved to: {self.output_folder}"))
 
+            # Show completion notification
+            self.results_queue.put(('notification', (
+                'Classmark Complete',
+                f'Processed {len(files)} files, found {hits_count} classification hits'
+            )))
+
         except Exception as e:
             self.results_queue.put(('error', f"Fatal error: {str(e)}"))
 
@@ -613,6 +707,10 @@ class ClassmarkGUI:
                     self.start_button.config(state='normal' if self.input_folder else 'disabled')
                     self.stop_button.config(state='disabled')
                     self.status_var.set("Ready")
+
+                elif msg_type == 'notification':
+                    title, message = data
+                    self._show_notification(title, message)
 
                 elif msg_type in ['info', 'success', 'warning', 'error']:
                     self.log_message(data, msg_type)
@@ -701,10 +799,10 @@ class ClassmarkGUI:
         self.log_text.config(state='disabled')
 
     def open_settings(self):
-        """Open settings dialog - Performance Optimizations Only"""
+        """Open settings dialog"""
         settings_window = tk.Toplevel(self.root)
-        settings_window.title("Performance Settings")
-        settings_window.geometry("500x300")
+        settings_window.title("Settings")
+        settings_window.geometry("550x500")
         settings_window.transient(self.root)
         settings_window.grab_set()
 
@@ -712,58 +810,99 @@ class ClassmarkGUI:
         frame = ttk.Frame(settings_window, padding="20")
         frame.pack(fill=tk.BOTH, expand=True)
 
-        # Title
-        ttk.Label(frame, text="Performance Optimizations", font=('Helvetica', 12, 'bold')).grid(row=0, column=0, columnspan=2, sticky=tk.W, pady=(0, 15))
+        row = 0
+
+        # UI Settings Section
+        ttk.Label(frame, text="User Interface", font=(PLATFORM_INFO.system_font, 12, 'bold')).grid(row=row, column=0, columnspan=2, sticky=tk.W, pady=(0, 10))
+        row += 1
+
+        # Theme selection
+        ttk.Label(frame, text="Theme:").grid(row=row, column=0, sticky=tk.W, pady=5)
+        theme_var = tk.StringVar(value=self.settings.get('theme', 'auto'))
+        theme_combo = ttk.Combobox(frame, textvariable=theme_var, values=['auto', 'light', 'dark'],
+                                   state='readonly', width=15)
+        theme_combo.grid(row=row, column=1, sticky=tk.W, pady=5)
+        row += 1
+
+        # Notifications
+        notifications_var = tk.BooleanVar(value=self.settings.get('show_notifications', True))
+        ttk.Checkbutton(frame, text="Show system notifications",
+                       variable=notifications_var).grid(row=row, column=0, columnspan=2, sticky=tk.W, pady=5)
+        row += 1
+
+        # Separator
+        ttk.Separator(frame, orient='horizontal').grid(row=row, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=15)
+        row += 1
+
+        # Performance Settings Section
+        ttk.Label(frame, text="Performance Optimizations", font=(PLATFORM_INFO.system_font, 12, 'bold')).grid(row=row, column=0, columnspan=2, sticky=tk.W, pady=(0, 10))
+        row += 1
 
         # Early exit optimization
         early_exit_var = tk.BooleanVar(value=self.settings['enable_early_exit'])
         ttk.Checkbutton(frame, text="Enable Early Exit (stop after finding classification)",
-                       variable=early_exit_var).grid(row=1, column=0, columnspan=2, sticky=tk.W, pady=5)
+                       variable=early_exit_var).grid(row=row, column=0, columnspan=2, sticky=tk.W, pady=5)
+        row += 1
 
         # Early exit threshold
-        ttk.Label(frame, text="Early Exit Confidence Threshold:").grid(row=2, column=0, sticky=tk.W, pady=5, padx=(20, 0))
+        ttk.Label(frame, text="Early Exit Confidence Threshold:").grid(row=row, column=0, sticky=tk.W, pady=5, padx=(20, 0))
         early_exit_threshold_var = tk.DoubleVar(value=self.settings['early_exit_threshold'])
         early_exit_threshold_spin = ttk.Spinbox(frame, from_=0.7, to=1.0, increment=0.05,
                                                textvariable=early_exit_threshold_var, width=10)
-        early_exit_threshold_spin.grid(row=2, column=1, sticky=tk.W, pady=5)
+        early_exit_threshold_spin.grid(row=row, column=1, sticky=tk.W, pady=5)
+        row += 1
 
         # Quick scan pages
-        ttk.Label(frame, text="Quick Scan Pages (for early exit):").grid(row=3, column=0, sticky=tk.W, pady=5, padx=(20, 0))
+        ttk.Label(frame, text="Quick Scan Pages (for early exit):").grid(row=row, column=0, sticky=tk.W, pady=5, padx=(20, 0))
         quick_scan_pages_var = tk.IntVar(value=self.settings['quick_scan_pages'])
         quick_scan_pages_spin = ttk.Spinbox(frame, from_=1, to=10, increment=1,
                                            textvariable=quick_scan_pages_var, width=10)
-        quick_scan_pages_spin.grid(row=3, column=1, sticky=tk.W, pady=5)
+        quick_scan_pages_spin.grid(row=row, column=1, sticky=tk.W, pady=5)
+        row += 1
 
         # Separator
-        ttk.Separator(frame, orient='horizontal').grid(row=4, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=15)
+        ttk.Separator(frame, orient='horizontal').grid(row=row, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=15)
+        row += 1
 
         # Parallel workers
         max_cpu = multiprocessing.cpu_count()
-        ttk.Label(frame, text=f"Parallel Workers (of {max_cpu} CPU cores):").grid(row=5, column=0, sticky=tk.W, pady=5)
+        ttk.Label(frame, text=f"Parallel Workers (of {max_cpu} CPU cores):").grid(row=row, column=0, sticky=tk.W, pady=5)
         parallel_workers_var = tk.IntVar(value=self.settings['parallel_workers'])
         parallel_workers_spin = ttk.Spinbox(frame, from_=1, to=max_cpu, increment=1,
                                            textvariable=parallel_workers_var, width=10)
-        parallel_workers_spin.grid(row=5, column=1, sticky=tk.W, pady=5)
+        parallel_workers_spin.grid(row=row, column=1, sticky=tk.W, pady=5)
+        row += 1
 
         # Help text
         help_text = ttk.Label(frame, text="Note: Higher values improve speed but use more CPU/memory.",
-                             foreground='gray', font=('Helvetica', 9))
-        help_text.grid(row=6, column=0, columnspan=2, sticky=tk.W, pady=(10, 0))
+                             foreground='gray', font=(PLATFORM_INFO.system_font, 9))
+        help_text.grid(row=row, column=0, columnspan=2, sticky=tk.W, pady=(10, 0))
+        row += 1
 
         # Buttons
         button_frame = ttk.Frame(frame)
-        button_frame.grid(row=7, column=0, columnspan=2, pady=(20, 0))
+        button_frame.grid(row=row, column=0, columnspan=2, pady=(20, 0))
 
         def save_settings():
-            # Save ONLY performance optimization settings
-            # Other settings remain at their default/configured values
+            # Save UI settings
+            old_theme = self.settings.get('theme', 'auto')
+            self.settings['theme'] = theme_var.get()
+            self.settings['show_notifications'] = notifications_var.get()
+
+            # Save performance optimization settings
             self.settings['enable_early_exit'] = early_exit_var.get()
             self.settings['early_exit_threshold'] = early_exit_threshold_var.get()
             self.settings['quick_scan_pages'] = quick_scan_pages_var.get()
             self.settings['parallel_workers'] = parallel_workers_var.get()
 
             self.save_settings_to_file()
-            self.log_message("Performance settings saved", "success")
+            self.log_message("Settings saved", "success")
+
+            # Reapply theme if changed
+            if old_theme != theme_var.get():
+                self._apply_theme()
+                self.log_message("Theme updated - restart application for full effect", "info")
+
             settings_window.destroy()
 
         def on_closing():
@@ -868,6 +1007,9 @@ For more information, see PROJECT_SUMMARY.md"""
         if 'log_format' in settings and settings['log_format'] in ['csv', 'json']:
             validated['log_format'] = settings['log_format']
 
+        if 'theme' in settings and settings['theme'] in ['auto', 'light', 'dark']:
+            validated['theme'] = settings['theme']
+
         return validated
 
     def save_settings_to_file(self):
@@ -883,7 +1025,19 @@ For more information, see PROJECT_SUMMARY.md"""
 
 def main():
     """Main entry point"""
-    root = tk.Tk()
+    # Use ttkbootstrap Window if available, otherwise fallback to tk.Tk
+    if TTKBOOTSTRAP_AVAILABLE:
+        # Determine initial theme
+        platform_info = get_platform_info()
+        if platform_info.is_dark_mode:
+            theme = 'darkly'
+        else:
+            theme = 'flatly'
+
+        root = ttk.Window(themename=theme)
+    else:
+        root = tk.Tk()
+
     app = ClassmarkGUI(root)
     root.mainloop()
 

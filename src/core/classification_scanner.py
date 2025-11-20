@@ -262,6 +262,7 @@ class ClassificationPatterns:
         r'CLASSIFIED\s+BY:?\s*[^\n]+',
         r'(?:^|\n)\s*DERIVED\s+FROM:?\s*[^\n]+',  # Must be at line start
         r'DECLASSIFY\s+ON:?\s*[^\n]+',
+        r'DECLASSIFIED(?:\s+BY)?(?:\s+AUTH(?:ORITY)?)?:?\s*[^\n]*',  # DECLASSIFIED stamps/markings
         r'REASON:?\s*1\.\d\([a-h]\)',
         r'CLASSIFICATION\s+AUTHORITY:',
     ]
@@ -1232,7 +1233,7 @@ class FuzzyMatcher:
         'TOP SECRET', 'SECRET', 'CONFIDENTIAL', 'UNCLASSIFIED',
         'CUI', 'CONTROLLED UNCLASSIFIED INFORMATION',
         'NOFORN', 'ORCON', 'IMCON', 'RELIDO', 'PROPIN', 'FISA', 'SCI',
-        'CLASSIFIED BY', 'DERIVED FROM', 'DECLASSIFY ON',
+        'CLASSIFIED BY', 'DERIVED FROM', 'DECLASSIFY ON', 'DECLASSIFIED',
         # Legacy CUI markings
         'FOUO', 'FOR OFFICIAL USE ONLY',
         'SBU', 'SENSITIVE BUT UNCLASSIFIED',
