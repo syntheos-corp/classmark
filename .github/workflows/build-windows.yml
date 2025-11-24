@@ -44,7 +44,7 @@ jobs:
 
       - name: Download AI models
         run: |
-          python src/utils/download_models.py
+          python src/utils/download_models.py --yes
 
       - name: Build Windows executable
         run: |

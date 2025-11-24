@@ -231,6 +231,8 @@ def main():
                        help='Skip YOLO download (OCR on scanned docs disabled)')
     parser.add_argument('--verify-only', action='store_true',
                        help='Only verify existing models, do not download')
+    parser.add_argument('--yes', '-y', action='store_true',
+                       help='Skip confirmation prompt (for CI/automated builds)')
 
     args = parser.parse_args()
 
@@ -246,7 +248,7 @@ def main():
     print(f"Internet connection required for this step only")
     print()
 
-    if not args.verify_only:
+    if not args.verify_only and not args.yes:
         input("Press Enter to continue or Ctrl+C to cancel...")
 
     # Verify only mode

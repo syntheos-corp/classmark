@@ -43,7 +43,7 @@ jobs:
 
       - name: Download AI models
         run: |
-          python src/utils/download_models.py
+          python src/utils/download_models.py --yes
           echo "Models downloaded:"
           ls -la models/ || echo "Models directory structure:"
           find models -type f -name "*.pt" -o -name "*.bin" 2>/dev/null | head -20 || true
