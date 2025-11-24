@@ -58,18 +58,19 @@ def download_layoutlmv3(models_dir: str):
         from transformers import LayoutLMv3Processor, LayoutLMv3ForTokenClassification
 
         print("Downloading processor...")
-        processor = LayoutLMv3Processor.from_pretrained(
-            'microsoft/layoutlmv3-base',
-            cache_dir=model_dir
-        )
+        processor = LayoutLMv3Processor.from_pretrained('microsoft/layoutlmv3-base')
 
         print("Downloading model (125M parameters, ~500MB)...")
-        model = LayoutLMv3ForTokenClassification.from_pretrained(
-            'microsoft/layoutlmv3-base',
-            cache_dir=model_dir
-        )
+        model = LayoutLMv3ForTokenClassification.from_pretrained('microsoft/layoutlmv3-base')
 
-        print("✓ LayoutLMv3 downloaded successfully")
+        # Save to our models directory (not cache)
+        print(f"Saving processor to {model_dir}...")
+        processor.save_pretrained(model_dir)
+
+        print(f"Saving model to {model_dir}...")
+        model.save_pretrained(model_dir)
+
+        print("✓ LayoutLMv3 downloaded and saved successfully")
         return True
 
     except Exception as e:
