@@ -1,0 +1,96 @@
+name: Build macOS DMG
+
+on:
+  # Manual trigger from GitHub UI
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number (e.g., 1.0.0)'
+        required: true
+        default: '1.0.0'
+
+  # Auto-trigger on release tags
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-macos:
+    runs-on: macos-14  # Apple Silicon runner
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install system dependencies
+        run: |
+          brew install tesseract poppler create-dmg
+          echo "Tesseract version:"
+          tesseract --version
+          echo "Poppler version:"
+          pdftoppm -v
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install py2app
+
+      - name: Download AI models
+        run: |
+          python src/utils/download_models.py
+          echo "Models downloaded:"
+          ls -la models/ || echo "Models directory structure:"
+          find models -type f -name "*.pt" -o -name "*.bin" 2>/dev/null | head -20 || true
+
+      - name: Build macOS app
+        run: |
+          cd build/macos
+          python setup_macos.py py2app
+          echo "Build complete. Contents:"
+          ls -la dist/
+
+      - name: Create DMG
+        run: |
+          cd build/macos
+
+          # Create DMG using create-dmg
+          create-dmg \
+            --volname "Classmark" \
+            --volicon "../../resources/icon.icns" \
+            --window-pos 200 120 \
+            --window-size 800 400 \
+            --icon-size 100 \
+            --icon "Classmark.app" 200 190 \
+            --hide-extension "Classmark.app" \
+            --app-drop-link 600 185 \
+            "dist/Classmark-${{ github.event.inputs.version || '1.0.0' }}.dmg" \
+            "dist/Classmark.app" \
+          || {
+            # Fallback: simple DMG creation if create-dmg fails
+            echo "create-dmg failed, using hdiutil fallback..."
+            hdiutil create -volname "Classmark" -srcfolder "dist/Classmark.app" -ov -format UDZO "dist/Classmark-${{ github.event.inputs.version || '1.0.0' }}.dmg"
+          }
+
+          echo "DMG created:"
+          ls -lh dist/*.dmg
+
+      - name: Upload DMG artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Classmark-macOS-${{ github.event.inputs.version || '1.0.0' }}
+          path: build/macos/dist/*.dmg
+          retention-days: 90
+
+      - name: Upload to Release (if tagged)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: build/macos/dist/*.dmg
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

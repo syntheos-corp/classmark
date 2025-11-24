@@ -1,0 +1,78 @@
+name: Build Windows Installer
+
+on:
+  # Manual trigger from GitHub UI
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number (e.g., 1.0.0)'
+        required: true
+        default: '1.0.0'
+
+  # Auto-trigger on release tags
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Tesseract OCR
+        run: |
+          choco install tesseract -y
+          echo "C:\Program Files\Tesseract-OCR" >> $env:GITHUB_PATH
+
+      - name: Install Poppler
+        run: |
+          choco install poppler -y
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Download AI models
+        run: |
+          python src/utils/download_models.py
+
+      - name: Build Windows executable
+        run: |
+          cd build/windows
+          pyinstaller --name="ClassificationScanner" `
+            --windowed `
+            --onefile `
+            --add-data="../../models;models" `
+            --add-data="../../src;src" `
+            --hidden-import=sklearn.linear_model `
+            --hidden-import=sklearn.isotonic `
+            --hidden-import=transformers.models.layoutlmv3 `
+            ../../src/gui/classmark_gui.py
+
+          echo "Build complete:"
+          dir dist/
+
+      - name: Upload EXE artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Classmark-Windows-${{ github.event.inputs.version || '1.0.0' }}
+          path: build/windows/dist/*.exe
+          retention-days: 90
+
+      - name: Upload to Release (if tagged)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: build/windows/dist/*.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
