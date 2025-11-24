@@ -50,6 +50,9 @@ jobs:
 
       - name: Build macOS app with PyInstaller
         run: |
+          # Add src to PYTHONPATH so imports work
+          export PYTHONPATH="${PYTHONPATH}:$(pwd)"
+
           # Create PyInstaller spec for macOS
           pyinstaller \
             --name="Classmark" \
@@ -57,6 +60,27 @@ jobs:
             --onedir \
             --add-data="models:models" \
             --add-data="src:src" \
+            --add-data="src/gui/platform_utils.py:." \
+            --paths="." \
+            --paths="src" \
+            --paths="src/core" \
+            --paths="src/gui" \
+            --paths="src/config" \
+            --paths="src/utils" \
+            --hidden-import=platform_utils \
+            --hidden-import=src \
+            --hidden-import=src.core \
+            --hidden-import=src.core.classification_scanner \
+            --hidden-import=src.core.fast_pattern_matcher \
+            --hidden-import=src.core.visual_pattern_detector \
+            --hidden-import=src.core.hybrid_classifier \
+            --hidden-import=src.core.calibrated_scorer \
+            --hidden-import=src.core.yolo_ocr \
+            --hidden-import=src.core.simple_ocr \
+            --hidden-import=src.config \
+            --hidden-import=src.config.offline_config \
+            --hidden-import=src.gui \
+            --hidden-import=src.gui.platform_utils \
             --hidden-import=sklearn.utils._typedefs \
             --hidden-import=sklearn.utils._heap \
             --hidden-import=sklearn.utils._sorting \
@@ -67,6 +91,7 @@ jobs:
             --collect-all=transformers \
             --collect-all=ultralytics \
             --collect-all=ttkbootstrap \
+            --collect-all=ahocorasick \
             --noconfirm \
             src/gui/classmark_gui.py
 
