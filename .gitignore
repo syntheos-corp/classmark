@@ -8,7 +8,8 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
+# Ignore PyInstaller build output, but keep our build scripts
+build/classification_scanner_gui/
 develop-eggs/
 dist/
 downloads/
