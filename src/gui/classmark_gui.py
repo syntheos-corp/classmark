@@ -44,10 +44,15 @@ except ImportError:
     TTKBOOTSTRAP_AVAILABLE = False
 
 # Import platform utilities
+# Add script directory to path for PyInstaller compatibility
+_script_dir = os.path.dirname(os.path.abspath(__file__))
+if _script_dir not in sys.path:
+    sys.path.insert(0, _script_dir)
+
 try:
     from .platform_utils import get_platform_info, get_notification_command, Platform
 except ImportError:
-    # Handle direct script execution
+    # Handle direct script execution or PyInstaller bundle
     from platform_utils import get_platform_info, get_notification_command, Platform
 
 # Get platform info
