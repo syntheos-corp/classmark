@@ -70,11 +70,11 @@ def download_layoutlmv3(models_dir: str):
         print(f"Saving model to {model_dir}...")
         model.save_pretrained(model_dir)
 
-        print("✓ LayoutLMv3 downloaded and saved successfully")
+        print("[OK] LayoutLMv3 downloaded and saved successfully")
         return True
 
     except Exception as e:
-        print(f"✗ Error downloading LayoutLMv3: {e}")
+        print(f"[ERROR] Error downloading LayoutLMv3: {e}")
         return False
 
 
@@ -99,11 +99,11 @@ def download_yolo(models_dir: str):
         if os.path.exists('yolov8n.pt'):
             os.rename('yolov8n.pt', model_path)
 
-        print("✓ YOLOv8n downloaded successfully")
+        print("[OK] YOLOv8n downloaded successfully")
         return True
 
     except Exception as e:
-        print(f"✗ Error downloading YOLOv8n: {e}")
+        print(f"[ERROR] Error downloading YOLOv8n: {e}")
         return False
 
 
@@ -120,8 +120,8 @@ def create_config(models_dir: str):
         manager = OfflineConfigManager()
         manager.save_config(config, config_path)
 
-        print(f"\n✓ Offline configuration created and saved to {config_path}")
-        print("✓ Copy this file to your project directory or ~/.classmark/ to enable offline mode")
+        print(f"\n[OK] Offline configuration created and saved to {config_path}")
+        print("[OK] Copy this file to your project directory or ~/.classmark/ to enable offline mode")
 
     except ImportError:
         # Fallback if offline_config module not available
@@ -138,7 +138,7 @@ def create_config(models_dir: str):
         with open(config_path, 'w') as f:
             json.dump(config, f, indent=2)
 
-        print(f"\n✓ Configuration saved to {config_path}")
+        print(f"\n[OK] Configuration saved to {config_path}")
 
 
 def verify_models(models_dir: str):
@@ -173,7 +173,7 @@ def verify_models(models_dir: str):
         # Check LayoutLMv3
         layoutlmv3_dir = os.path.join(models_dir, "layoutlmv3-base")
         if os.path.exists(layoutlmv3_dir):
-            print("✓ LayoutLMv3 directory exists")
+            print("[OK] LayoutLMv3 directory exists")
 
             try:
                 from transformers import LayoutLMv3Processor
@@ -181,28 +181,28 @@ def verify_models(models_dir: str):
                     layoutlmv3_dir,
                     local_files_only=True
                 )
-                print("✓ LayoutLMv3 can be loaded")
+                print("[OK] LayoutLMv3 can be loaded")
             except Exception as e:
-                print(f"✗ LayoutLMv3 load error: {e}")
+                print(f"[ERROR] LayoutLMv3 load error: {e}")
                 all_good = False
         else:
-            print("✗ LayoutLMv3 not found")
+            print("[ERROR] LayoutLMv3 not found")
             all_good = False
 
         # Check YOLO
         yolo_path = os.path.join(models_dir, "yolo", "yolov8n.pt")
         if os.path.exists(yolo_path):
-            print("✓ YOLOv8n file exists")
+            print("[OK] YOLOv8n file exists")
 
             try:
                 from ultralytics import YOLO
                 model = YOLO(yolo_path)
-                print("✓ YOLOv8n can be loaded")
+                print("[OK] YOLOv8n can be loaded")
             except Exception as e:
-                print(f"✗ YOLOv8n load error: {e}")
+                print(f"[ERROR] YOLOv8n load error: {e}")
                 all_good = False
         else:
-            print("✗ YOLOv8n not found")
+            print("[ERROR] YOLOv8n not found")
             all_good = False
 
         return all_good
@@ -255,11 +255,11 @@ def main():
     # Verify only mode
     if args.verify_only:
         if verify_models(models_dir):
-            print("\n✓ All models verified successfully")
+            print("\n[OK] All models verified successfully")
             print("Classmark is ready for offline operation")
             return 0
         else:
-            print("\n✗ Model verification failed")
+            print("\n[ERROR] Model verification failed")
             print("Run without --verify-only to download models")
             return 1
 
@@ -270,13 +270,13 @@ def main():
         if not download_layoutlmv3(models_dir):
             success = False
     else:
-        print("\n⚠ Skipping LayoutLMv3 (visual detection will be unavailable)")
+        print("\n[WARN] Skipping LayoutLMv3 (visual detection will be unavailable)")
 
     if not args.skip_yolo:
         if not download_yolo(models_dir):
             success = False
     else:
-        print("\n⚠ Skipping YOLO (OCR on scanned documents will be unavailable)")
+        print("\n[WARN] Skipping YOLO (OCR on scanned documents will be unavailable)")
 
     # Create config
     if success:
@@ -291,8 +291,8 @@ def main():
         size_mb = get_model_size(models_dir)
         print(f"\nTotal models size: {size_mb:.1f} MB")
         print(f"Models location: {models_dir}")
-        print("\n✓ Classmark is now ready for OFFLINE operation")
-        print("✓ No internet connection required for future use")
+        print("\n[OK] Classmark is now ready for OFFLINE operation")
+        print("[OK] No internet connection required for future use")
         print("\nNext steps:")
         print("  1. Run the installer to package the application")
         print("  2. Include the models/ directory in the installer")
@@ -300,7 +300,7 @@ def main():
 
         return 0
     else:
-        print("\n✗ Download or verification failed")
+        print("\n[ERROR] Download or verification failed")
         print("Please check your internet connection and try again")
         return 1
 
